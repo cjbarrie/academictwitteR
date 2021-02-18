@@ -2,7 +2,7 @@
 
 Repo containing code to loop through usernames and collect tweets from Full Archive v2 API endpoint. Uses new pagination_token query params.
 
-Function taken from Gist by [https://github.com/schochastics](https://github.com/schochastics): [https://gist.github.com/schochastics/1ff42c0211916d73fc98ba8ad0dcb261#file-get_tweets-r-L14](https://gist.github.com/schochastics/1ff42c0211916d73fc98ba8ad0dcb261#file-get_tweets-r-L14)
+Function taken from [Gist](https://gist.github.com/schochastics/1ff42c0211916d73fc98ba8ad0dcb261#file-get_tweets-r-L14) by [https://github.com/schochastics](https://github.com/schochastics)
 
 - get_user_tweetsv2.R loops through list of users and collects tweets between specified date ranges, avoiding rate limits by sleeping between calls.
 - get_hashtag_tweetsv2.R captures tweets for particular hashtag between specified date ranges, avoiding rate limits by sleeping between calls.
