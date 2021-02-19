@@ -1,6 +1,6 @@
 # twitterv2r
 
-Repo containing code to loop through usernames and collect tweets from Full Archive v2 API endpoint. Uses new pagination_token query params.
+Repo containing code to loop through usernames/hashtag and collect tweets from Full Archive v2 API endpoint. Uses new pagination_token query params. 
 
 Function taken from [Gist](https://gist.github.com/schochastics/1ff42c0211916d73fc98ba8ad0dcb261#file-get_tweets-r-L14) by [https://github.com/schochastics](https://github.com/schochastics)
 
