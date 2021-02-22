@@ -1,0 +1,5 @@
+^twitterv2r\.Rproj$
+^\.Rproj\.user$
+test.R
+data\*.*
+includes\*.*
