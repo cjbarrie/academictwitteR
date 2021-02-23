@@ -4,12 +4,12 @@ Version: 0.0.0.9000
 Authors@R: 
     c(person(given = "Christopher",
            family = "Barrie",
-           role = c("aut", "cre"),
+           role = c("aut"),
            email = "christopher.barrie@ed.ac.uk",
            comment = c(ORCID = "0000-0002-9156-990X")),
            person(given = "Justin Chun-ting",
            family = "Ho",
-           role = c("aut", "cre"),
+           role = c("cre"),
            email = "justin.chunting.ho@sciencespo.fr",
            comment = c(ORCID = "0000-0002-7884-1059")))
 Description: What the package does (one paragraph).
