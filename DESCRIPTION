@@ -2,11 +2,16 @@ Package: twitterv2r
 Title: Collect Tweets from Full Archive v2 API Endpoint
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    c(person(given = "Christopher",
+           family = "Barrie",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+           email = "christopher.barrie@ed.ac.uk",
+           comment = c(ORCID = "0000-0002-9156-990X")),
+           person(given = "Justin Chun-ting",
+           family = "Ho",
+           role = c("aut", "cre"),
+           email = "justin.chunting.ho@sciencespo.fr",
+           comment = c(ORCID = "0000-0002-7884-1059")))
 Description: What the package does (one paragraph).
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license
