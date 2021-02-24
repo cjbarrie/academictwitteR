@@ -2,7 +2,7 @@
 
 Repo containing code to loop through usernames/hashtags and collect tweets from Full Archive v2 API endpoint. Uses new pagination_token query params. Repo now contains skeleton for developing package to contain all functions; for now, main functions are located in folder "R/".
 
-## INSTALLATION
+## Installation
 
 You can install the development package with:
 
@@ -12,9 +12,9 @@ devtools::install_github("cjbarrie/twitterv2r")
 
 NOTE: the name of the package is likely to soon change!
 
-## DEMO
+## Demo
 
-Getting tweets of specified users via `get_user_tweets()`. This function captures tweets for a particular user or set of users and collects tweets between specified date ranges, avoiding rate limits by sleeping between calls.
+Getting tweets of specified users via `get_user_tweets()`. This function captures tweets for a particular user or set of users and collects tweets between specified date ranges, avoiding rate limits by sleeping between calls. A call may look like:
 
 ```{r}
 
@@ -25,7 +25,7 @@ get_user_tweets(users, "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_to
 
 ```
 
-Getting tweets of specified list of hashtags via `get_user_tweets()`. This function captures tweets for a particular hashtag or set of hashtags between specified date ranges, avoiding rate limits by sleeping between calls.
+Getting tweets of specified list of hashtags via `get_user_tweets()`. This function captures tweets for a particular hashtag or set of hashtags between specified date ranges, avoiding rate limits by sleeping between calls. A call may look like:
 
 ```{r}
 
