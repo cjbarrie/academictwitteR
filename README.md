@@ -1,6 +1,16 @@
 # twitterv2r
 
-Repo containing code to loop through usernames/hashtag and collect tweets from Full Archive v2 API endpoint. Uses new pagination_token query params. Repo also contains skeleton for developing package to contain all functions; for now, main functions are located in folder "R/".
+Repo containing code to loop through usernames/hashtags and collect tweets from Full Archive v2 API endpoint. Uses new pagination_token query params. Repo now contains skeleton for developing package to contain all functions; for now, main functions are located in folder "R/".
+
+## Installation
+
+You can install the development package with:
+
+``` r
+devtools::install_github("cjbarrie/twitterv2r")
+```
+
+NOTE: the name of the package is likely to soon change!
 
 Function originally taken from [Gist](https://gist.github.com/schochastics/1ff42c0211916d73fc98ba8ad0dcb261#file-get_tweets-r-L14) by [https://github.com/schochastics](https://github.com/schochastics).
 
