@@ -14,7 +14,7 @@ NOTE: the name of the package is likely to soon change!
 
 ## DEMO
 
-Getting tweets of specified users via `get_user_tweets()`:
+Getting tweets of specified users via `get_user_tweets()`. This function captures tweets for a particular user or set of users and collects tweets between specified date ranges, avoiding rate limits by sleeping between calls.
 
 ```{r}
 
@@ -25,7 +25,7 @@ get_user_tweets(users, "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_to
 
 ```
 
-Getting tweets of specified list of hashtags via `get_user_tweets()`:
+Getting tweets of specified list of hashtags via `get_user_tweets()`. This function captures tweets for a particular hashtag or set of hashtags between specified date ranges, avoiding rate limits by sleeping between calls.
 
 ```{r}
 
@@ -36,9 +36,6 @@ get_hashtag_tweets("#BLM+#BlackLivesMatter", "2020-01-01T00:00:00Z", "2020-01-02
 ```
 
 Function originally taken from [Gist](https://gist.github.com/schochastics/1ff42c0211916d73fc98ba8ad0dcb261#file-get_tweets-r-L14) by [https://github.com/schochastics](https://github.com/schochastics).
-
-- get_user_tweetsv2.R loops through list of users and collects tweets between specified date ranges, avoiding rate limits by sleeping between calls.
-- get_hashtag_tweetsv2.R captures tweets for particular hashtag or hashtags between specified date ranges, avoiding rate limits by sleeping between calls.
 
 Files are stores as JSON files in folders "data/" and "includes/," where "data/" contains the main tweet parameters, and "includes/" contains additional user-level information.
 
