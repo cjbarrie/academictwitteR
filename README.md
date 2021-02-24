@@ -7,7 +7,7 @@ Repo containing code to loop through usernames/hashtags and collect tweets from 
 You can install the development package with:
 
 ``` r
-devtools::install_github("cjbarrie/twitterv2r")
+devtools::install_github("cjbarrie/twittterv2r")
 ```
 
 NOTE: the name of the package is likely to soon change!
