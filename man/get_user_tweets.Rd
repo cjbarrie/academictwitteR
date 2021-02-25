@@ -10,8 +10,7 @@ get_user_tweets(
   end_tweets,
   bearer_token,
   file = NULL,
-  data_path = "data/",
-  users_path = "includes/"
+  data_path = NULL
 )
 }
 \arguments{
@@ -23,11 +22,9 @@ get_user_tweets(
 
 \item{bearer_token}{string, bearer token}
 
-\item{file}{string, name of the resulting RDS file. Will return a dataframe if not supplied.}
+\item{file}{string, name of the resulting RDS file. Will return a dataframe if not supplied}
 
-\item{data_path}{string, path for saving jsons containing main tweet parameters}
-
-\item{users_path}{string, path for saving jsons containing user-level information}
+\item{data_path}{string, if supplied, fetched data will be saved to the designated path as jsons}
 }
 \value{
 a data frame
