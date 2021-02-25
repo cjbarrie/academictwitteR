@@ -39,9 +39,9 @@ get_hashtag_tweets <- function(query, start_tweets, end_tweets, bearer_token, fi
         token = bearer_token,
         next_token = nextoken
       )
-    jsonlite::write_json(df$data, paste0("data/", "data_", df$data$id[nrow(df$data)], ".json"))
+    jsonlite::write_json(df$data, paste0(data_path, "data_", df$data$id[nrow(df$data)], ".json"))
     jsonlite::write_json(df$includes,
-                         paste0("includes/", "includes_", df$data$id[nrow(df$data)], ".json"))
+                         paste0(users_path, "includes_", df$data$id[nrow(df$data)], ".json"))
     nextoken <-
       df$meta$next_token #this is NULL if there are no pages left
     cat(query, ": ", "(", nrow(df$data), ") ", "\n", sep = "")
