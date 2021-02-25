@@ -21,7 +21,7 @@ Getting tweets of specified users via `get_user_tweets()`. This function capture
 bearer_token <- "" # Insert bearer token
 
 users <- c("TwitterDev", "jack")
-get_user_tweets(users, "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, path = "data/")
+get_user_tweets(users, "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
 
 ```
 
