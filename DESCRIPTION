@@ -1,4 +1,4 @@
-Package: twitterv2r
+Package: academictwitteR
 Title: Collect Tweets from Full Archive v2 API Endpoint
 Version: 0.0.0.9000
 Authors@R: 
