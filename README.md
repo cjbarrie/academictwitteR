@@ -31,7 +31,7 @@ Getting tweets of specified list of hashtags via `get_user_tweets()`. This funct
 
 bearer_token <- "" # Insert bearer token
 
-get_hashtag_tweets("#BLM+#BlackLivesMatter", "2020-01-01T00:00:00Z", "2020-01-02T00:00:00Z", bearer_token)
+get_hashtag_tweets("#BLM+#BlackLivesMatter", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
 
 ```
 
