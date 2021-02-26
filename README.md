@@ -10,7 +10,7 @@ You can install the development package with:
 devtools::install_github("cjbarrie/academictwitteR")
 ```
 
-NOTE: the name of the package is likely to soon change!
+NOTE: the name of the package has been changed from twittterv2r.
 
 ## Demo
 
