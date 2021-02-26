@@ -16,13 +16,13 @@
 #' \dontrun{
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 #' users <- c("uoessps", "spsgradschool")
-#' get_user_tweets(users, "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, file = "testing.rds")
+#' get_user_tweets(users, "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
 #' }
 get_user_tweets <- function(users, start_tweets, end_tweets, bearer_token, file = NULL, data_path = NULL){
   #create folders for storage
   ifelse(!dir.exists(file.path(data_path)),
          dir.create(file.path(data_path), showWarnings = FALSE),
-         FALSE)
+         warning("Directory already exists. Existing JSON files will be parsed and returned, choose a new path if this is not intended.", call. = FALSE, immediate. = TRUE))
 
   #get tweets
   nextoken <- ""

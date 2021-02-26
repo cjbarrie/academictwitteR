@@ -15,13 +15,13 @@
 #' @examples
 #' \dontrun{
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-#' get_hashtag_tweets("#BLM+#BlackLivesMatter", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token)
+#' get_hashtag_tweets("#BLM+#BlackLivesMatter", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
 #' }
 get_hashtag_tweets <- function(query, start_tweets, end_tweets, bearer_token, file = NULL, data_path = NULL){
   #create folders for storage
   ifelse(!dir.exists(file.path(data_path)),
          dir.create(file.path(data_path), showWarnings = FALSE),
-         FALSE)
+         warning("Directory already exists. Existing JSON files will be parsed and returned, choose a new path if this is not intended.", call. = FALSE, immediate. = TRUE))
 
   nextoken <- ""
   df.all <- data.frame()
