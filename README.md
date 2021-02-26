@@ -1,4 +1,4 @@
-# twitterv2r
+# academictwitteR
 
 Repo containing code to loop through usernames/hashtags and collect tweets from Full Archive v2 API endpoint. Uses new pagination_token query params. Repo now contains skeleton for developing package to contain all functions; for now, main functions are located in folder "R/".
 
@@ -7,7 +7,7 @@ Repo containing code to loop through usernames/hashtags and collect tweets from 
 You can install the development package with:
 
 ``` r
-devtools::install_github("cjbarrie/twittterv2r")
+devtools::install_github("cjbarrie/academictwitteR")
 ```
 
 NOTE: the name of the package is likely to soon change!
