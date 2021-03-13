@@ -25,13 +25,15 @@ get_user_tweets(users, "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_to
 
 ```
 
-Getting tweets of specified list of hashtags via `get_user_tweets()`. This function captures tweets for a particular hashtag or set of hashtags between specified date ranges, avoiding rate limits by sleeping between calls. A call may look like:
+Getting tweets of specified list of hashtags via `get_hashtag_tweets()`. This function captures tweets for a particular hashtag or set of hashtags between specified date ranges, avoiding rate limits by sleeping between calls. See [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query) for information on building queries for search tweets.
+
+A call may look like:
 
 ```{r}
 
 bearer_token <- "" # Insert bearer token
 
-get_hashtag_tweets("#BLM+#BlackLivesMatter", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
+get_hashtag_tweets("#BLM OR #BlackLivesMatter", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
 
 ```
 
