@@ -3,3 +3,4 @@
 test.R
 data\*.*
 includes\*.*
+.Rbuildignore
