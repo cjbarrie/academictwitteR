@@ -44,3 +44,15 @@ Files are stores as JSON files in folders "data/" and "includes/," where "data/"
 If a filename is supplied, the functions will save the result as a RDS file, otherwise, they will return the results as a dataframe.
 
 For more information on the parameters and fields included in queries to new v2 Endpoint see: [https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-all](https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-all).
+
+## Note on User Information
+The API call returns both the tweet data and the user information separately, but currently only the former is parsed. Is it possible to obtain other user information such as user handle and display name. These can then be merged with the dataset using the author_id field.
+
+```
+bearer_token <- "" # Insert bearer token
+
+users <- c("TwitterDev", "jack")
+tweets_df <- get_user_tweets(users, "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token)
+
+get_user_profile(unique(tweets_df$author_id), bearer_token)
+```
