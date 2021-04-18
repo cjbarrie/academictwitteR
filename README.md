@@ -37,11 +37,23 @@ get_hashtag_tweets("#BLM OR #BlackLivesMatter", "2020-01-01T00:00:00Z", "2020-01
 
 ```
 
+Getting tweets of specified string or series of strings via `get_all_tweets()`. This function captures tweets containing a particular string or set of strings between specified date ranges, avoiding rate limits by sleeping between calls. See [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query) for information on building queries for search tweets.
+
+A call may look like:
+
+```{r}
+
+bearer_token <- "" # Insert bearer token
+
+get_all_tweets("BLM OR BlackLivesMatter", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
+
+```
+
 Function originally taken from [Gist](https://gist.github.com/schochastics/1ff42c0211916d73fc98ba8ad0dcb261#file-get_tweets-r-L14) by [https://github.com/schochastics](https://github.com/schochastics).
 
-Files are stores as JSON files in folders "data/" and "includes/," where "data/" contains the main tweet parameters, and "includes/" contains additional user-level information.
+Files are stores as JSON files in folder "data/" when a `data_path` is specified. Tweet-level data is stored in files beginning "data_"; user-level data is stored in files beginning "user_".
 
-If a filename is supplied, the functions will save the result as a RDS file, otherwise, they will return the results as a dataframe.
+If a filename is supplied, the functions will save the resulting tweet-level information as a RDS file, otherwise results will be returned as a dataframe.
 
 For more information on the parameters and fields included in queries to new v2 Endpoint see: [https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-all](https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-all).
 
