@@ -30,7 +30,7 @@ get_all_tweets(
 a data frame
 }
 \description{
-This function loops through specified hashtags and collects tweets containing the hashtags between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
+This function loops through specified hashtags and collects tweets containing the hashtags between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "user_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
 }
 \examples{
 \dontrun{
