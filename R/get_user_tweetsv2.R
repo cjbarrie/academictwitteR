@@ -1,6 +1,6 @@
 #' Get tweets from user
 #' 
-#' This function loops through list of users and collects tweets between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONS; User-level data is stored in a includes/ path as a series of JSONS. If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
+#' This function loops through specified hashtags and collects tweets containing the hashtags between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "user_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
 #'
 #' @param users character vector, user handles to collect data from
 #' @param start_tweets string, starting date
