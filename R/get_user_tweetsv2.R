@@ -68,7 +68,7 @@ get_user_tweets <- function(users, start_tweets, end_tweets, bearer_token, file 
   
   if(is.null(data_path)){ # if data path is null
     if(!is.null(file)){ # and if file name is supplied
-      saveRDS(df.all, file = file) # save as RDS
+      saveRDS(df.all, file = paste0(file, ".rds")) # save as RDS
     } else { # if file name is not supplied
       return(df.all) # return to data frame
     }
