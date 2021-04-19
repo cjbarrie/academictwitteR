@@ -1,7 +1,7 @@
 #' Get tweets from user
 #' 
-#' This function loops through list of users and collects tweets between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONS; User-level data is stored in a includes/ path as a series of JSONS. If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
-#' @param users character vector, user handles to collect data from
+#' This function loops through specified strings or hashtags and collects tweets containing the strings or hashtags between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "user_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
+#' @param query string, search query, use "+" to separate query terms.
 #' @param start_tweets string, starting date
 #' @param end_tweets  string, ending date
 #' @param bearer_token string, bearer token
@@ -14,23 +14,18 @@
 #' @examples
 #' \dontrun{
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-#' users <- c("uoessps", "spsgradschool")
-#' get_user_tweets(users, "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
+#' get_all_tweets("BLM", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
 #' }
-get_user_tweets <- function(users, start_tweets, end_tweets, bearer_token, file = NULL, data_path = NULL){
+get_all_tweets <- function(query, start_tweets, end_tweets, bearer_token, file = NULL, data_path = NULL){
   #create folders for storage
   ifelse(!dir.exists(file.path(data_path)),
          dir.create(file.path(data_path), showWarnings = FALSE),
          warning("Directory already exists. Existing JSON files will be parsed and returned, choose a new path if this is not intended.", call. = FALSE, immediate. = TRUE))
-
-  #get tweets
+  
   nextoken <- ""
-  i <- 1
   df.all <- data.frame()
   
   while (!is.null(nextoken)) {
-    query <- paste0('from:', users[[i]])
-    userhandle <- users[[i]]
     df <-
       get_tweets(
         q = query ,
@@ -51,19 +46,13 @@ get_user_tweets <- function(users, start_tweets, end_tweets, bearer_token, file 
     nextoken <-
       df$meta$next_token #this is NULL if there are no pages left
     cat(query, ": ", "(", nrow(df$data), ") ", "\n", sep = "")
-    Sys.sleep(3.1) #sleep between calls to avoid rate limiting
+    Sys.sleep(3.1)
     if (is.null(nextoken)) {
-      cat("next_token is now NULL for",
-          userhandle,
-          " moving to next account \n")
-      nextoken <- ""
-      i = i + 1
-      if (i > length(users)) {
-        cat("No more accounts to capture")
-        break
-      }
+      cat("next_token is now NULL for", query, ": finishing collection.")
+      break
     }
   }
+  
   
   if(is.null(data_path)){ # if data path is null
     if(!is.null(file)){ # and if file name is supplied
@@ -101,4 +90,3 @@ get_user_tweets <- function(users, start_tweets, end_tweets, bearer_token, file 
     }
   }
 }
-
