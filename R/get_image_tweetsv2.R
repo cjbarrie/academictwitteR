@@ -1,6 +1,7 @@
-#' Get tweets for query containing media
+#' Get tweets for query containing images
 #'
-#' This function loops through specified strings or hashtags and collects tweets containing the strings or hashtags between specified date ranges that also contain a media object, such as a photo, GIF, or video, as determined by Twitter. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
+#' This function loops through specified strings or hashtags and collects tweets containing the strings or hashtags between specified date ranges that also contain a recognized URL to an image. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
+#'
 #' @param query 
 #' @param start_tweets 
 #' @param end_tweets 
@@ -14,9 +15,9 @@
 #' @examples
 #' \dontrun{
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-#' get_media_tweets("#BLM", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
+#' get_image_tweets("#BLM", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
 #' }
-get_media_tweets <- function(query, start_tweets, end_tweets, bearer_token, file = NULL, data_path = NULL){
+get_image_tweets <- function(query, start_tweets, end_tweets, bearer_token, file = NULL, data_path = NULL){
   #create folders for storage
   ifelse(!dir.exists(file.path(data_path)),
          dir.create(file.path(data_path), showWarnings = FALSE),
@@ -28,7 +29,7 @@ get_media_tweets <- function(query, start_tweets, end_tweets, bearer_token, file
   while (!is.null(nextoken)) {
     df <-
       get_tweets(
-        q = paste0('has:media ', query),
+        q = paste0('has:images ', query),
         n = 500,
         start_time = start_tweets,
         end_time = end_tweets,
