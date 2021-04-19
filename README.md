@@ -25,27 +25,25 @@ get_user_tweets(users, "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_to
 
 ```
 
-Getting tweets of specified list of hashtags via `get_hashtag_tweets()`. This function captures tweets for a particular hashtag or set of hashtags between specified date ranges, avoiding rate limits by sleeping between calls. See [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query) for information on building queries for search tweets.
+Getting tweets of specified string or series of strings via `get_all_tweets()`. This function captures tweets containing a particular string or set of strings between specified date ranges, avoiding rate limits by sleeping between calls. This function can also captures tweets for a particular hashtag or set of hashtags when specified with the # operator. See [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query) for information on building queries for search tweets.
 
-A call may look like:
+For a particular series of strings a call may look like:
 
 ```{r}
 
 bearer_token <- "" # Insert bearer token
 
-get_hashtag_tweets("#BLM OR #BlackLivesMatter", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
+get_all_tweets("apples OR oranges", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
 
 ```
 
-Getting tweets of specified string or series of strings via `get_all_tweets()`. This function captures tweets containing a particular string or set of strings between specified date ranges, avoiding rate limits by sleeping between calls. See [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query) for information on building queries for search tweets.
-
-A call may look like:
+For a particular series of hashtags a call may look like:
 
 ```{r}
 
 bearer_token <- "" # Insert bearer token
 
-get_all_tweets("BLM OR BlackLivesMatter", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
+get_all_tweets("#BLM OR #BlackLivesMatter", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
 
 ```
 
@@ -58,6 +56,7 @@ If a filename is supplied, the functions will save the resulting tweet-level inf
 For more information on the parameters and fields included in queries to new v2 Endpoint see: [https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-all](https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-all).
 
 ## Note on User Information
+
 The API call returns both the tweet data and the user information separately, but currently only the former is parsed. Is it possible to obtain other user information such as user handle and display name. These can then be merged with the dataset using the author_id field.
 
 ```
