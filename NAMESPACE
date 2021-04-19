@@ -3,6 +3,7 @@
 export(get_all_tweets)
 export(get_image_tweets)
 export(get_media_tweets)
+export(get_mentions_tweets)
 export(get_user_profile)
 export(get_user_tweets)
 export(get_video_tweets)
