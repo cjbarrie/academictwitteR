@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_mentions_tweetsv2.R
 \name{get_mentions_tweets}
 \alias{get_mentions_tweets}
-\title{Get tweets for query containing videos}
+\title{Get tweets for query containing mentions of another user}
 \usage{
 get_mentions_tweets(
   query,
