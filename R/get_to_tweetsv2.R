@@ -1,6 +1,6 @@
-#' Get tweets from user
+#' Get tweets to users
 #' 
-#' This function loops through list of users and collects tweets between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
+#' This function loops through list of users and collects tweets between specified date ranges that are in reply to the specified user(s). Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
 #' @param users character vector, user handles to collect data from
 #' @param start_tweets string, starting date
 #' @param end_tweets  string, ending date
@@ -15,21 +15,21 @@
 #' \dontrun{
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 #' users <- c("uoessps", "spsgradschool")
-#' get_user_tweets(users, "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
+#' get_to_tweets(users, "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
 #' }
-get_user_tweets <- function(users, start_tweets, end_tweets, bearer_token, file = NULL, data_path = NULL){
+get_to_tweets <- function(users, start_tweets, end_tweets, bearer_token, file = NULL, data_path = NULL){
   #create folders for storage
   ifelse(!dir.exists(file.path(data_path)),
          dir.create(file.path(data_path), showWarnings = FALSE),
          warning("Directory already exists. Existing JSON files will be parsed and returned, choose a new path if this is not intended.", call. = FALSE, immediate. = TRUE))
-
+  
   #get tweets
   nextoken <- ""
   i <- 1
   df.all <- data.frame()
   
   while (!is.null(nextoken)) {
-    query <- paste0('from:', users[[i]])
+    query <- paste0('to:', users[[i]])
     userhandle <- users[[i]]
     df <-
       get_tweets(
