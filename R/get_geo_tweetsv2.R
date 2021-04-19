@@ -1,22 +1,22 @@
-#' Get tweets from user
-#' 
-#' This function loops through specified strings or hashtags and collects tweets containing the strings or hashtags between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
-#' @param query string, search query, use "+" to separate query terms.
-#' @param start_tweets string, starting date
-#' @param end_tweets  string, ending date
-#' @param bearer_token string, bearer token
-#' @param file string, name of the resulting RDS file. Will return a dataframe if not supplied
-#' @param data_path string, if supplied, fetched data will be saved to the designated path as jsons
+#' Get tweets for query containing geo information
 #'
-#' @return a data frame
+#' This function loops through specified strings or hashtags and collects tweets containing the strings or hashtags between specified date ranges that also contain Tweet-specific geolocation data provided by the Twitter user. This can be either a location in the form of a Twitter place, with the corresponding display name, geo polygon, and other fields, or in rare cases, a geo lat-long coordinate. Note: Operators matching on place (Tweet geo) will only include matches from original tweets. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
+#'
+#' @param query 
+#' @param start_tweets 
+#' @param end_tweets 
+#' @param bearer_token 
+#' @param file 
+#' @param data_path 
+#'
+#' @return
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-#' get_all_tweets("BLM", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
+#' get_geo_tweets("protest", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
 #' }
-get_all_tweets <- function(query, start_tweets, end_tweets, bearer_token, file = NULL, data_path = NULL){
+get_geo_tweets <- function(query, start_tweets, end_tweets, bearer_token, file = NULL, data_path = NULL){
   #create folders for storage
   ifelse(!dir.exists(file.path(data_path)),
          dir.create(file.path(data_path), showWarnings = FALSE),
@@ -28,7 +28,7 @@ get_all_tweets <- function(query, start_tweets, end_tweets, bearer_token, file =
   while (!is.null(nextoken)) {
     df <-
       get_tweets(
-        q = query ,
+        q = paste0('has:geo ', query),
         n = 500,
         start_time = start_tweets,
         end_time = end_tweets,

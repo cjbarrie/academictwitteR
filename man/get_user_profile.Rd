@@ -15,7 +15,7 @@ get_user_profile(x, bearer_token)
 a data frame
 }
 \description{
-This function fetch a variety of information about one or more users specified by the requested ids.
+This function fetches a variety of information about one or more users specified by the requested ids.
 }
 \examples{
 \dontrun{
