@@ -84,7 +84,7 @@ get_all_tweets <- function(query, start_tweets, end_tweets, bearer_token, file =
     }
     
     if(!is.null(file)){ # and if file name is supplied
-      saveRDS(json.df.all, file = file) # save as RDS
+      saveRDS(json.df.all, file = paste0(file, ".rds")) # save as RDS
     } else { # if file name is not supplied
       return(json.df.all) # return to data frame
     }

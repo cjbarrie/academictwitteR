@@ -1,0 +1,66 @@
+---
+title: "Intro. to academictwitteR"
+author: Christopher Barrie and Justin Ho
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Intro. to academictwitteR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This vignette provides a quick tour of the R package `academictwitteR`. The package is useful solely for querying the Twitter Academic Research Product Track v2. API endpoint. This version of the Twitter API allows researchers to access larger volumes of Twitter data. For more information on the the Twitter API, including how to apply for access to the Academic Research Product Track, see [here](https://developer.twitter.com/en/solutions/academic-research/products-for-researchers).
+
+The following vignette will guide you through how to use the package.
+
+We will begin by describing the thinking behind the development of this package and, specifically, the data storage conventions we have established when querying the API.
+
+The Academic Research Product Track permits the user to access larger volumes of data, over a far longer time range, than was previously possible. From the Twitter [documentation](https://developer.twitter.com/en/solutions/academic-research/application-info):
+
+> "The Academic Research product track includes full-archive search, as well as increased access and other v2 endpoints and functionality designed to get more precise and complete data for analyzing the public conversation, at no cost for qualifying researchers. Since the Academic Research track includes specialized, greater levels of access, it is reserved solely for non-commercial use".
+
+The new "v2 endpoints" refer to the v2 API, introduced around the same time as the new Academic Research Product Track. Full details of the v2 endpoints are available [here](https://developer.twitter.com/en/docs/twitter-api/early-access).
+
+In summary the Academic Research product track allows the authorized user:
+
+1. Access to the full archive of (as-yet-undeleted) tweets published on Twitter
+2. A higher monthly tweet cap (10m--or 20x what was previously possible with the standard v1.1 API)
+3. Ability to access these data with more precise filters permitted by the v2 API
+
+Given this sizeable increase in the volume of data potentially retrievable with the Academic Research Product Track, it is advisable that researchers establish clear storage conventions to mitigate data loss caused by e.g. the unplanned interruption of an API query.
+
+```{r setup}
+library(academictwitteR)
+```
+
+The workhorse function of `academictwitteR` when it comes to collecting tweets containing a particular string or hashtag is `get_all_tweets`.
+
+```{r, eval=F}
+
+tweets <-
+  get_all_tweets(
+    "#BLM OR #BlackLivesMatter",
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token,
+    data_path = "data/",
+    file = "BLMtweets"
+  )
+  
+```
+
+We draw your attention first to the `data_path` and `file` arguments. 
+
+In the data path, the user can either specify a directory that already exists or name a new directory. In other words, if there is already a folder in your working directory called "data" then `get_all_tweets` will find it and store data there. If there is no such directory, then a directory named (here) "data" will be created in your working directory for the purposes of data storage. Note that the folder need not be named "data"--it could be named something more informative too and specific to the type of data to be stored there. 
+
+The data is stored in this folder as a series of JSONs. Tweet-level data is stored as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_".
+
+In the file path, the user can also specify the name of a file to be stored with a ".rds" extension, which includes all of the tweet-level information collected for a given query.
+
+If neither the `data_path` or `file` arguments are provided, the data will be stored as a dataframe. 

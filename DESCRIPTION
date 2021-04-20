@@ -28,3 +28,7 @@ Imports:
     dplyr,
     httr,
     jsonlite
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
