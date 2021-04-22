@@ -1,15 +1,15 @@
 Package: academictwitteR
-Title: Collect Tweets from Full Archive v2 API Endpoint
+Title: academictwitteR: a package to access the Twitter Academic Research Product Track v2 API endpoint
 Version: 0.0.0.9000
 Authors@R: 
     c(person(given = "Christopher",
            family = "Barrie",
-           role = c("aut"),
+           role = c("aut", "cre"),
            email = "christopher.barrie@ed.ac.uk",
            comment = c(ORCID = "0000-0002-9156-990X")),
            person(given = "Justin Chun-ting",
            family = "Ho",
-           role = c("cre"),
+           role = c("aut"),
            email = "justin.chunting.ho@sciencespo.fr",
            comment = c(ORCID = "0000-0002-7884-1059")))
 Description: Package to query the Twitter Academic Research Product Track,
@@ -20,6 +20,7 @@ Description: Package to query the Twitter Academic Research Product Track,
     workarounds to manage and reshape the format in which data is provided on
     the client side.
 License: MIT + file LICENSE
+URL: https://github.com/cjbarrie/academictwitteR
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
