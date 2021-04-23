@@ -1,14 +1,16 @@
 #' Get tweets from user
-#' 
-#' This function loops through specified strings or hashtags and collects tweets containing the strings or hashtags between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
+#'
+#' This function loops through specified strings or hashtags and collects tweets containing the strings or hashtags between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a data.frame.
+#'
 #' @param query string, search query, use "+" to separate query terms.
 #' @param start_tweets string, starting date
 #' @param end_tweets  string, ending date
 #' @param bearer_token string, bearer token
-#' @param file string, name of the resulting RDS file. Will return a dataframe if not supplied
-#' @param data_path string, if supplied, fetched data will be saved to the designated path as jsons
+#' @param file string, name of the resulting RDS file
+#' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
+#' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
 #'
-#' @return a data frame
+#' @return a data.frame
 #' @export
 #'
 #' @examples
@@ -16,77 +18,130 @@
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 #' get_all_tweets("BLM", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
 #' }
-get_all_tweets <- function(query, start_tweets, end_tweets, bearer_token, file = NULL, data_path = NULL){
-  #create folders for storage
-  ifelse(!dir.exists(file.path(data_path)),
-         dir.create(file.path(data_path), showWarnings = FALSE),
-         warning("Directory already exists. Existing JSON files will be parsed and returned, choose a new path if this is not intended.", call. = FALSE, immediate. = TRUE))
-  
-  nextoken <- ""
-  df.all <- data.frame()
-  
-  while (!is.null(nextoken)) {
-    df <-
-      get_tweets(
-        q = query ,
-        n = 500,
-        start_time = start_tweets,
-        end_time = end_tweets,
-        token = bearer_token,
-        next_token = nextoken
+get_all_tweets <-
+  function(query,
+           start_tweets,
+           end_tweets,
+           bearer_token,
+           file = NULL,
+           data_path = NULL,
+           bind_tweets = TRUE) {
+    #warning re data storage recommendations if no data path set
+    if (is.null(data_path)) {
+      warning(
+        "Recommended to specify a data path in order to mitigate data loss when ingesting large amounts of data.",
+        call. = FALSE,
+        immediate. = TRUE
       )
-    if(is.null(data_path)){ # if data path is null, combine new data with old data within function
-      df.all <- dplyr::bind_rows(df.all, df$data)} 
-    else { # if data path is supplied, save to path
-      jsonlite::write_json(df$data, paste0(data_path, "data_", df$data$id[nrow(df$data)], ".json"))
-      jsonlite::write_json(df$includes,
-                           paste0(data_path, "users_", df$data$id[nrow(df$data)], ".json"))
-    } 
-    
-    nextoken <-
-      df$meta$next_token #this is NULL if there are no pages left
-    cat(query, ": ", "(", nrow(df$data), ") ", "\n", sep = "")
-    Sys.sleep(3.1)
-    if (is.null(nextoken)) {
-      cat("next_token is now NULL for", query, ": finishing collection.")
-      break
     }
-  }
-  
-  
-  if(is.null(data_path)){ # if data path is null
-    if(!is.null(file)){ # and if file name is supplied
+    #warning re data.frame object and necessity of assignment
+    if (is.null(data_path) & is.null(file)) {
+      warning(
+        "Tweets will not be stored as JSONs or as a .rds file and will only be available in local memory if assigned to an object.",
+        call. = FALSE,
+        immediate. = TRUE
+      )
+    }
+    #stop clause for if user sets bind_tweets to FALSE but sets no data path
+    if (is.null(data_path) & bind_tweets == F) {
+      stop("Argument (bind_tweets = F) only valid when a data_path is specified.")
+    }
+    #warning re binding of tweets when a data path and file path have been set but bind_tweets is set to FALSE
+    if (!is.null(data_path) & !is.null(file) & bind_tweets == F) {
+      warning(
+        "Tweets will still be bound in local memory to generate .rds file. Argument (bind_tweets = F) only valid when just a data path has been specified.",
+        call. = FALSE,
+        immediate. = TRUE
+      )
+    }
+    #warning re data storage and memory limits when setting bind_tweets to TRUE 
+    if (!is.null(data_path) & is.null(file) & bind_tweets == T) {
+      warning(
+        "Tweets will be bound in local memory as well as stored as JSONs.",
+        call. = FALSE,
+        immediate. = TRUE
+      )
+    }
+    #create folders for storage
+    ifelse(!dir.exists(file.path(data_path)),
+           dir.create(file.path(data_path), showWarnings = FALSE),
+           warning(
+             "Directory already exists. Existing JSON files may be parsed and returned, choose a new path if this is not intended.",
+             call. = FALSE,
+             immediate. = TRUE
+           ))
+    
+    nextoken <- ""
+    df.all <- data.frame()
+    toknum <- 0
+    ntweets <- 0
+    
+    while (!is.null(nextoken)) {
+      df <-
+        get_tweets(
+          q = query ,
+          n = 500,
+          start_time = start_tweets,
+          end_time = end_tweets,
+          token = bearer_token,
+          next_token = nextoken
+        )
+      if (is.null(data_path)) {
+        # if data path is null, generate data.frame object within loop
+        df.all <- dplyr::bind_rows(df.all, df$data)
+      }
+      if (!is.null(data_path) & is.null(file) & bind_tweets == F) {
+        # if only data path is supplied and bind_tweets is set to FALSE, generate only JSON files in data path folder
+        jsonlite::write_json(df$data,
+                             paste0(data_path, "data_", df$data$id[nrow(df$data)], ".json"))
+        jsonlite::write_json(df$includes,
+                             paste0(data_path, "users_", df$data$id[nrow(df$data)], ".json"))
+      }
+      if (!is.null(data_path)) {
+        # if data path is supplied and file name given, generate data.frame object within loop and JSONs
+        jsonlite::write_json(df$data,
+                             paste0(data_path, "data_", df$data$id[nrow(df$data)], ".json"))
+        jsonlite::write_json(df$includes,
+                             paste0(data_path, "users_", df$data$id[nrow(df$data)], ".json"))
+        df.all <-
+          dplyr::bind_rows(df.all, df$data) #and combine new data with old within function
+      }
+      
+      nextoken <-
+        df$meta$next_token #this is NULL if there are no pages left
+      toknum <- toknum + 1
+      ntweets <- ntweets + nrow(df$data)
+      cat(
+        "query: <",
+        query,
+        ">: ",
+        "(tweets captured this page: ",
+        nrow(df$data),
+        "). Total pages queried: ",
+        toknum,
+        ". Total tweets ingested: ",
+        ntweets, 
+        ". \n",
+        sep = ""
+      )
+      Sys.sleep(3.1)
+      if (is.null(nextoken)) {
+        cat("next_token is now NULL for",
+            query,
+            ": finishing collection. \n")
+        break
+      }
+    }
+    
+    if (is.null(data_path) & is.null(file)) {
+      return(df.all) # return to data.frame
+    }
+    if (!is.null(file)) {
       saveRDS(df.all, file = paste0(file, ".rds")) # save as RDS
-    } else { # if file name is not supplied
-      return(df.all) # return to data frame
+      return(df.all) # return data.frame
     }
-  } else { # if data path is supplied
-    # parse and bind
-    files <-
-      list.files(
-        path = file.path(data_path),
-        pattern = "^data_",
-        recursive = T,
-        include.dirs = T
-      )
-    files <- paste(data_path, files, sep = "")
-    
-    pb = utils::txtProgressBar(min = 0,
-                               max = length(files),
-                               initial = 0)
-    
-    json.df.all <- data.frame()
-    for (i in seq_along(files)) {
-      filename = files[[i]]
-      json.df <- jsonlite::read_json(filename, simplifyVector = TRUE)
-      json.df.all <- dplyr::bind_rows(json.df.all, json.df)
-      utils::setTxtProgressBar(pb, i)
-    }
-    
-    if(!is.null(file)){ # and if file name is supplied
-      saveRDS(json.df.all, file = paste0(file, ".rds")) # save as RDS
-    } else { # if file name is not supplied
-      return(json.df.all) # return to data frame
+    if (!is.null(data_path) &
+        is.null(file) & bind_tweets == F) {
+      cat("Data stored as JSONs: use bind_tweets_json function to bundle into data.frame")
     }
   }
-}

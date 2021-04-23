@@ -10,7 +10,8 @@ get_all_tweets(
   end_tweets,
   bearer_token,
   file = NULL,
-  data_path = NULL
+  data_path = NULL,
+  bind_tweets = TRUE
 )
 }
 \arguments{
@@ -22,15 +23,17 @@ get_all_tweets(
 
 \item{bearer_token}{string, bearer token}
 
-\item{file}{string, name of the resulting RDS file. Will return a dataframe if not supplied}
+\item{file}{string, name of the resulting RDS file}
 
-\item{data_path}{string, if supplied, fetched data will be saved to the designated path as jsons}
+\item{data_path}{string, if supplied, fetched data can be saved to the designated path as jsons}
+
+\item{bind_tweets}{If \code{TRUE}, tweets captured are bound into a data.frame for assignment}
 }
 \value{
-a data frame
+a data.frame
 }
 \description{
-This function loops through specified strings or hashtags and collects tweets containing the strings or hashtags between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
+This function loops through specified strings or hashtags and collects tweets containing the strings or hashtags between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a data.frame.
 }
 \examples{
 \dontrun{

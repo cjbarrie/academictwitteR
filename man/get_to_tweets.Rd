@@ -10,11 +10,12 @@ get_to_tweets(
   end_tweets,
   bearer_token,
   file = NULL,
-  data_path = NULL
+  data_path = NULL,
+  bind_tweets = TRUE
 )
 }
 \arguments{
-\item{users}{character vector, user handles to collect data from}
+\item{users}{character vector, user handles from which to collect data}
 
 \item{start_tweets}{string, starting date}
 
@@ -22,9 +23,11 @@ get_to_tweets(
 
 \item{bearer_token}{string, bearer token}
 
-\item{file}{string, name of the resulting RDS file. Will return a dataframe if not supplied}
+\item{file}{string, name of the resulting RDS file}
 
-\item{data_path}{string, if supplied, fetched data will be saved to the designated path as jsons}
+\item{data_path}{string, if supplied, fetched data can be saved to the designated path as jsons}
+
+\item{bind_tweets}{If \code{TRUE}, tweets captured are bound into a data.frame for assignment}
 }
 \value{
 a data frame
