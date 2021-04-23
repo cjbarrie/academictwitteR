@@ -7,14 +7,14 @@ get_tweets <- function(q="",n=10,start_time,end_time,token,next_token=""){
     warning("n too small Using 10 instead")
     n <- 500
   }
-  if(missing(token)){
-    stop("bearer token must be specified.")  
+  if(missing(start_time)){
+    stop("start time must be specified.")
   }
   if(missing(end_time)){
-    end_time <- gsub(" ","T",paste0(as.character(Sys.time()),"Z"))
+    stop("end time must be specified.")
   }
-  if(missing(start_time)){
-    start_time <- paste0(Sys.Date(),"T00:00:00Z")
+  if(missing(token)){
+    stop("bearer token must be specified.")  
   }
   if(substr(token,1,7)=="Bearer "){
     bearer <- token
