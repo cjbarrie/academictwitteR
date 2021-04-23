@@ -1,6 +1,7 @@
 #' Get tweets from user
 #' 
 #' This function loops through list of users and collects tweets between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
+#' 
 #' @param users character vector, user handles from which to collect data
 #' @param start_tweets string, starting date
 #' @param end_tweets  string, ending date
@@ -8,6 +9,7 @@
 #' @param file string, name of the resulting RDS file
 #' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
 #' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
+#' @param verbose If `FALSE`, query progress messages are suppressed
 #'
 #' @return a data frame
 #' @export
@@ -25,7 +27,8 @@ get_user_tweets <-
            bearer_token,
            file = NULL,
            data_path = NULL,
-           bind_tweets = TRUE) {
+           bind_tweets = TRUE,
+           verbose = TRUE) {
     #warning re data storage recommendations if no data path set
     if (is.null(data_path)) {
       warning(
@@ -112,30 +115,34 @@ get_user_tweets <-
       
       nextoken <-
         df$meta$next_token #this is NULL if there are no pages left
-      toknum <- toknum + 1
-      ntweets <- ntweets + nrow(df$data)
-      cat(
-        "query: <",
-        query,
-        ">: ",
-        "(tweets captured this page: ",
-        nrow(df$data),
-        "). Total pages queried: ",
-        toknum,
-        ". Total tweets ingested: ",
-        ntweets, 
-        ". \n",
-        sep = ""
-      )
+      if(verbose) {
+        toknum <- toknum + 1
+        ntweets <- ntweets + nrow(df$data)
+        cat(
+          "query: <",
+          query,
+          ">: ",
+          "(tweets captured this page: ",
+          nrow(df$data),
+          "). Total pages queried: ",
+          toknum,
+          ". Total tweets ingested: ",
+          ntweets, 
+          ". \n",
+          sep = ""
+        )
+      }
       Sys.sleep(3.1)
       if (is.null(nextoken)) {
-        cat("next_token is now NULL for",
-            userhandle,
-            " moving to next account \n")
-        nextoken <- ""
-        i = i + 1
-        if (i > length(users)) {
-          cat("No more accounts to capture")
+        if(verbose) {
+          cat("next_token is now NULL for",
+              userhandle,
+              " moving to next account \n")
+          nextoken <- ""
+          i = i + 1
+          if (i > length(users)) {
+            cat("No more accounts to capture")
+          }
           break
         }
       }
