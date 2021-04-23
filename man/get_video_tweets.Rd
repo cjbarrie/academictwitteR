@@ -10,7 +10,8 @@ get_video_tweets(
   end_tweets,
   bearer_token,
   file = NULL,
-  data_path = NULL
+  data_path = NULL,
+  bind_tweets = TRUE
 )
 }
 \arguments{
