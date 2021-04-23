@@ -4,8 +4,6 @@
 
 [![DOI](https://zenodo.org/badge/340095903.svg)](https://zenodo.org/badge/latestdoi/340095903)
 
-
-
 Repo containing code to for R package <tt>academictwitteR</tt> collect tweets from v2 API endpoint for the Academic Research Product Track.
 
 Get started by reading `vignette("academictwitteR")`.
@@ -16,7 +14,7 @@ To cite package ‘academictwitteR’ in publications use:
   Christopher Barrie and Justin Chun-ting Ho (NA). academictwitteR:
   academictwitteR: a package to access the Twitter Academic Research
   Product Track v2 API endpoint. R package version 0.0.0.9000.
-  https://github.com/cjbarrie/academictwitteR
+  https://github.com/cjbarrie/academictwitteR. doi:10.5281/zenodo.4714637
 
 A BibTeX entry for LaTeX users is
 
@@ -25,6 +23,7 @@ A BibTeX entry for LaTeX users is
     author = {Christopher Barrie and Justin Chun-ting Ho},
     note = {R package version 0.0.0.9000},
     url = {https://github.com/cjbarrie/academictwitteR},
+    doi = {10.5281/zenodo.4714637}
   }
   
 ```
