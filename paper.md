@@ -36,7 +36,7 @@ Authorization for the Academic Research Product Track provides access to the Twi
 2. A higher monthly tweet cap (10m---or 20x what was previously possible with the standard v1.1 API);
 3. Ability to access these data with more precise filters permitted by the v2 API.
 
-The ``academictwitteR`` package was designed: 1) to make the Academic Research Product Track more easily accessible for R users by providing dedicated functions to query the the v2 API endpoints; 2) to encourage academic researchers efficiently and safely to store their data.
+The ``academictwitteR`` package was designed: 1) to make the Academic Research Product Track easily accessible for R users by providing dedicated functions to query the the v2 API endpoints; 2) to encourage academic researchers efficiently and safely to store their data.
 
 The functions allow the user to combine multiple conditions when filtering tweet content. In particular, queries that include conjunction-required operators, can also be accessed via a set of "shortcut" functions for accessing e.g. tweets containing media content. Data is stored in serialized form as RDS files or as separate JSON files. The former represents the most efficient storage solution for native R data-file formats; the latter helps mitigate loss by storing data as separate JSONs for each pagination token (or up to 500 tweets). Convenience functions are also included to bind tweet- and user-level information stored as JSON files.
 
