@@ -1,5 +1,11 @@
 # academictwitteR 
 
+[![v2](https://img.shields.io/endpoint?url=https%3A%2F%2Ftwbadges.glitch.me%2Fbadges%2Fv2)](https://developer.twitter.com/en/docs/twitter-api)
+
+[![DOI](https://zenodo.org/badge/340095903.svg)](https://zenodo.org/badge/latestdoi/340095903)
+
+
+
 Repo containing code to for R package <tt>academictwitteR</tt> collect tweets from v2 API endpoint for the Academic Research Product Track.
 
 Get started by reading `vignette("academictwitteR")`.
