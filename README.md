@@ -4,7 +4,7 @@
 
 [![DOI](https://zenodo.org/badge/340095903.svg)](https://zenodo.org/badge/latestdoi/340095903)
 
-Repo containing code to for R package <tt>academictwitteR</tt> collect tweets from v2 API endpoint for the Academic Research Product Track.
+Repo containing code to for R package <tt>academictwitteR</tt> to collect tweets from v2 API endpoint for the Academic Research Product Track.
 
 Get started by reading `vignette("academictwitteR")`.
 
