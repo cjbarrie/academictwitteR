@@ -4,6 +4,8 @@
 
 Repo containing code to for R package <tt>academictwitteR</tt> collect tweets from v2 API endpoint for the Academic Research Product Track.
 
+Get started by reading `vignette("academictwitteR")`.
+
 ```
 To cite package ‘academictwitteR’ in publications use:
 
