@@ -11,7 +11,8 @@ get_retweets_of_user(
   bearer_token,
   file = NULL,
   data_path = NULL,
-  bind_tweets = TRUE
+  bind_tweets = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ get_retweets_of_user(
 \item{data_path}{string, if supplied, fetched data can be saved to the designated path as jsons}
 
 \item{bind_tweets}{If \code{TRUE}, tweets captured are bound into a data.frame for assignment}
+
+\item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 }
 \value{
 a data frame
