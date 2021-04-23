@@ -12,14 +12,14 @@ Get started by reading `vignette("academictwitteR")`.
 To cite package ‘academictwitteR’ in publications use:
 
   Christopher Barrie and Justin Chun-ting Ho (NA). academictwitteR:
-  academictwitteR: a package to access the Twitter Academic Research
+  an R package to access the Twitter Academic Research
   Product Track v2 API endpoint. R package version 0.0.0.9000.
   https://github.com/cjbarrie/academictwitteR. doi:10.5281/zenodo.4714637
 
 A BibTeX entry for LaTeX users is
 
   @Manual{,
-    title = {academictwitteR: academictwitteR: a package to access the Twitter Academic Research Product Track v2 API endpoint},
+    title = {academictwitteR: an R package to access the Twitter Academic Research Product Track v2 API endpoint},
     author = {Christopher Barrie and Justin Chun-ting Ho},
     note = {R package version 0.0.0.9000},
     url = {https://github.com/cjbarrie/academictwitteR},
