@@ -1,5 +1,5 @@
 ---
-title: "Intro. to academictwitteR"
+title: "Intro. to <tt>academictwitteR</tt>"
 author: Christopher Barrie and Justin Ho
 output: rmarkdown::html_vignette
 vignette: >
@@ -49,18 +49,47 @@ tweets <-
     "2020-01-01T00:00:00Z",
     "2020-01-05T00:00:00Z",
     bearer_token,
-    data_path = "data/",
-    file = "BLMtweets"
+    file = "blmtweets"
   )
   
 ```
 
-We draw your attention first to the `data_path` and `file` arguments. 
+We draw your attention first to the`file` argument.
 
-In the data path, the user can either specify a directory that already exists or name a new directory. In other words, if there is already a folder in your working directory called "data" then `get_all_tweets` will find it and store data there. If there is no such directory, then a directory named (here) "data" will be created in your working directory for the purposes of data storage. Note that the folder need not be named "data"--it could be named something more informative too and specific to the type of data to be stored there. 
+In the file path, the user can specify the name of a file to be stored with a ".rds" extension, which includes all of the tweet-level information collected for a given query.
+
+Alternatively, the user can specify a `data_path` as follows:
+
+```{r, eval=F}
+
+tweets <-
+  get_all_tweets(
+    "#BLM OR #BlackLivesMatter",
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token,
+    data_path = "data/"
+    bind_tweets = FALSE
+  )
+  
+```
+
+In the data path, the user can either specify a directory that already exists or name a new directory. In other words, if there is already a folder in your working directory called "data" then `get_all_tweets` will find it and store data there. If there is no such directory, then a directory named (here) "data" will be created in your working directory for the purposes of data storage.
 
 The data is stored in this folder as a series of JSONs. Tweet-level data is stored as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_".
 
-In the file path, the user can also specify the name of a file to be stored with a ".rds" extension, which includes all of the tweet-level information collected for a given query.
+Note that the `get_all_tweets()` functions always returns a data.frame object unless `data_path` is specified and `bind_tweets` is set to `FALSE`. When collecting large amounts of data, we recommend using the `data_path` option with `bind_tweets = FALSE`. This mitigates potential data loss in case the query is interrupted.
 
-If neither the `data_path` or `file` arguments are provided, the data will be stored as a dataframe. 
+Users can then use the `bind_tweet_jsons` and `bind_user_jsons` convenience functions to bundle the JSONs into a data.frame object for analysis in R as such:
+
+```{r, eval=FALSE}
+
+tweets <- bind_tweet_jsons(data_path = "data/")
+
+```
+
+```{r, eval=FALSE}
+
+users <- bind_user_jsons(data_path = "data/")
+
+```
