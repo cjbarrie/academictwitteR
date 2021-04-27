@@ -149,9 +149,7 @@ build_query <- function(query,
   }
   
   if(!is.null(lang)) {
-    langq <- paste0("lang:", lang)
-    langq <- paste(langq, collapse = " ")
-    query <- paste(query, langq)
+    query <- paste(query, paste0("lang:", lang))
     
   }
   
