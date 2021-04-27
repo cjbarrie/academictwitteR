@@ -146,6 +146,11 @@ get_all_tweets <-
       saveRDS(df.all, file = paste0(file, ".rds")) # save as RDS
       return(df.all) # return data.frame
     }
+    
+    if (!is.null(data_path) & bind_tweets==T) {
+      return(df.all) # return data.frame
+    }
+    
     if (!is.null(data_path) &
         is.null(file) & bind_tweets == F) {
       cat("Data stored as JSONs: use bind_tweets_json function to bundle into data.frame")
