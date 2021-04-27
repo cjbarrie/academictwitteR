@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_queryv2.R
 \name{build_query}
 \alias{build_query}
-\title{Build tweet query according to targeted parameters, can then be input to main \code{get_all_tweets()} function as query parameter}
+\title{Build tweet query}
 \usage{
 build_query(
   query,
@@ -63,7 +63,7 @@ build_query(
 
 }
 \description{
-Build tweet query according to targeted parameters, can then be input to main \code{get_all_tweets()} function as query parameter
+Build tweet query according to targeted parameters, can then be input to main \code{get_all_tweets()} function as query parameter.
 }
 \examples{
 \dontrun{

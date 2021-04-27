@@ -1,4 +1,6 @@
-#' Build tweet query according to targeted parameters, can then be input to main `get_all_tweets()` function as query parameter
+#' Build tweet query 
+#' 
+#' Build tweet query according to targeted parameters, can then be input to main `get_all_tweets()` function as query parameter.
 #'
 #' @param query string, search query
 #' @param is_retweet If `TRUE`, only retweets will be returned; if `FALSE` retweets will not be returned
