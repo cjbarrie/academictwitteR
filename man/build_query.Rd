@@ -21,7 +21,8 @@ build_query(
   has_media = FALSE,
   has_images = FALSE,
   has_videos = FALSE,
-  has_geo = FALSE
+  has_geo = FALSE,
+  lang
 )
 }
 \arguments{
@@ -58,6 +59,8 @@ build_query(
 \item{has_videos}{If \code{TRUE}, only tweets containing contain native Twitter videos, uploaded directly to Twitter will be returned}
 
 \item{has_geo}{If \code{TRUE}, only tweets containing Tweet-specific geolocation data provided by the Twitter user will be returned}
+
+\item{lang}{string, a single BCP 47 language identifier}
 }
 \value{
 
