@@ -19,6 +19,7 @@
 #' @param has_images If `TRUE`, only tweets containing a recognized URL to an image will be returned
 #' @param has_videos If `TRUE`, only tweets containing contain native Twitter videos, uploaded directly to Twitter will be returned
 #' @param has_geo If `TRUE`, only tweets containing Tweet-specific geolocation data provided by the Twitter user will be returned
+#' @param lang string, a single BCP 47 language identifier
 #'
 #' @return
 #' @export
@@ -43,7 +44,8 @@ build_query <- function(query,
                         has_media = FALSE,
                         has_images = FALSE,
                         has_videos = FALSE,
-                        has_geo = FALSE) {
+                        has_geo = FALSE,
+                        lang) {
   
   if (isTRUE(is_retweet) & isTRUE(is_reply)) {
     stop("A tweet cannot be both a retweet and a reply")
@@ -86,9 +88,11 @@ build_query <- function(query,
     y <- readline("What is latitude? ")  
     z <- readline("What is radius? ")
     
-    if(z>25) {
+    zn<- as.integer(z)
+    while(zn>25) {
       cat("Radius must be less than 25 miles")
       z <- readline("What is radius? ")
+      zn<- as.integer(z)
     }
     
     z <- paste0(z, "mi")
