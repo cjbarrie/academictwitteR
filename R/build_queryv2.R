@@ -148,5 +148,10 @@ build_query <- function(query,
     query <- paste(query, "has:geo")
   }
   
+  if(!is.null(lang)) {
+    query <- paste(query, paste0("lang:", lang))
+    
+  }
+  
   return(query)
 }
