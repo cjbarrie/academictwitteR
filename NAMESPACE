@@ -2,6 +2,7 @@
 
 export(bind_tweet_jsons)
 export(bind_user_jsons)
+export(build_query)
 export(get_all_tweets)
 export(get_geo_tweets)
 export(get_image_tweets)
