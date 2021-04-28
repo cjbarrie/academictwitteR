@@ -63,7 +63,7 @@ build_query(
 
 \item{has_geo}{If \code{TRUE}, only tweets containing Tweet-specific geolocation data provided by the Twitter user will be returned}
 
-\item{lang}{string, a single BCP 47 language identifier}
+\item{lang}{string, a single BCP 47 language identifier e.g. "fr"}
 }
 \value{
 
