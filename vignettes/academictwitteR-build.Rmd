@@ -139,20 +139,35 @@ To build a query including a filter by point radius, we might use:
 
 ```{r}
 
-query <- build_query(query = "#BLM", point_radius = c(-0.131969125179604,51.50847878040284, 25), lang="en")
+query <- build_query(query = "#BLM", point_radius = c(-0.131969125179604,51.50847878040284, 25))
 
 query
   
 ```
 
-Additionally, the `build_query()` function includes prompts for entering parameters that require more precise geographical information, like the "bounding_box" or "point_radius" parameters for which we can submit queries to the Twitter API.
+Note that the maximum radius for the buffer is 25 miles. Similarly, the maximum height and width of any bounding box is 25 miles. Inputting coordinate information that exceeds these bounds will result in a 400 status code error.
+
+To make things a bit simpler, the `build_query()` function also includes prompts for entering parameters that require more precise geographical information, like the "bounding_box" or "point_radius" parameters for which we can submit queries to the Twitter API. These can be called by setting the `geo_query` argument to `TRUE` as so:
 
 
+```{r, eval=F}
 
+query <- build_query(query = "#BLM", geo_query = TRUE)
+  
+```
 
 ```
 Which geo buffer type type do you want? 
 
 1: Point radius
 2: Bounding box
+```
+
+If we select option 1, we will then be prompted to enter the longitude, latitude, and radius of the buffer emanating outwards from this coordinate as below, where I enter the same information as we did above:
+
+```
+Selection: 1
+What is longitude? -0.131969125179604
+What is latitude? 51.50847878040284
+What is radius? 25
 ```
