@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_url_tweetsv2.R
 \name{get_url_tweets}
 \alias{get_url_tweets}
-\title{Get tweets for query containing geo information}
+\title{Get tweets containing URL}
 \usage{
 get_url_tweets(
   query,
@@ -10,25 +10,41 @@ get_url_tweets(
   end_tweets,
   bearer_token,
   file = NULL,
-  data_path = NULL
+  data_path = NULL,
+  bind_tweets = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
-\item{query}{}
+\item{query}{string, url}
 
-\item{start_tweets}{}
+\item{start_tweets}{string, starting date}
 
-\item{end_tweets}{}
+\item{end_tweets}{string, ending date}
 
-\item{bearer_token}{}
+\item{bearer_token}{string, bearer token}
 
-\item{file}{}
+\item{file}{string, name of the resulting RDS file}
 
-\item{data_path}{}
+\item{data_path}{string, if supplied, fetched data can be saved to the designated path as jsons}
+
+\item{bind_tweets}{If \code{TRUE}, tweets captured are bound into a data.frame for assignment}
+
+\item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 }
 \value{
-
+a data.frame
 }
 \description{
-This function loops through specified urls to capture tweets containing the url between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
+This function collects tweets containing a given url between specified date ranges.
+Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of
+JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file, otherwise,
+it will return the results as a dataframe.
+}
+\examples{
+\dontrun{
+bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+tweets <- get_url_tweets("https://www.theguardian.com/environment/2020/jan/07/save-the-planet-guide-fighting-climate-crisis-veganism-flying-earth-emergency-action", 
+"2020-01-01T00:00:00Z", "2020-04-04T00:00:00Z", bearer_token, data_path = "data/")
+}
 }

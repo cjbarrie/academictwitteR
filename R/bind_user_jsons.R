@@ -1,6 +1,6 @@
 #' Bind user information stored as JSON files
 #'
-#' @param data_path string, file path to directory of stored tweets data saved as users_<id>.json
+#' @param data_path string, file path to directory of stored tweets data saved as users_*id*.json
 #'
 #' @return
 #' @export

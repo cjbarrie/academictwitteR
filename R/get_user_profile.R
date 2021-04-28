@@ -1,6 +1,6 @@
 #' Get user profile
 #' 
-#' This function fetches a variety of information about one or more users specified by the requested ids.
+#' This function fetches user-level information for a vector of user IDs.
 #'
 #' @param x string containing one user id or a vector of user ids
 #' @param bearer_token string, bearer token

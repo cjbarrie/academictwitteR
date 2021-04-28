@@ -36,7 +36,12 @@ get_video_tweets(
 
 }
 \description{
-This function loops through specified strings or hashtags and collects tweets containing the strings or hashtags between specified date ranges that also contain native Twitter videos, uploaded directly to Twitter. This will not match on videos created with Periscope, or Tweets with links to other video hosting sites. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
+This function collects tweets containing strings or hashtags between specified date ranges
+that also contain native Twitter videos, uploaded directly to Twitter. This will not match
+on videos created with Periscope, or Tweets with links to other video hosting sites. Tweet-level
+data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored
+as a series of JSONs beginning "users_". If a filename is supplied, this function will save the
+result as a RDS file, otherwise, it will return the results as a dataframe.
 }
 \examples{
 \dontrun{

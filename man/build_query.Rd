@@ -11,8 +11,9 @@ build_query(
   is_quote = FALSE,
   place = NULL,
   country = NULL,
-  point_radius = FALSE,
-  bbox = FALSE,
+  point_radius = NULL,
+  bbox = NULL,
+  geo_query = FALSE,
   remove_promoted = FALSE,
   has_hashtags = FALSE,
   has_cashtags = FALSE,
@@ -38,9 +39,11 @@ build_query(
 
 \item{country}{string, name of country as ISO alpha-2 code e.g. "GB"}
 
-\item{point_radius}{If \code{TRUE}, user will be prompted to enter lat. long, and radius}
+\item{point_radius}{numeric, a vector of two point coordinates latitude, longitude, and point radius distance}
 
-\item{bbox}{If \code{TRUE}, user will be prompted to enter bounding box coordinates from west longitude to north latitude}
+\item{bbox}{numeric, a vector of four bounding box coordinates from west longitude to north latitude}
+
+\item{geo_query}{If \code{TRUE} user will be propmted to enter relevant information for bounding box or point radius geo buffers}
 
 \item{remove_promoted}{If \code{TRUE}, tweets created for promotion only on ads.twitter.com are removed}
 
@@ -66,7 +69,7 @@ build_query(
 
 }
 \description{
-Build tweet query according to targeted parameters, can then be input to main \code{get_all_tweets()} function as query parameter.
+Build tweet query according to targeted parameters, can then be input to main \code{\link{get_all_tweets}} function as query parameter.
 }
 \examples{
 \dontrun{

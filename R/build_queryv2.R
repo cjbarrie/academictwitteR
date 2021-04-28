@@ -1,6 +1,6 @@
 #' Build tweet query 
 #' 
-#' Build tweet query according to targeted parameters, can then be input to main `get_all_tweets()` function as query parameter.
+#' Build tweet query according to targeted parameters, can then be input to main \code{\link{get_all_tweets}} function as query parameter.
 #'
 #' @param query string, search query
 #' @param is_retweet If `TRUE`, only retweets will be returned; if `FALSE` retweets will not be returned
@@ -8,8 +8,9 @@
 #' @param is_quote If `TRUE`, only quote tweets will be returned
 #' @param place string, name of place e.g. "new york city"
 #' @param country string, name of country as ISO alpha-2 code e.g. "GB"
-#' @param point_radius If `TRUE`, user will be prompted to enter lat. long, and radius
-#' @param bbox If `TRUE`, user will be prompted to enter bounding box coordinates from west longitude to north latitude
+#' @param point_radius numeric, a vector of two point coordinates latitude, longitude, and point radius distance
+#' @param bbox numeric, a vector of four bounding box coordinates from west longitude to north latitude
+#' @param geo_query If `TRUE` user will be propmted to enter relevant information for bounding box or point radius geo buffers
 #' @param remove_promoted If `TRUE`, tweets created for promotion only on ads.twitter.com are removed
 #' @param has_hashtags If `TRUE`, only tweets containing hashtags will be returned
 #' @param has_cashtags If `TRUE`, only tweets containing cashtags will be returned
@@ -34,8 +35,9 @@ build_query <- function(query,
                         is_quote = FALSE,
                         place = NULL, 
                         country = NULL, 
-                        point_radius = FALSE,
-                        bbox = FALSE,
+                        point_radius = NULL,
+                        bbox = NULL,
+                        geo_query = FALSE,
                         remove_promoted = FALSE,
                         has_hashtags = FALSE,
                         has_cashtags = FALSE,
@@ -83,32 +85,63 @@ build_query <- function(query,
     query <- paste(query, paste0("place_country:", country))
   }
   
+  if(isTRUE(geo_query)) {
+    if(response <- menu(c("Point radius", "Bounding box"), title="Which geo buffer type type do you want?") ==1) {
+      x <- readline("What is longitude? ")  
+      y <- readline("What is latitude? ")  
+      z <- readline("What is radius? ")
+      
+      zn<- as.integer(z)
+      while(zn>25) {
+        cat("Radius must be less than 25 miles")
+        z <- readline("What is radius? ")
+        zn<- as.integer(z)
+      }
+      
+      z <- paste0(z, "mi")
+      
+      r <- paste(x,y,z)
+      query <- paste(query, paste0("point_radius:","[", r,"]"))
+    }
+    else if(response <- menu(c("Point radius", "Bounding box"), title="Which geo buffer type type do you want?") ==2) {
+        w <- readline("What is west longitude? ")  
+        x <- readline("What is south latitude? ")
+        y <- readline("What is east longitude? ")
+        z <- readline("What is north latitude? ")
+
+        z <- paste(w,x,y,z)
+
+        query <- paste(query, paste0("bounding_box:","[", z,"]"))
+      }
+      
+    }
+  
   if(isTRUE(point_radius)) {
-    x <- readline("What is longitude? ")  
-    y <- readline("What is latitude? ")  
-    z <- readline("What is radius? ")
-    
-    zn<- as.integer(z)
+    x <- point_radius[1]
+    y <- point_radius[2]
+    z <- point_radius[3]
+
+    zn<- as.numeric(z)
     while(zn>25) {
       cat("Radius must be less than 25 miles")
       z <- readline("What is radius? ")
-      zn<- as.integer(z)
+      zn<- as.numeric(z)
     }
-    
+
     z <- paste0(z, "mi")
-    
+
     r <- paste(x,y,z)
     query <- paste(query, paste0("point_radius:","[", r,"]"))
   }
-  
+
   if(isTRUE(bbox)) {
-    w <- readline("What is west longitude? ")  
-    x <- readline("What is south latitude? ")  
-    y <- readline("What is east longitude? ")
-    z <- readline("What is north latitude? ")
-    
+    w <- bbox[1]
+    x <- bbox[2]
+    y <- bbox[3]
+    z <- bbox[4]
+
     z <- paste(w,x,y,z)
-    
+
     query <- paste(query, paste0("bounding_box:","[", z,"]"))
   }
   
