@@ -39,7 +39,7 @@ build_query(
 
 \item{country}{string, name of country as ISO alpha-2 code e.g. "GB"}
 
-\item{point_radius}{numeric, a vector of two point coordinates latitude, longitude, and point radius distance}
+\item{point_radius}{numeric, a vector of two point coordinates latitude, longitude, and point radius distance (in miles)}
 
 \item{bbox}{numeric, a vector of four bounding box coordinates from west longitude to north latitude}
 

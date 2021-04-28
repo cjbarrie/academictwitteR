@@ -1,11 +1,14 @@
-#' Get tweets from full archive search
+#' Get tweets within bounding box
 #'
-#' This function loops collects tweets containing strings or hashtags 
-#' between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; 
-#' User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will 
+#' This function collects tweets containing strings or hashtags 
+#' between specified date ranges filtering by bounding box. Tweet-level data is stored in a data/ 
+#' path as a series of JSONs beginning "data_"; User-level data is stored as a series of 
+#' JSONs beginning "users_". If a filename is supplied, this function will 
 #' save the result as a RDS file, otherwise, it will return the results as a data.frame.
+#' Note: width and height of the bounding box must be less than 25mi.
 #'
 #' @param query string, search query
+#' @param bbox numeric, a vector of four bounding box coordinates from west longitude to north latitude
 #' @param start_tweets string, starting date
 #' @param end_tweets  string, ending date
 #' @param bearer_token string, bearer token
@@ -20,10 +23,11 @@
 #' @examples
 #' \dontrun{
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-#' get_all_tweets("BLM", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
+#' tweets <- get_bbox_tweets("happy", bbox= c(-0.222473,51.442453,0.072784,51.568534), "2021-01-01T00:00:00Z", "2021-02-01T10:00:00Z", bearer_token, data_path = "data/")
 #' }
-get_all_tweets <-
+get_bbox_tweets <-
   function(query,
+           bbox,
            start_tweets,
            end_tweets,
            bearer_token,
@@ -31,6 +35,10 @@ get_all_tweets <-
            data_path = NULL,
            bind_tweets = TRUE,
            verbose = TRUE) {
+    #stop clause for if user sets no place
+    if (missing(bbox)) {
+      stop("bbox coordinates must be specified for get_bbox_tweets() function")
+    }
     #warning re data storage recommendations if no data path set
     if (is.null(data_path)) {
       warning(
@@ -82,9 +90,18 @@ get_all_tweets <-
     ntweets <- 0
     
     while (!is.null(nextoken)) {
+      w <- bbox[1]
+      x <- bbox[2]
+      y <- bbox[3]
+      z <- bbox[4]
+      
+      z <- paste(w,x,y,z)
+      
+      bboxparam <- paste0("bounding_box:","[", z,"]")
+      
       df <-
         get_tweets(
-          q = query ,
+          q = paste(query, bboxparam),
           n = 500,
           start_time = start_tweets,
           end_time = end_tweets,
@@ -115,28 +132,28 @@ get_all_tweets <-
       nextoken <-
         df$meta$next_token #this is NULL if there are no pages left
       if(verbose) {
-      toknum <- toknum + 1
-      ntweets <- ntweets + nrow(df$data)
-      cat(
-        "query: <",
-        query,
-        ">: ",
-        "(tweets captured this page: ",
-        nrow(df$data),
-        "). Total pages queried: ",
-        toknum,
-        ". Total tweets ingested: ",
-        ntweets, 
-        ". \n",
-        sep = ""
-      )
+        toknum <- toknum + 1
+        ntweets <- ntweets + nrow(df$data)
+        cat(
+          "query: <",
+          query,
+          ">: ",
+          "(tweets captured this page: ",
+          nrow(df$data),
+          "). Total pages queried: ",
+          toknum,
+          ". Total tweets ingested: ",
+          ntweets, 
+          ". \n",
+          sep = ""
+        )
       }
       Sys.sleep(3.1)
       if (is.null(nextoken)) {
         if(verbose) {
-        cat("next_token is now NULL for",
-            query,
-            ": finishing collection. \n")
+          cat("next_token is now NULL for",
+              query,
+              ": finishing collection. \n")
         }
         break
       }
