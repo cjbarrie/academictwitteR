@@ -23,7 +23,7 @@ build_query(
   has_images = FALSE,
   has_videos = FALSE,
   has_geo = FALSE,
-  lang
+  lang = NULL
 )
 }
 \arguments{
