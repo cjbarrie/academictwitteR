@@ -20,7 +20,7 @@
 #' @param has_images If `TRUE`, only tweets containing a recognized URL to an image will be returned
 #' @param has_videos If `TRUE`, only tweets containing contain native Twitter videos, uploaded directly to Twitter will be returned
 #' @param has_geo If `TRUE`, only tweets containing Tweet-specific geolocation data provided by the Twitter user will be returned
-#' @param lang string, a single BCP 47 language identifier
+#' @param lang string, a single BCP 47 language identifier e.g. "fr"
 #'
 #' @return
 #' @export
