@@ -47,7 +47,7 @@ build_query <- function(query,
                         has_images = FALSE,
                         has_videos = FALSE,
                         has_geo = FALSE,
-                        lang) {
+                        lang= NULL) {
   
   if (isTRUE(is_retweet) & isTRUE(is_reply)) {
     stop("A tweet cannot be both a retweet and a reply")
@@ -116,7 +116,7 @@ build_query <- function(query,
       
     }
   
-  if(isTRUE(point_radius)) {
+  if(!is.null(point_radius)) {
     x <- point_radius[1]
     y <- point_radius[2]
     z <- point_radius[3]
@@ -134,7 +134,7 @@ build_query <- function(query,
     query <- paste(query, paste0("point_radius:","[", r,"]"))
   }
 
-  if(isTRUE(bbox)) {
+  if(!is.null(bbox)) {
     w <- bbox[1]
     x <- bbox[2]
     y <- bbox[3]

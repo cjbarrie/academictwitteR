@@ -21,6 +21,7 @@ Description: Package to query the Twitter Academic Research Product Track,
     the client side.
 License: MIT + file LICENSE
 URL: https://github.com/cjbarrie/academictwitteR
+BugReports: https://github.com/cjbarrie/academictwitteR/issues
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

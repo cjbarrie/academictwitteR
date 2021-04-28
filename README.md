@@ -6,8 +6,6 @@
 
 Repo containing code to for R package <tt>academictwitteR</tt> to collect tweets from v2 API endpoint for the Academic Research Product Track.
 
-Get started by reading `vignette("academictwitteR")`.
-
 ```
 To cite package ‘academictwitteR’ in publications use:
 
@@ -34,8 +32,10 @@ A BibTeX entry for LaTeX users is
 You can install the development package with:
 
 ``` r
-devtools::install_github("cjbarrie/academictwitteR")
+devtools::install_github("cjbarrie/academictwitteR", build_vignettes = TRUE)
 ```
+
+Get started by reading `vignette("academictwitteR-intro")`.
 
 The <tt>academictwitteR</tt> package has been designed with the efficient storage of data in mind. Queries to the API include arguments to specify whether tweets be stored as a .rds file using the `file` argument or as separate JSON files for tweet- and user-level information separately with argument `data_path`.
 
