@@ -1,12 +1,12 @@
-get_tweets <- function(q="",n=10,start_time,end_time,token,next_token=""){
-  if(n>500){
-    warning("n too big. Using 500 instead")
-    n <- 500
-  }
-  if(n<5){
-    warning("n too small Using 10 instead")
-    n <- 500
-  }
+get_tweets <- function(q="",n=500,start_time,end_time,token,next_token=""){
+  # if(n>500){
+  #   warning("n too big. Using 500 instead")
+  #   n <- 500
+  # }
+  # if(n<5){
+  #   warning("n too small Using 10 instead")
+  #   n <- 500
+  # }
   if(missing(start_time)){
     stop("start time must be specified.")
   }

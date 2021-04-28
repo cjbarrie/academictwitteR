@@ -1,11 +1,13 @@
-#' Get tweets from full archive search
+#' Get tweets with place parameter
 #'
-#' This function loops collects tweets containing strings or hashtags 
-#' between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; 
-#' User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will 
+#' This function collects tweets containing strings or hashtags 
+#' between specified date ranges filtering by place. Tweet-level data is stored in a data/ 
+#' path as a series of JSONs beginning "data_"; User-level data is stored as a series of 
+#' JSONs beginning "users_". If a filename is supplied, this function will 
 #' save the result as a RDS file, otherwise, it will return the results as a data.frame.
 #'
 #' @param query string, search query
+#' @param country, string, name of country as ISO alpha-2 code e.g. "GB"
 #' @param start_tweets string, starting date
 #' @param end_tweets  string, ending date
 #' @param bearer_token string, bearer token
@@ -20,10 +22,11 @@
 #' @examples
 #' \dontrun{
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-#' get_all_tweets("BLM", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
+#' get_country_tweets("happy", country = "GB", "2021-01-01T00:00:00Z", "2021-01-01T00:10:00Z", bearer_token, data_path = "data/")
 #' }
-get_all_tweets <-
+get_country_tweets <-
   function(query,
+           country,
            start_tweets,
            end_tweets,
            bearer_token,
@@ -31,6 +34,10 @@ get_all_tweets <-
            data_path = NULL,
            bind_tweets = TRUE,
            verbose = TRUE) {
+    #stop clause for if user sets no place
+    if (missing(country)) {
+      stop("country must be specified for get_country_tweets() function")
+    }
     #warning re data storage recommendations if no data path set
     if (is.null(data_path)) {
       warning(
@@ -82,9 +89,10 @@ get_all_tweets <-
     ntweets <- 0
     
     while (!is.null(nextoken)) {
+      cntparam <- paste0("place_country:", country)
       df <-
         get_tweets(
-          q = query ,
+          q = paste(query, cntparam),
           n = 500,
           start_time = start_tweets,
           end_time = end_tweets,
@@ -115,28 +123,28 @@ get_all_tweets <-
       nextoken <-
         df$meta$next_token #this is NULL if there are no pages left
       if(verbose) {
-      toknum <- toknum + 1
-      ntweets <- ntweets + nrow(df$data)
-      cat(
-        "query: <",
-        query,
-        ">: ",
-        "(tweets captured this page: ",
-        nrow(df$data),
-        "). Total pages queried: ",
-        toknum,
-        ". Total tweets ingested: ",
-        ntweets, 
-        ". \n",
-        sep = ""
-      )
+        toknum <- toknum + 1
+        ntweets <- ntweets + nrow(df$data)
+        cat(
+          "query: <",
+          query,
+          ">: ",
+          "(tweets captured this page: ",
+          nrow(df$data),
+          "). Total pages queried: ",
+          toknum,
+          ". Total tweets ingested: ",
+          ntweets, 
+          ". \n",
+          sep = ""
+        )
       }
       Sys.sleep(3.1)
       if (is.null(nextoken)) {
         if(verbose) {
-        cat("next_token is now NULL for",
-            query,
-            ": finishing collection. \n")
+          cat("next_token is now NULL for",
+              query,
+              ": finishing collection. \n")
         }
         break
       }

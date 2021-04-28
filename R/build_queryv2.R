@@ -8,7 +8,7 @@
 #' @param is_quote If `TRUE`, only quote tweets will be returned
 #' @param place string, name of place e.g. "new york city"
 #' @param country string, name of country as ISO alpha-2 code e.g. "GB"
-#' @param point_radius numeric, a vector of two point coordinates latitude, longitude, and point radius distance
+#' @param point_radius numeric, a vector of two point coordinates latitude, longitude, and point radius distance (in miles)
 #' @param bbox numeric, a vector of four bounding box coordinates from west longitude to north latitude
 #' @param geo_query If `TRUE` user will be propmted to enter relevant information for bounding box or point radius geo buffers
 #' @param remove_promoted If `TRUE`, tweets created for promotion only on ads.twitter.com are removed
@@ -124,7 +124,7 @@ build_query <- function(query,
     zn<- as.numeric(z)
     while(zn>25) {
       cat("Radius must be less than 25 miles")
-      z <- readline("What is radius? ")
+      z <- readline("Input new radius: ")
       zn<- as.numeric(z)
     }
 
