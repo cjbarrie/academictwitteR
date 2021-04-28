@@ -1,6 +1,10 @@
 #' Get tweets for query containing mentions of another user
 #'
-#' This function loops through specified strings or hashtags and collects tweets containing the strings or hashtags between specified date ranges that also contain mentions of another Twitter user. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
+#' This function collects tweets containing strings or 
+#' hashtags between specified date ranges that also contain mentions of another Twitter user. Tweet-level data 
+#' is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of 
+#' JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file, otherwise, 
+#' it will return the results as a dataframe.
 #'
 #' @param query string, search query
 #' @param start_tweets string, starting date
@@ -15,6 +19,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 #' get_mentions_tweets("#nowplaying", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
 #' }

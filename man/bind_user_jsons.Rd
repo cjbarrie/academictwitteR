@@ -7,7 +7,7 @@
 bind_user_jsons(data_path)
 }
 \arguments{
-\item{data_path}{string, file path to directory of stored tweets data saved as users_<id>.json}
+\item{data_path}{string, file path to directory of stored tweets data saved as users_\emph{id}.json}
 }
 \value{
 

@@ -1,6 +1,6 @@
 #' Bind tweets stored as JSON files
 #'
-#' @param data_path string, file path to directory of stored tweets data saved as data_<id>.json
+#' @param data_path string, file path to directory of stored tweets data saved as data_*id*.json
 #'
 #' @return
 #' @export
