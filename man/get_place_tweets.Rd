@@ -17,7 +17,7 @@ get_place_tweets(
 )
 }
 \arguments{
-\item{query}{string, search query}
+\item{query}{string or character vector, search query or queries}
 
 \item{place, }{string, name of place e.g. "new york city"}
 

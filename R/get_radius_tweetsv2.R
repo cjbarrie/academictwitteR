@@ -7,7 +7,7 @@
 #' save the result as a RDS file, otherwise, it will return the results as a data.frame.
 #' Note: radius must be less than 25mi.
 #'
-#' @param query string, search query
+#' @param query string or character vector, search query or queries
 #' @param radius numeric, a vector of two point coordinates latitude, longitude, and point radius distance (in miles)
 #' @param start_tweets string, starting date
 #' @param end_tweets  string, ending date

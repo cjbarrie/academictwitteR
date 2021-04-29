@@ -16,7 +16,7 @@ get_all_tweets(
 )
 }
 \arguments{
-\item{query}{string, search query}
+\item{query}{string or character vector, search query or queries}
 
 \item{start_tweets}{string, starting date}
 

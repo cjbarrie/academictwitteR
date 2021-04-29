@@ -17,7 +17,7 @@ get_radius_tweets(
 )
 }
 \arguments{
-\item{query}{string, search query}
+\item{query}{string or character vector, search query or queries}
 
 \item{radius}{numeric, a vector of two point coordinates latitude, longitude, and point radius distance (in miles)}
 

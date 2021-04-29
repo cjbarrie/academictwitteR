@@ -2,7 +2,7 @@
 #' 
 #' Build tweet query according to targeted parameters, can then be input to main \code{\link{get_all_tweets}} function as query parameter.
 #'
-#' @param query string, search query
+#' @param query string or character vector, search query or queries
 #' @param is_retweet If `TRUE`, only retweets will be returned; if `FALSE` retweets will not be returned
 #' @param is_reply If `TRUE`, only reply tweets will be returned
 #' @param is_quote If `TRUE`, only quote tweets will be returned

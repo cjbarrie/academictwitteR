@@ -17,7 +17,7 @@ get_country_tweets(
 )
 }
 \arguments{
-\item{query}{string, search query}
+\item{query}{string or character vector, search query or queries}
 
 \item{country, }{string, name of country as ISO alpha-2 code e.g. "GB"}
 

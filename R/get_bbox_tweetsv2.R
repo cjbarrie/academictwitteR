@@ -7,7 +7,7 @@
 #' save the result as a RDS file, otherwise, it will return the results as a data.frame.
 #' Note: width and height of the bounding box must be less than 25mi.
 #'
-#' @param query string, search query
+#' @param query string or character vector, search query or queries
 #' @param bbox numeric, a vector of four bounding box coordinates from west longitude to north latitude
 #' @param start_tweets string, starting date
 #' @param end_tweets  string, ending date
