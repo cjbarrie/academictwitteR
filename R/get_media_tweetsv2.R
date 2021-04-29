@@ -82,10 +82,14 @@ get_media_tweets <-
     toknum <- 0
     ntweets <- 0
     
+    if(isTRUE(length(query) >1)) {
+      query <- paste(query, collapse = " OR ")
+    }
+    
     while (!is.null(nextoken)) {
       df <-
         get_tweets(
-          q = paste0('has:media ', query),
+          q = paste(query, 'has:media'),
           n = 500,
           start_time = start_tweets,
           end_time = end_tweets,

@@ -88,6 +88,10 @@ get_place_tweets <-
     toknum <- 0
     ntweets <- 0
     
+    if(isTRUE(length(query) >1)) {
+      query <- paste(query, collapse = " OR ")
+    }
+    
     while (!is.null(nextoken)) {
       placeparam <- paste0("place:", place)
       df <-

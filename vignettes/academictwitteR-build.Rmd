@@ -21,15 +21,107 @@ The v2 Twitter API allows for greater precision when making queries. A query mig
 
 This vignette guides you through the logics underpinning queries to the Twitter API. For full information on these logics you may additionally wish to consult the Twitter API documentation on how to build a query [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query).
 
-## Building a query manually
+## Introduction
 
 We first load our package into memory with:
 
-```{r setup}
+```{r, eval =FALSE}
 library(academictwitteR)
 ```
 
-With the `academictwitteR` you have two main options when building a query. The first is to do it "manually" by following the documentation provided by Twitter (linked above) and pasting in the relevant operators to your query.
+```{r, echo =FALSE}
+library(devtools)
+load_all()
+```
+
+Getting tweets of specified users is achieved with the `get_user_tweets()` function. This function captures tweets for a particular user or set of users and collects tweets between specified date ranges, avoiding rate limits by sleeping between calls. A call may look like:
+
+```{r, eval = F}
+
+bearer_token <- "" # Insert bearer token
+
+users <- c("TwitterDev", "jack")
+tweets <-
+  get_user_tweets(users,
+                  "2010-01-01T00:00:00Z",
+                  "2020-01-01T00:00:00Z",
+                  bearer_token)
+
+```
+
+Getting tweets of specified string or set of strings is achieved with the `get_all_tweets()` function. This function captures tweets containing a particular string or set of strings between specified date ranges, avoiding rate limits by sleeping between calls. 
+
+This function can also capture tweets for a particular hashtag or set of hashtags when specified with the # operator.
+
+For a particular set of strings a call may look like:
+
+```{r, eval = F}
+
+bearer_token <- "" # Insert bearer token
+
+tweets <-
+  get_all_tweets("apples OR oranges",
+                 "2020-01-01T00:00:00Z",
+                 "2020-01-05T00:00:00Z",
+                 bearer_token)
+
+```
+
+For a particular set of hashtags a call may look like:
+
+```{r, eval = F}
+
+bearer_token <- "" # Insert bearer token
+
+tweets <-
+  get_all_tweets(
+    "#BLM OR #BlackLivesMatter",
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token
+  )
+
+```
+
+Alternatively, we can specify a character string comprising several elements. For example, we if we wanted to search multiple hashtags, we could specify a query as follows:
+
+```{r, eval = F}
+
+bearer_token <- "" # Insert bearer token
+
+htagquery <- c("#BLM", "#BlackLivesMatter", "#GeorgeFloyd")
+
+tweets <-
+  get_all_tweets(
+    htagquery,
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token
+  )
+
+```
+
+, which will achieve the same thing as typing out `OR` between our strings.  
+
+Note that the "AND" operator is implicit when specifying more than one character string in the query. See [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query) for information on building queries for search tweets. Thus, when searching for all elements of a character string, a call may look like:
+
+```{r, eval = F}
+
+bearer_token <- "" # Insert bearer token
+
+tweets <-
+  get_all_tweets("apples oranges",
+                 "2020-01-01T00:00:00Z",
+                 "2020-01-05T00:00:00Z",
+                 bearer_token)
+
+```
+
+, which will capture tweets containing *both* the words "apples" and "oranges." The same logic applies for hashtag queries.
+
+## Building a query manually
+
+With `academictwitteR` you have two main options when building a query. The first is to do it "manually" by following the documentation provided by Twitter (linked above) and pasting in the relevant operators to your query.
 
 Here's how you might achieve this, using the `get_all_tweets()` function:
 
@@ -139,7 +231,11 @@ To build a query including a filter by point radius, we might use:
 
 ```{r}
 
-query <- build_query(query = "#BLM", point_radius = c(-0.131969125179604,51.50847878040284, 25))
+query <-
+  build_query(
+    query = "#BLM",
+    point_radius = c(-0.131969125179604, 51.50847878040284, 25)
+  )
 
 query
   
@@ -153,7 +249,7 @@ To make things a bit simpler, the `build_query()` function also includes prompts
 ```{r, eval=F}
 
 query <- build_query(query = "#BLM", geo_query = TRUE)
-  
+
 ```
 
 ```
@@ -174,11 +270,65 @@ What is radius? 25
 ```
 
 ```{r, echo=F}
-query <- "#BLM -is:retweet point_radius:[-0.131969125179604 51.50847878040284 25mi]"
+query <-
+  "#BLM -is:retweet point_radius:[-0.131969125179604 51.50847878040284 25mi]"
+
 ```
 
 And we see that the end result is the same as the above:
 
 ```{r}
 query
+```
+
+Note that `build_query()` can also take a character vector of strings as query. This will produce the equivalent of typing `"OR"` between our target strings. Let's say we were interested in multiple hashtags and not just one. We could still build a query filter our tweets by the parameters discuss above as follows:
+
+```{r}
+
+htagquery <- c("#BLM", "#BlackLivesMatter", "#GeorgeFloyd")
+
+query <-
+  build_query(
+    query = htagquery,
+    is_retweet = FALSE,
+    place = "London",
+    remove_promoted = TRUE,
+    has_links = TRUE,
+    has_videos = TRUE,
+    lang = "en"
+  )
+
+query
+  
+```
+
+## Building user queries with `build_user_query()`
+
+What if we had a number of users in which we were interested but we weren't interested in all of their tweets? Say we wanted only to collect tweets that weren't retweets but contained images, and that were in the English language?
+
+We can achieve this by building a query with `build_user_query` and passing the resulting character vector of users and parameters to the `get_user_tweets()` function as follows:
+
+```{r}
+
+users <- c("cbarrie", "justin_ct_ho")
+
+users_params <-
+  build_user_query(users,
+                   is_retweet = F,
+                   has_media = T,
+                   lang = "en")
+
+users_params
+
+```
+
+
+We would then enter our new vector of users with added parameters to the `get_user_tweets()` function as follows:
+
+```{r, eval=FALSE}
+tweets <-
+  get_user_tweets(users_params,
+                  "2018-01-01T00:00:00Z",
+                  "2020-04-05T00:00:00Z",
+                  bearer_token)
 ```

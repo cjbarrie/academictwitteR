@@ -89,6 +89,10 @@ get_bbox_tweets <-
     toknum <- 0
     ntweets <- 0
     
+    if(isTRUE(length(query) >1)) {
+      query <- paste(query, collapse = " OR ")
+    }
+    
     while (!is.null(nextoken)) {
       w <- bbox[1]
       x <- bbox[2]

@@ -88,6 +88,10 @@ get_lang_tweets <-
     toknum <- 0
     ntweets <- 0
     
+    if(isTRUE(length(query) >1)) {
+      query <- paste(query, collapse = " OR ")
+    }
+    
     while (!is.null(nextoken)) {
       langparam <- paste0("lang:", lang)
       df <-

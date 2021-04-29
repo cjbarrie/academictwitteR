@@ -89,6 +89,10 @@ get_radius_tweets <-
     toknum <- 0
     ntweets <- 0
     
+    if(isTRUE(length(query) >1)) {
+      query <- paste(query, collapse = " OR ")
+    }
+    
     while (!is.null(nextoken)) {
       x <- radius[1]
       y <- radius[2]
