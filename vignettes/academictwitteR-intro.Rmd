@@ -46,7 +46,7 @@ We begin by loading the package with:
 library(academictwitteR)
 ```
 
-The workhorse function of `academictwitteR` when it comes to collecting tweets containing a particular string or hashtag is `get_all_tweets`.
+The workhorse function of `academictwitteR` when it comes to collecting tweets containing a particular string or hashtag is `get_all_tweets()`.
 
 ```{r, eval=F}
 

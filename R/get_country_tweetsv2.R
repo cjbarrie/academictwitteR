@@ -88,6 +88,10 @@ get_country_tweets <-
     toknum <- 0
     ntweets <- 0
     
+    if(isTRUE(length(query) >1)) {
+      query <- paste(query, collapse = " OR ")
+    }
+    
     while (!is.null(nextoken)) {
       cntparam <- paste0("place_country:", country)
       df <-

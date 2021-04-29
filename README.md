@@ -92,9 +92,28 @@ tweets <-
 
 ```
 
-Note that the "AND" operator is implicit when specifying more than one character string in the query. See [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query) for information on building queries for search tweets. 
+Alternatively, we can specify a character vector comprising several elements. For example, we if we wanted to search multiple hashtags, we could specify a query as follows:
 
-Thus, when searching for all elements of a character string, a call may look like:
+```{r}
+
+bearer_token <- "" # Insert bearer token
+
+htagquery <- c("#BLM", "#BlackLivesMatter", "#GeorgeFloyd")
+
+tweets <-
+  get_all_tweets(
+    htagquery,
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token
+  )
+
+```
+
+, which will achieve the same thing as typing out `OR` between our strings.  
+
+
+Note that the "AND" operator is implicit when specifying more than one character string in the query. See [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query) for information on building queries for search tweets. Thus, when searching for all elements of a character string, a call may look like:
 
 ```{r}
 

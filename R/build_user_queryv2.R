@@ -2,7 +2,7 @@
 #' 
 #' Build tweet query according to targeted parameters, can then be input to main \code{\link{get_all_tweets}} function as query parameter.
 #'
-#' @param query string, search query
+#' @param users string or character vector, user handles from which to collect data
 #' @param is_retweet If `TRUE`, only retweets will be returned; if `FALSE` retweets will not be returned
 #' @param is_reply If `TRUE`, only reply tweets will be returned
 #' @param is_quote If `TRUE`, only quote tweets will be returned
@@ -27,9 +27,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' query <- build_query("happy", is_retweet = FALSE, point_radius = TRUE, place = "new york", country = "US")
+#' users <- c("cbarrie", "justin_ct_ho")
+#' users <-   build_user_query(users, is_retweet = F, has_media = T, lang = "en")
 #' }
-build_query <- function(query, 
+build_user_query <- function(users, 
                         is_retweet = NULL, 
                         is_reply = FALSE, 
                         is_quote = FALSE,
@@ -49,9 +50,8 @@ build_query <- function(query,
                         has_geo = FALSE,
                         lang= NULL) {
   
-  if(isTRUE(length(query) >1)) {
-    query <- paste(query, collapse = " OR ")
-  }
+  for(i in seq_along(users)) {
+    query <- users[[i]]
   
   if (isTRUE(is_retweet) & isTRUE(is_reply)) {
     stop("A tweet cannot be both a retweet and a reply")
@@ -108,44 +108,44 @@ build_query <- function(query,
       query <- paste(query, paste0("point_radius:","[", r,"]"))
     }
     else if(response <- menu(c("Point radius", "Bounding box"), title="Which geo buffer type type do you want?") ==2) {
-        w <- readline("What is west longitude? ")  
-        x <- readline("What is south latitude? ")
-        y <- readline("What is east longitude? ")
-        z <- readline("What is north latitude? ")
-
-        z <- paste(w,x,y,z)
-
-        query <- paste(query, paste0("bounding_box:","[", z,"]"))
-      }
+      w <- readline("What is west longitude? ")  
+      x <- readline("What is south latitude? ")
+      y <- readline("What is east longitude? ")
+      z <- readline("What is north latitude? ")
       
+      z <- paste(w,x,y,z)
+      
+      query <- paste(query, paste0("bounding_box:","[", z,"]"))
     }
+    
+  }
   
   if(!is.null(point_radius)) {
     x <- point_radius[1]
     y <- point_radius[2]
     z <- point_radius[3]
-
+    
     zn<- as.numeric(z)
     while(zn>25) {
       cat("Radius must be less than 25 miles")
       z <- readline("Input new radius: ")
       zn<- as.numeric(z)
     }
-
+    
     z <- paste0(z, "mi")
-
+    
     r <- paste(x,y,z)
     query <- paste(query, paste0("point_radius:","[", r,"]"))
   }
-
+  
   if(!is.null(bbox)) {
     w <- bbox[1]
     x <- bbox[2]
     y <- bbox[3]
     z <- bbox[4]
-
+    
     z <- paste(w,x,y,z)
-
+    
     query <- paste(query, paste0("bounding_box:","[", z,"]"))
   }
   
@@ -190,5 +190,7 @@ build_query <- function(query,
     
   }
   
-  return(query)
+  users[[i]] <- paste(query)
+  }
+  return(users)
 }
