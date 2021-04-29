@@ -6,7 +6,7 @@
 #' @param is_retweet If `TRUE`, only retweets will be returned; if `FALSE` retweets will not be returned
 #' @param is_reply If `TRUE`, only reply tweets will be returned
 #' @param is_quote If `TRUE`, only quote tweets will be returned
-#' @param place string, name of place e.g. "new york city"
+#' @param place string, name of place e.g. "London"
 #' @param country string, name of country as ISO alpha-2 code e.g. "GB"
 #' @param point_radius numeric, a vector of two point coordinates latitude, longitude, and point radius distance (in miles)
 #' @param bbox numeric, a vector of four bounding box coordinates from west longitude to north latitude
@@ -30,7 +30,7 @@
 #' query <- build_query("happy", is_retweet = FALSE, point_radius = TRUE, place = "new york", country = "US")
 #' }
 build_query <- function(query, 
-                        is_retweet = FALSE, 
+                        is_retweet = NULL, 
                         is_reply = FALSE, 
                         is_quote = FALSE,
                         place = NULL, 

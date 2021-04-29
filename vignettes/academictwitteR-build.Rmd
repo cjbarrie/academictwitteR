@@ -170,4 +170,15 @@ Selection: 1
 What is longitude? -0.131969125179604
 What is latitude? 51.50847878040284
 What is radius? 25
+
+```
+
+```{r, echo=F}
+query <- "#BLM -is:retweet point_radius:[-0.131969125179604 51.50847878040284 25mi]"
+```
+
+And we see that the end result is the same as the above:
+
+```{r}
+query
 ```
