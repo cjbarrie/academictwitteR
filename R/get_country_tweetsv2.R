@@ -6,7 +6,7 @@
 #' JSONs beginning "users_". If a filename is supplied, this function will 
 #' save the result as a RDS file, otherwise, it will return the results as a data.frame.
 #'
-#' @param query string, search query
+#' @param query string or character vector, search query or queries
 #' @param country, string, name of country as ISO alpha-2 code e.g. "GB"
 #' @param start_tweets string, starting date
 #' @param end_tweets  string, ending date

@@ -27,7 +27,7 @@ build_query(
 )
 }
 \arguments{
-\item{query}{string, search query}
+\item{query}{string or character vector, search query or queries}
 
 \item{is_retweet}{If \code{TRUE}, only retweets will be returned; if \code{FALSE} retweets will not be returned}
 

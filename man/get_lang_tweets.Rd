@@ -17,7 +17,7 @@ get_lang_tweets(
 )
 }
 \arguments{
-\item{query}{string, search query}
+\item{query}{string or character vector, search query or queries}
 
 \item{lang, }{string, a single BCP 47 language identifier e.g. "fr"}
 

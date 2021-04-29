@@ -17,7 +17,7 @@ get_bbox_tweets(
 )
 }
 \arguments{
-\item{query}{string, search query}
+\item{query}{string or character vector, search query or queries}
 
 \item{bbox}{numeric, a vector of four bounding box coordinates from west longitude to north latitude}
 
