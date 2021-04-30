@@ -5,3 +5,4 @@ data\*.*
 includes\*.*
 .Rbuildignore
 ^LICENSE\.md$
+.DS_Store
