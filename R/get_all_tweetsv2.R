@@ -13,6 +13,7 @@
 #' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
 #' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
 #' @param verbose If `FALSE`, query progress messages are suppressed
+#' @param ... arguements will be passed to `built_query()` function. See `?build_query()` for further information.
 #' 
 #' @return a data.frame
 #' @export
@@ -30,7 +31,8 @@ get_all_tweets <-
            file = NULL,
            data_path = NULL,
            bind_tweets = TRUE,
-           verbose = TRUE) {
+           verbose = TRUE, 
+           ...) {
     #warning re data storage recommendations if no data path set
     if (is.null(data_path)) {
       warning(
@@ -76,19 +78,17 @@ get_all_tweets <-
              immediate. = TRUE
            ))
     
+    # Build query
+    built_query <- build_query(query, ...)
+    
     nextoken <- ""
     df.all <- data.frame()
     toknum <- 0
     ntweets <- 0
-    
-    if(isTRUE(length(query) >1)) {
-      query <- paste(query, collapse = " OR ")
-    }
-    
     while (!is.null(nextoken)) {
       df <-
         get_tweets(
-          q = query ,
+          q = built_query,
           n = 500,
           start_time = start_tweets,
           end_time = end_tweets,
@@ -123,7 +123,7 @@ get_all_tweets <-
       ntweets <- ntweets + nrow(df$data)
       cat(
         "query: <",
-        query,
+        built_query,
         ">: ",
         "(tweets captured this page: ",
         nrow(df$data),
@@ -138,8 +138,8 @@ get_all_tweets <-
       Sys.sleep(3.1)
       if (is.null(nextoken)) {
         if(verbose) {
-        cat("next_token is now NULL for",
-            query,
+        cat("This is the last page for",
+            built_query,
             ": finishing collection. \n")
         }
         break
