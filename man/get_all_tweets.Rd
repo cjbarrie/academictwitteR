@@ -12,7 +12,8 @@ get_all_tweets(
   file = NULL,
   data_path = NULL,
   bind_tweets = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  ...
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ get_all_tweets(
 \item{bind_tweets}{If \code{TRUE}, tweets captured are bound into a data.frame for assignment}
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
+
+\item{...}{arguements will be passed to \code{built_query()} function. See \code{?build_query()} for further information.}
 }
 \value{
 a data.frame

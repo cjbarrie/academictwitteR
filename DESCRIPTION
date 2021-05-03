@@ -32,5 +32,6 @@ Imports:
     jsonlite
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    devtools
 VignetteBuilder: knitr

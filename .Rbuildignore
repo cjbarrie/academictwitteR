@@ -6,3 +6,7 @@ includes\*.*
 .Rbuildignore
 ^LICENSE\.md$
 .DS_Store
+.github
+twittterv2r.Rproj
+paper.bib
+paper.md

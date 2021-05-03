@@ -22,7 +22,7 @@
 #' @param has_geo If `TRUE`, only tweets containing Tweet-specific geolocation data provided by the Twitter user will be returned
 #' @param lang string, a single BCP 47 language identifier e.g. "fr"
 #'
-#' @return
+#' @return a query string
 #' @export
 #'
 #' @examples
@@ -30,6 +30,10 @@
 #' users <- c("cbarrie", "justin_ct_ho")
 #' users <-   build_user_query(users, is_retweet = F, has_media = T, lang = "en")
 #' }
+#' 
+#' @importFrom utils menu
+#' 
+
 build_user_query <- function(users, 
                         is_retweet = NULL, 
                         is_reply = FALSE, 

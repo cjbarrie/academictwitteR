@@ -66,7 +66,7 @@ build_user_query(
 \item{lang}{string, a single BCP 47 language identifier e.g. "fr"}
 }
 \value{
-
+a query string
 }
 \description{
 Build tweet query according to targeted parameters, can then be input to main \code{\link{get_all_tweets}} function as query parameter.
@@ -76,4 +76,5 @@ Build tweet query according to targeted parameters, can then be input to main \c
 users <- c("cbarrie", "justin_ct_ho")
 users <-   build_user_query(users, is_retweet = F, has_media = T, lang = "en")
 }
+
 }
