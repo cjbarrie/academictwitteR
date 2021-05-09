@@ -4,17 +4,7 @@
 \alias{get_bbox_tweets}
 \title{Get tweets within bounding box}
 \usage{
-get_bbox_tweets(
-  query,
-  bbox,
-  start_tweets,
-  end_tweets,
-  bearer_token,
-  file = NULL,
-  data_path = NULL,
-  bind_tweets = TRUE,
-  verbose = TRUE
-)
+get_bbox_tweets(query, bbox, ...)
 }
 \arguments{
 \item{query}{string or character vector, search query or queries}
