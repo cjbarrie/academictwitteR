@@ -187,7 +187,7 @@ tweets <-
   
 ```
 
-What if we were unsatisifed with the accuracy of our geo parameters and we wanted to be sure that our tweets were actually coming from a particular place? Let's say we are interested in central Seattle, as shown in the map below.
+What if we were unsatisfied with the accuracy of our geo parameters and we wanted to be sure that our tweets were actually coming from a particular place? Let's say we are interested in central Seattle, as shown in the map below.
 
 ![](files/seattle.png){width=70%}
 

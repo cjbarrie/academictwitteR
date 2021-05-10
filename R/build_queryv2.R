@@ -12,7 +12,7 @@
 #' @param country string, name of country as ISO alpha-2 code e.g. "GB"
 #' @param point_radius numeric, a vector of two point coordinates latitude, longitude, and point radius distance (in miles)
 #' @param bbox numeric, a vector of four bounding box coordinates from west longitude to north latitude
-#' @param geo_query If `TRUE` user will be propmted to enter relevant information for bounding box or point radius geo buffers
+#' @param geo_query If `TRUE` user will be prompted to enter relevant information for bounding box or point radius geo buffers
 #' @param remove_promoted If `TRUE`, tweets created for promotion only on ads.twitter.com are removed
 #' @param has_hashtags If `TRUE`, only tweets containing hashtags will be returned
 #' @param has_cashtags If `TRUE`, only tweets containing cashtags will be returned

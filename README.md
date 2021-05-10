@@ -186,7 +186,7 @@ users <- bind_user_jsons(data_path = "data/")
 |country | Name of country as ISO alpha-2 code e.g. "GB"
 |point_radius | A vector of two point coordinates latitude, longitude, and point radius distance (in miles)
 |bbox | A vector of four bounding box coordinates from west longitude to north latitude
-|geo_query | If `TRUE` user will be propmted to enter relevant information for bounding box or point radius geo buffers
+|geo_query | If `TRUE` user will be prompted to enter relevant information for bounding box or point radius geo buffers
 |remove_promoted | If `TRUE`, tweets created for promotion only on ads.twitter.com are removed
 |has_hashtags | If `TRUE`, only tweets containing hashtags will be returned
 |has_cashtags | If `TRUE`, only tweets containing cashtags will be returned

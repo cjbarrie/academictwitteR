@@ -18,7 +18,7 @@ a data.frame
 }
 \description{
 This function resumes a previous interrupted collection session.
-#' For this function to work, export_query must be set to "TRUE" during the original collection.
+For this function to work, export_query must be set to "TRUE" during the original collection.
 }
 \examples{
 \dontrun{

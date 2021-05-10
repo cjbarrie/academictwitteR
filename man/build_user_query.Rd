@@ -43,7 +43,7 @@ build_user_query(
 
 \item{bbox}{numeric, a vector of four bounding box coordinates from west longitude to north latitude}
 
-\item{geo_query}{If \code{TRUE} user will be propmted to enter relevant information for bounding box or point radius geo buffers}
+\item{geo_query}{If \code{TRUE} user will be prompted to enter relevant information for bounding box or point radius geo buffers}
 
 \item{remove_promoted}{If \code{TRUE}, tweets created for promotion only on ads.twitter.com are removed}
 
