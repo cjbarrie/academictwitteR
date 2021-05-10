@@ -16,6 +16,7 @@
 #' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
 #' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
 #' @param verbose If `FALSE`, query progress messages are suppressed
+#' @param ... arguements will be passed to `built_query()` function. See `?build_query()` for further information.
 #' 
 #' @return a data.frame
 #' @export
@@ -37,11 +38,12 @@ get_radius_tweets <-
            file = NULL,
            data_path = NULL,
            bind_tweets = TRUE,
-           verbose = TRUE) {
+           verbose = TRUE,
+           ...) {
     #stop clause for if user sets no place
     if (missing(radius)) {
       stop("radius must be specified for get_radius_tweets() function")
     }
-    get_all_tweets(query, start_tweets, end_tweets, bearer_token, radius=point_radius, ...)
+    get_all_tweets(query, start_tweets, end_tweets, bearer_token, point_radius = radius, ...)
 
   }

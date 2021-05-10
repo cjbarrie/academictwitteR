@@ -11,6 +11,7 @@
 #' @param bearer_token string, bearer token
 #' @param file string, name of the resulting RDS file
 #' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
+#' @param export_query If `TRUE`, query are exported to data_path
 #' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
 #' @param verbose If `FALSE`, query progress messages are suppressed
 #' @param ... arguements will be passed to `built_query()` function. See `?build_query()` for further information.
@@ -21,7 +22,8 @@
 #' @examples
 #' \dontrun{
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-#' get_all_tweets("BLM", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
+#' get_all_tweets("BLM", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", 
+#'                bearer_token, data_path = "data/")
 #' }
 get_all_tweets <-
   function(query,
@@ -30,6 +32,7 @@ get_all_tweets <-
            bearer_token,
            file = NULL,
            data_path = NULL,
+           export_query = TRUE,
            bind_tweets = TRUE,
            verbose = TRUE, 
            ...) {
@@ -39,7 +42,7 @@ get_all_tweets <-
       if(substr(data_path, nchar(data_path), nchar(data_path)) != "/"){
         data_path <- paste0(data_path,"/")
         }
-      }
+    }
     
     # Check file storage conditions
     check_data_path(data_path, file, bind_tweets)
@@ -50,10 +53,12 @@ get_all_tweets <-
     # Create storage direction
     if (!is.null(data_path)){
       create_data_dir(data_path)
-      # Writing query to file (for resuming)
-      filecon <- file(paste0(data_path,"query"))
-      writeLines(c(built_query,start_tweets,end_tweets), filecon)
-      close(filecon)
+      if (isTRUE(export_query)){ # Note export_query is called only if data path is supplied
+        # Writing query to file (for resuming)
+        filecon <- file(paste0(data_path,"query"))
+        writeLines(c(built_query,start_tweets,end_tweets), filecon)
+        close(filecon)
+      }
     }
     
     # Fetch data

@@ -15,6 +15,7 @@
 #' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
 #' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
 #' @param verbose If `FALSE`, query progress messages are suppressed
+#' @param ... arguements will be passed to `built_query()` function. See `?build_query()` for further information.
 #' 
 #' @return a data.frame
 #' @export
@@ -35,7 +36,8 @@ get_place_tweets <-
            file = NULL,
            data_path = NULL,
            bind_tweets = TRUE,
-           verbose = TRUE) {
+           verbose = TRUE,
+           ...) {
     #stop clause for if user sets no place
     if (missing(place)) {
       stop("place must be specified for get_place_tweets() function")

@@ -16,6 +16,7 @@
 #' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
 #' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
 #' @param verbose If `FALSE`, query progress messages are suppressed
+#' @param ... arguements will be passed to `built_query()` function. See `?build_query()` for further information.
 #' 
 #' @return a data.frame
 #' @export
@@ -23,7 +24,9 @@
 #' @examples
 #' \dontrun{
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-#' tweets <- get_bbox_tweets("happy", bbox= c(-0.222473,51.442453,0.072784,51.568534), "2021-01-01T00:00:00Z", "2021-02-01T10:00:00Z", bearer_token, data_path = "data/")
+#' tweets <- get_bbox_tweets("happy", bbox= c(-0.222473,51.442453,0.072784,51.568534), 
+#'                            "2021-01-01T00:00:00Z", "2021-02-01T10:00:00Z", 
+#'                            bearer_token, data_path = "data/")
 #' }
 get_bbox_tweets <-
   function(query,

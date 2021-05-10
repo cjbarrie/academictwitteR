@@ -79,7 +79,9 @@ Build tweet query according to targeted parameters, can then be input to main \c
 }
 \examples{
 \dontrun{
-query <- build_query("happy", is_retweet = FALSE, point_radius = TRUE, place = "new york", country = "US")
+query <- build_query("happy", is_retweet = FALSE, 
+                     point_radius = TRUE, place = "new york", 
+                     country = "US")
 }
 
 }

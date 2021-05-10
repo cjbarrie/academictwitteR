@@ -33,7 +33,7 @@ get_geo_tweets(
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 }
 \value{
-
+a data.frame
 }
 \description{
 This function loops collects tweets containing strings or
@@ -47,6 +47,7 @@ If a filename is supplied, this function will save the result as a RDS file, oth
 \examples{
 \dontrun{
 bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-get_geo_tweets("protest", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
+get_geo_tweets("protest", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", 
+               bearer_token, data_path = "data/")
 }
 }

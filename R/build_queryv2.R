@@ -29,7 +29,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' query <- build_query("happy", is_retweet = FALSE, point_radius = TRUE, place = "new york", country = "US")
+#' query <- build_query("happy", is_retweet = FALSE, 
+#'                      point_radius = TRUE, place = "new york", 
+#'                      country = "US")
 #' }
 #' 
 #' @importFrom utils menu

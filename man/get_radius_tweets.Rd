@@ -13,7 +13,8 @@ get_radius_tweets(
   file = NULL,
   data_path = NULL,
   bind_tweets = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  ...
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ get_radius_tweets(
 \item{bind_tweets}{If \code{TRUE}, tweets captured are bound into a data.frame for assignment}
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
+
+\item{...}{arguements will be passed to \code{built_query()} function. See \code{?build_query()} for further information.}
 }
 \value{
 a data.frame
@@ -49,6 +52,9 @@ Note: radius must be less than 25mi.
 \examples{
 \dontrun{
 bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-tweets <- get_radius_tweets("happy", radius = c(-0.131969125179604,51.50847878040284, 25), start_tweets = "2021-01-01T00:00:00Z", end_tweets = "2021-01-01T10:00:00Z", bearer_token = bearer_token, data_path = "data/")
+tweets <- get_radius_tweets("happy", radius = c(-0.131969125179604,51.50847878040284, 25), 
+                           start_tweets = "2021-01-01T00:00:00Z", 
+                           end_tweets = "2021-01-01T10:00:00Z", 
+                           bearer_token = bearer_token, data_path = "data/")
 }
 }

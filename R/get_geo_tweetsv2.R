@@ -17,13 +17,14 @@
 #' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
 #' @param verbose If `FALSE`, query progress messages are suppressed
 #' 
-#' @return
+#' @return a data.frame
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-#' get_geo_tweets("protest", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
+#' get_geo_tweets("protest", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", 
+#'                bearer_token, data_path = "data/")
 #' }
 get_geo_tweets <-
   function(query,

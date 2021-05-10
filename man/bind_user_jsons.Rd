@@ -10,7 +10,7 @@ bind_user_jsons(data_path)
 \item{data_path}{string, file path to directory of stored tweets data saved as users_\emph{id}.json}
 }
 \value{
-
+a data.frame
 }
 \description{
 Bind user information stored as JSON files

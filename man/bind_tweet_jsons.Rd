@@ -10,7 +10,7 @@ bind_tweet_jsons(data_path)
 \item{data_path}{string, file path to directory of stored tweets data saved as data_\emph{id}.json}
 }
 \value{
-
+a data.frame
 }
 \description{
 Bind tweets stored as JSON files
