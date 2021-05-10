@@ -170,6 +170,52 @@ tweets <- bind_tweet_jsons(data_path = "data/")
 users <- bind_user_jsons(data_path = "data/")
 
 ```
+## Arguments
+
+`get_all_tweets()` accepts a range of arguments, which can be combined to generate a more precise query.
+
+| Arguments   |     Description      |
+|----------|:-------------:|
+|query | Search query or queries e.g. "cat"
+|exclude | Tweets containing the keyword(s) will be excluded "grumpy" e.g.
+|is_retweet | If `TRUE`, only retweets will be returned; if `FALSE`, retweets will not be returned, only tweets will be returned; if `NULL`, both retweets and tweets will be returned.
+|is_reply | If `TRUE`, only reply tweets will be returned
+|is_quote | If `TRUE`, only quote tweets will be returned
+|is_verified |If `TRUE`, only tweets whose authors are verified by Twitter will be returned
+|place | Name of place e.g. "London"
+|country | Name of country as ISO alpha-2 code e.g. "GB"
+|point_radius | A vector of two point coordinates latitude, longitude, and point radius distance (in miles)
+|bbox | A vector of four bounding box coordinates from west longitude to north latitude
+|geo_query | If `TRUE` user will be propmted to enter relevant information for bounding box or point radius geo buffers
+|remove_promoted | If `TRUE`, tweets created for promotion only on ads.twitter.com are removed
+|has_hashtags | If `TRUE`, only tweets containing hashtags will be returned
+|has_cashtags | If `TRUE`, only tweets containing cashtags will be returned
+|has_links | If `TRUE`, only tweets containing links and media will be returned
+|has_mentions |If `TRUE`, only tweets containing mentions will be returned
+|has_media |If `TRUE`, only tweets containing a recognized media object, such as a photo, GIF, or video, as determined by Twitter will be returned
+|has_images |If `TRUE`, only tweets containing a recognized URL to an image will be returned
+|has_videos |If `TRUE`, only tweets containing contain native Twitter videos, uploaded directly to Twitter will be returned
+|has_geo |If `TRUE`, only tweets containing Tweet-specific geolocation data provided by the Twitter user will be returned
+|lang | A single BCP 47 language identifier e.g. "fr"
+
+An example would be:
+```{r}
+bearer_token <- "" # Insert bearer token
+
+tweets <-
+  get_all_tweets(
+    query = "cat",
+    exclude = "grumpy",
+    "2020-01-01T00:00:00Z",
+    "2020-01-02T00:00:00Z",
+    bearer_token,
+    has_images = TRUE,
+    has_hashtags = TRUE,
+    country = "GB",
+    lang = "en"
+  )
+```
+The above query will fetch all tweets that contain the word "cat" but not "grumpy", posted on 1 January 2020 in the UK, have an image attachment, include at least one hashtag, and are written in English.
 
 ## Note on v2 Twitter API
 
