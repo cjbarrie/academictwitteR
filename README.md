@@ -217,6 +217,20 @@ tweets <-
 ```
 The above query will fetch all tweets that contain the word "cat" but not "grumpy", posted on 1 January 2020 in the UK, have an image attachment, include at least one hashtag, and are written in English.
 
+## Interruption and Continuation
+
+The package offers two functions to deal with interruption and continue previous data collection session. If you have set a data_path and export_query was set to "TRUE" during the original collection, you can use `resume_collection()` to resume a previous interrupted collection session. An example would be:
+```{r}
+bearer_token <- ""
+resume_collection(data_path = "data", bearer_token)
+```
+
+If a previous data collection session is completed, you can use `update_collection()` to continue data collection with a new end date. This function is particularly useful for getting data for ongoing events. An example would be:
+```{r}
+bearer_token <- ""
+update_collection(data_path = "data", "2020-05-10T00:00:00Z", bearer_token)
+```
+
 ## Note on v2 Twitter API
 
 For more information on the parameters and fields available from the v2 Twitter API endpoint see: [https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-all](https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-all).
