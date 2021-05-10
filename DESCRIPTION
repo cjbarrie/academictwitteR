@@ -1,5 +1,5 @@
 Package: academictwitteR
-Title: academictwitteR: a package to access the Twitter Academic Research Product Track v2 API endpoint
+Title: academictwitteR: a Package to Access the Twitter Academic Research Product Track V2 API Endpoint
 Version: 0.1.0
 Authors@R: 
     c(person(given = "Christopher",
@@ -23,7 +23,6 @@ License: MIT + file LICENSE
 URL: https://github.com/cjbarrie/academictwitteR
 BugReports: https://github.com/cjbarrie/academictwitteR/issues
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: 
