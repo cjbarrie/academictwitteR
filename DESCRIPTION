@@ -1,5 +1,5 @@
 Package: academictwitteR
-Title: academictwitteR: a Package to Access the Twitter Academic Research Product Track V2 API Endpoint
+Title: Access the Twitter Academic Research Product Track V2 API Endpoint
 Version: 0.1.0
 Authors@R: 
     c(person(given = "Christopher",
