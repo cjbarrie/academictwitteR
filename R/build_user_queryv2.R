@@ -1,6 +1,6 @@
 #' Build tweet query 
 #' 
-#' Build tweet query according to targeted parameters, can then be input to main \code{\link{get_all_tweets}} function as query parameter.
+#' Build tweet query according to targeted parameters, can then be input to main \code{\link{get_user_tweets}} function as query parameter.
 #'
 #' @param users string or character vector, user handles from which to collect data
 #' @param is_retweet If `TRUE`, only retweets will be returned; if `FALSE` retweets will not be returned
@@ -28,7 +28,7 @@
 #' @examples
 #' \dontrun{
 #' users <- c("cbarrie", "justin_ct_ho")
-#' users <-   build_user_query(users, is_retweet = F, has_media = T, lang = "en")
+#' query <-   build_user_query(users, is_retweet = F, has_media = T, lang = "en")
 #' }
 #' 
 #' @importFrom utils menu

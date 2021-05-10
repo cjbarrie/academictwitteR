@@ -36,7 +36,7 @@ get_place_tweets(
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 
-\item{...}{arguements will be passed to \code{built_query()} function. See \code{?build_query()} for further information.}
+\item{...}{arguments will be passed to \code{build_query()} function. See \code{?build_query()} for further information.}
 }
 \value{
 a data.frame

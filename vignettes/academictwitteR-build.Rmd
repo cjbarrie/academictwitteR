@@ -213,9 +213,9 @@ tweets <-
 
 Alternatively, you can use the convenience function `build_query()` included in the `academictwitteR` package. 
 
-The function comes with multiple optional parameters, which can be combined to generate a more precise query. This can then be passed to an object, here called "query," which can then be entered into the `get_all_tweets()` function as our query. 
+The function comes with multiple optional parameters, which can be combined to generate a more precise query. This can then be passed to an object, here called "query," which can then be entered into the `get_all_tweets()` function as our query. Alternatively, the `build_query` arguments (with the exception of the `geo_query` argument) can be added as additional arguments into the `get_all_tweets` function. 
 
-The below provides an example, and prints the out output of the function. Here, we are building a query for the #BLM hashtag, specifying that we do not want to capture retweets, that we want to tweets to originate from London, that we don't want to capture any promoted tweets, that we want the tweets to contain  URLs, that we want it to contain videos, and that they are written in English. 
+The below provides an example, and prints the out output of the function. Here, we are building a query for the #BLM hashtag, specifying that we do not want to capture retweets, that we want tweets to originate from London, that we don't want to capture any promoted tweets, that we want the tweets to contain  URLs, that we want it to contain videos, and that they are written in English. 
 
 ```{r}
 
@@ -281,7 +281,7 @@ And we see that the end result is the same as the above:
 query
 ```
 
-Note that `build_query()` can also take a character vector of strings as query. This will produce the equivalent of typing `"OR"` between our target strings. Let's say we were interested in multiple hashtags and not just one. We could still build a query filter our tweets by the parameters discuss above as follows:
+Note that `build_query()` can also take a character vector of strings as query. This will produce the equivalent of typing "OR" between our target strings. Let's say we were interested in multiple hashtags and not just one. We could still build a query to filter our tweets by the parameters discussed above as follows:
 
 ```{r}
 

@@ -67,7 +67,7 @@ Here, we are collecting tweets containing one or both of two hashtags related to
 
 Given the sizeable increase in the volume of data potentially retrievable with the Academic Research Product Track, it is advisable that researchers establish clear storage conventions to mitigate data loss caused by e.g. the unplanned interruption of an API query.
 
-We first draw your attention first to the`file` argument in the code for the API query above.
+We first draw your attention first to the `file` argument in the code for the API query above.
 
 In the file path, the user can specify the name of a file to be stored with a ".rds" extension, which includes all of the tweet-level information collected for a given query.
 
@@ -91,7 +91,7 @@ In the data path, the user can either specify a directory that already exists or
 
 The data is stored in this folder as a series of JSONs. Tweet-level data is stored as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_".
 
-Note that the `get_all_tweets()` functions always returns a data.frame object unless `data_path` is specified and `bind_tweets` is set to `FALSE`. When collecting large amounts of data, we recommend using the `data_path` option with `bind_tweets = FALSE`. This mitigates potential data loss in case the query is interrupted.
+Note that the `get_all_tweets()` function always returns a data.frame object unless `data_path` is specified and `bind_tweets` is set to `FALSE`. When collecting large amounts of data, we recommend using the `data_path` option with `bind_tweets = FALSE`. This mitigates potential data loss in case the query is interrupted, and avoids system memory usage errors.
 
 ## Binding JSON files into data.frame objects
 

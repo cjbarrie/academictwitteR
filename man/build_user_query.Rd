@@ -69,12 +69,12 @@ build_user_query(
 a query string
 }
 \description{
-Build tweet query according to targeted parameters, can then be input to main \code{\link{get_all_tweets}} function as query parameter.
+Build tweet query according to targeted parameters, can then be input to main \code{\link{get_user_tweets}} function as query parameter.
 }
 \examples{
 \dontrun{
 users <- c("cbarrie", "justin_ct_ho")
-users <-   build_user_query(users, is_retweet = F, has_media = T, lang = "en")
+query <-   build_user_query(users, is_retweet = F, has_media = T, lang = "en")
 }
 
 }
