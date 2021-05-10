@@ -1,6 +1,6 @@
 Package: academictwitteR
-Title: academictwitteR: an R package to access the Twitter Academic Research Product Track v2 API endpoint
-Version: 0.0.0.9000
+Title: academictwitteR: an `R` package to access the Twitter Academic Research Product Track v2 API endpoint
+Version: 0.1.0
 Authors@R: 
     c(person(given = "Christopher",
            family = "Barrie",
@@ -12,7 +12,7 @@ Authors@R:
            role = c("aut"),
            email = "justin.chunting.ho@sciencespo.fr",
            comment = c(ORCID = "0000-0002-7884-1059")))
-Description: Package to query the Twitter Academic Research Product Track,
+Description: Package to query the Twitter Academic Research Product Track (<https://developer.twitter.com/en/solutions/academic-research>),
     providing access to full-archive search and other v2 API endpoints. Functions
     are written with academic research in mind. They provide flexibility in how 
     the user wishes to store collected data, and encourage regular storage of data
