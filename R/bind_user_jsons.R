@@ -2,7 +2,7 @@
 #'
 #' @param data_path string, file path to directory of stored tweets data saved as users_*id*.json
 #'
-#' @return
+#' @return a data.frame
 #' @export
 #'
 #' @examples

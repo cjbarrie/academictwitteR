@@ -45,6 +45,7 @@ otherwise, it will return the results as a dataframe.
 \dontrun{
 bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 users <- c("cbarrie", "justin_ct_ho")
-get_retweets_of_user(users, "2020-01-01T00:00:00Z", "2020-04-05T00:00:00Z", bearer_token, data_path = "data/")
+get_retweets_of_user(users, "2020-01-01T00:00:00Z", "2020-04-05T00:00:00Z", 
+                     bearer_token, data_path = "data/")
 }
 }

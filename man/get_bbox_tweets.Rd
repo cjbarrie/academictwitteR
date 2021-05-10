@@ -13,7 +13,8 @@ get_bbox_tweets(
   file = NULL,
   data_path = NULL,
   bind_tweets = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  ...
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ get_bbox_tweets(
 \item{bind_tweets}{If \code{TRUE}, tweets captured are bound into a data.frame for assignment}
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
+
+\item{...}{arguements will be passed to \code{built_query()} function. See \code{?build_query()} for further information.}
 }
 \value{
 a data.frame
@@ -49,6 +52,8 @@ Note: width and height of the bounding box must be less than 25mi.
 \examples{
 \dontrun{
 bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-tweets <- get_bbox_tweets("happy", bbox= c(-0.222473,51.442453,0.072784,51.568534), "2021-01-01T00:00:00Z", "2021-02-01T10:00:00Z", bearer_token, data_path = "data/")
+tweets <- get_bbox_tweets("happy", bbox= c(-0.222473,51.442453,0.072784,51.568534), 
+                           "2021-01-01T00:00:00Z", "2021-02-01T10:00:00Z", 
+                           bearer_token, data_path = "data/")
 }
 }

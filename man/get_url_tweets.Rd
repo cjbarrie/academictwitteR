@@ -44,7 +44,7 @@ it will return the results as a dataframe.
 \examples{
 \dontrun{
 bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-tweets <- get_url_tweets("https://www.theguardian.com/environment/2020/jan/07/save-the-planet-guide-fighting-climate-crisis-veganism-flying-earth-emergency-action", 
+tweets <- get_url_tweets("https://www.theguardian.com/", 
 "2020-01-01T00:00:00Z", "2020-04-04T00:00:00Z", bearer_token, data_path = "data/")
 }
 }

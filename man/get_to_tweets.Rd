@@ -45,6 +45,7 @@ this function will save the result as a RDS file, otherwise, it will return the 
 \dontrun{
 bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 users <- c("uoessps", "spsgradschool")
-get_to_tweets(users, "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", bearer_token, data_path = "data/")
+get_to_tweets(users, "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", 
+             bearer_token, data_path = "data/")
 }
 }

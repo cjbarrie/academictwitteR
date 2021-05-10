@@ -2,7 +2,7 @@
 #'
 #' @param data_path string, file path to directory of stored tweets data saved as data_*id*.json
 #'
-#' @return
+#' @return a data.frame
 #' @export
 #'
 #' @examples
@@ -10,6 +10,9 @@
 #' bind_tweet_jsons("data_path = "data/"")
 #' }
 bind_tweet_jsons <- function(data_path) {
+  if(substr(data_path, nchar(data_path), nchar(data_path)) != "/"){
+    data_path <- paste0(data_path,"/")
+  }
   # parse and bind
   files <-
     list.files(
@@ -31,5 +34,6 @@ bind_tweet_jsons <- function(data_path) {
     json.df.all <- dplyr::bind_rows(json.df.all, json.df)
     utils::setTxtProgressBar(pb, i)
   }
+  cat("\n")
   return(json.df.all)
 }
