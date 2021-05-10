@@ -13,7 +13,7 @@ update_collection(data_path, end_tweets, bearer_token, ...)
 
 \item{bearer_token}{string, bearer token}
 
-\item{...}{arguements will be passed to \code{get_all_tweets()} function. See \code{?get_all_tweets()} for further information.}
+\item{...}{arguments will be passed to \code{get_all_tweets()} function. See \code{?get_all_tweets()} for further information.}
 }
 \value{
 a data.frame
