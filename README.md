@@ -9,18 +9,19 @@ Repo containing code to for R package <tt>academictwitteR</tt> to collect tweets
 ```
 To cite package ‘academictwitteR’ in publications use:
 
-  Christopher Barrie and Justin Chun-ting Ho (2021). academictwitteR:
-  an R package to access the Twitter Academic Research
-  Product Track v2 API endpoint. R package version 0.0.0.9000.
+  Christopher Barrie and Justin Chun-ting Ho (2021). academictwitteR: 
+  Access the Twitter Academic Research Product Track V2 API Endpoint. 
+  R package version 0.1.0.
   https://github.com/cjbarrie/academictwitteR. doi:10.5281/zenodo.4714637
 
 A BibTeX entry for LaTeX users is
 
 @Manual{academictwitteR,
-  title = {academictwitteR: an R package to access the Twitter Academic Research Product Track v2 API endpoint},
+  title = {academictwitteR: 
+  Access the Twitter Academic Research Product Track V2 API Endpoint},
   author ={Christopher Barrie and Justin Chun-ting Ho},
   year = 2021,
-  note = {R package version 0.0.0.9000},
+  note = {R package version 0.1.0},
   url = {https://github.com/cjbarrie/academictwitteR},
   doi = {10.5281/zenodo.4714637}
 }
