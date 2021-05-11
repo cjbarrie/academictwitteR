@@ -8,6 +8,7 @@
 [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cbarrie.svg?style=social&label=Follow%20%40cbarrie)](https://twitter.com/cbarrie)
 [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/justin_ct_ho.svg?style=social&label=Follow%20%40justin_ct_ho)](https://twitter.com/justin_ct_ho)
 
+[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/chrisjbarrie@googlemail.com)
 
 Repo containing code to for R package <tt>academictwitteR</tt> to collect tweets from v2 API endpoint for the Academic Research Product Track.
 
