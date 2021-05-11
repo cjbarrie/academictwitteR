@@ -30,11 +30,16 @@ A BibTeX entry for LaTeX users is
 
 ## Installation
 
-You can install the development package with:
+You can install the package with:
+``` r
+install.packages("academictwitteR")
+```
 
+Alternatively, you can install the development version with:
 ``` r
 devtools::install_github("cjbarrie/academictwitteR", build_vignettes = TRUE)
 ```
+
 
 Get started by reading `vignette("academictwitteR-intro")`.
 
