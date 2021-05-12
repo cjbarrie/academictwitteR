@@ -2,6 +2,7 @@
 
 [![v2](https://img.shields.io/endpoint?url=https%3A%2F%2Ftwbadges.glitch.me%2Fbadges%2Fv2)](https://developer.twitter.com/en/docs/twitter-api)
 [![DOI](https://zenodo.org/badge/340095903.svg)](https://zenodo.org/badge/latestdoi/340095903)
+[![](https://www.r-pkg.org/badges/version/academictwitteR)](https://cran.r-project.org/package=academictwitteR)
 ![Downloads](https://cranlogs.r-pkg.org/badges/academictwitteR)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/academictwitteR)](https://cran.r-project.org/package=academictwitteR)
 
