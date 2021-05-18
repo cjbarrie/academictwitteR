@@ -1,6 +1,6 @@
 #' Build tweet query 
 #' 
-#' Build tweet query according to targeted parameters, can then be input to main \code{\link{get_all_tweets}} function as query parameter.
+#' Build tweet query according to targeted parameters, can then be input to main \code{\link{get_user_tweets}} function as query parameter.
 #'
 #' @param users string or character vector, user handles from which to collect data
 #' @param is_retweet If `TRUE`, only retweets will be returned; if `FALSE` retweets will not be returned
@@ -10,7 +10,7 @@
 #' @param country string, name of country as ISO alpha-2 code e.g. "GB"
 #' @param point_radius numeric, a vector of two point coordinates latitude, longitude, and point radius distance (in miles)
 #' @param bbox numeric, a vector of four bounding box coordinates from west longitude to north latitude
-#' @param geo_query If `TRUE` user will be propmted to enter relevant information for bounding box or point radius geo buffers
+#' @param geo_query If `TRUE` user will be prompted to enter relevant information for bounding box or point radius geo buffers
 #' @param remove_promoted If `TRUE`, tweets created for promotion only on ads.twitter.com are removed
 #' @param has_hashtags If `TRUE`, only tweets containing hashtags will be returned
 #' @param has_cashtags If `TRUE`, only tweets containing cashtags will be returned
@@ -28,7 +28,7 @@
 #' @examples
 #' \dontrun{
 #' users <- c("cbarrie", "justin_ct_ho")
-#' users <-   build_user_query(users, is_retweet = F, has_media = T, lang = "en")
+#' query <-   build_user_query(users, is_retweet = F, has_media = T, lang = "en")
 #' }
 #' 
 #' @importFrom utils menu

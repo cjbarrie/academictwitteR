@@ -36,13 +36,13 @@ get_geo_tweets(
 a data.frame
 }
 \description{
-This function loops collects tweets containing strings or
+This function collects tweets containing strings or
 hashtags between specified date ranges that also contain Tweet-specific geolocation data provided by the
 Twitter user. This can be either a location in the form of a Twitter place, with the corresponding display
 name, geo polygon, and other fields, or in rare cases, a geo lat-long coordinate. Note: Operators matching
 on place (Tweet geo) will only include matches from original tweets. Tweet-level data is stored in a data/
 path as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_".
-If a filename is supplied, this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
+If a filename is supplied, this function will save the result as a RDS file, otherwise it will return the results as a dataframe.
 }
 \examples{
 \dontrun{

@@ -1,11 +1,11 @@
 #' Resume previous collection
 #'
-#' This function resume previous interrupted collection session.
-#' #' For this function to work, export_query must be set to "TRUE" during the original collection.
+#' This function resumes a previous interrupted collection session.
+#' For this function to work, export_query must be set to "TRUE" during the original collection.
 #' 
 #' @param data_path string, name of an existing data_path
 #' @param bearer_token string, bearer token
-#' @param ... arguements will be passed to `get_all_tweets()` function. See `?get_all_tweets()` for further information.
+#' @param ... arguments will be passed to `get_all_tweets()` function. See `?get_all_tweets()` for further information.
 #' 
 #' @return a data.frame
 #' @export

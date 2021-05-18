@@ -43,7 +43,7 @@ build_user_query(
 
 \item{bbox}{numeric, a vector of four bounding box coordinates from west longitude to north latitude}
 
-\item{geo_query}{If \code{TRUE} user will be propmted to enter relevant information for bounding box or point radius geo buffers}
+\item{geo_query}{If \code{TRUE} user will be prompted to enter relevant information for bounding box or point radius geo buffers}
 
 \item{remove_promoted}{If \code{TRUE}, tweets created for promotion only on ads.twitter.com are removed}
 
@@ -69,12 +69,12 @@ build_user_query(
 a query string
 }
 \description{
-Build tweet query according to targeted parameters, can then be input to main \code{\link{get_all_tweets}} function as query parameter.
+Build tweet query according to targeted parameters, can then be input to main \code{\link{get_user_tweets}} function as query parameter.
 }
 \examples{
 \dontrun{
 users <- c("cbarrie", "justin_ct_ho")
-users <-   build_user_query(users, is_retweet = F, has_media = T, lang = "en")
+query <-   build_user_query(users, is_retweet = F, has_media = T, lang = "en")
 }
 
 }

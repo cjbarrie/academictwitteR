@@ -1,10 +1,10 @@
-#' Get tweets with place parameter
+#' Get tweets in particular language
 #'
 #' This function collects tweets containing strings or hashtags 
 #' between specified date ranges filtering by language. Tweet-level data is stored in a data/ 
 #' path as a series of JSONs beginning "data_"; User-level data is stored as a series of 
 #' JSONs beginning "users_". If a filename is supplied, this function will 
-#' save the result as a RDS file, otherwise, it will return the results as a data.frame.
+#' save the result as a RDS file, otherwise it will return the results as a dataframe.
 #'
 #' @param query string or character vector, search query or queries
 #' @param lang, string, a single BCP 47 language identifier e.g. "fr"
@@ -15,7 +15,7 @@
 #' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
 #' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
 #' @param verbose If `FALSE`, query progress messages are suppressed
-#' @param ... arguements will be passed to `built_query()` function. See `?build_query()` for further information.
+#' @param ... arguments will be passed to `build_query()` function. See `?build_query()` for further information.
 #' 
 #' @return a data.frame
 #' @export
