@@ -63,12 +63,12 @@ get_user_follows <- function(x, bearer_token, wt, verbose = TRUE){
   
   new_df <- data.frame()
   for(i in 1:length(x)){
-    cat(paste0("Processing ",i,"\n"))
+    cat(paste0("Processing ",x[i],"\n"))
     next_token <- ""
     while (!is.null(next_token)) {
       userurl <- paste0(url,"/",x[i],follows)
       
-      params = list()
+      params = list("max_results" = 1000)
       if(next_token!=""){
         params[["pagination_token"]] <- next_token
       }
@@ -95,11 +95,11 @@ get_user_follows <- function(x, bearer_token, wt, verbose = TRUE){
       dat <- jsonlite::fromJSON(httr::content(r, "text"))
       next_token <- dat$meta$next_token #this is NULL if there are no pages left
       new_rows <- dat$data
-      new_rows$from <- x[i]
+      new_rows$fromid <- x[i]
       new_df <- dplyr::bind_rows(new_df, new_rows) # add new rows
       
       cat("Total follows: ",nrow(new_df), "\n")
-      Sys.sleep(60)
+      Sys.sleep(1)
       if (is.null(next_token)) {
         if(verbose) {
           cat("This is the last page for ",
