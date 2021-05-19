@@ -10,5 +10,6 @@ includes\*.*
 twittterv2r.Rproj
 paper.bib
 paper.md
+demo.R
 cran-comments.md
 ^CRAN-RELEASE$
