@@ -16,7 +16,7 @@
 #' get_user_followers(users, bearer_token)
 #' }
 get_user_followers <- function(x, bearer_token, ...){
-  get_user_follows(x, bearer_token, wt = "followers", ...)
+  get_user_edges(x, bearer_token, wt = "followers", ...)
 }
 
 #' Get user following
@@ -37,10 +37,10 @@ get_user_followers <- function(x, bearer_token, ...){
 #' get_user_following(users, bearer_token)
 #' }
 get_user_following <- function(x, bearer_token, ...){
-  get_user_follows(x, bearer_token, wt = "following", ...)
+  get_user_edges(x, bearer_token, wt = "following", ...)
 }
 
-get_user_follows <- function(x, bearer_token, wt, verbose = TRUE){
+get_user_edges <- function(x, bearer_token, wt, verbose = TRUE){
   if(missing(bearer_token)){
     stop("bearer token must be specified.")
   }
