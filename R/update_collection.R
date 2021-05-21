@@ -6,7 +6,7 @@
 #' @param data_path string, name of an existing data_path
 #' @param end_tweets  string, new end date for data collection, it must be later then the original start date.
 #' @param bearer_token string, bearer token
-#' @param ... arguements will be passed to `get_all_tweets()` function. See `?get_all_tweets()` for further information.
+#' @param ... arguments will be passed to `get_all_tweets()` function. See `?get_all_tweets()` for further information.
 #' 
 #' @return a data.frame
 #' @export

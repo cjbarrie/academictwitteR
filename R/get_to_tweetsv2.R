@@ -1,9 +1,9 @@
 #' Get tweets to users
 #'
-#' This function loops through a vector of users and collects tweets between specified date ranges that are 
+#' This function collects tweets between specified date ranges that are 
 #' in reply to the specified user(s). Tweet-level data is stored in a data/ path as a series of JSONs beginning 
 #' "data_"; User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, 
-#' this function will save the result as a RDS file, otherwise, it will return the results as a dataframe.
+#' this function will save the result as a RDS file, otherwise it will return the results as a dataframe.
 #' 
 #' @param users character vector, user handles from which to collect data
 #' @param start_tweets string, starting date

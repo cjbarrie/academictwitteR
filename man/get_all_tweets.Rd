@@ -31,7 +31,7 @@ get_all_tweets(
 
 \item{data_path}{string, if supplied, fetched data can be saved to the designated path as jsons}
 
-\item{export_query}{If \code{TRUE}, query are exported to data_path}
+\item{export_query}{If \code{TRUE}, queries are exported to data_path}
 
 \item{bind_tweets}{If \code{TRUE}, tweets captured are bound into a data.frame for assignment}
 
@@ -39,16 +39,16 @@ get_all_tweets(
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 
-\item{...}{arguements will be passed to \code{built_query()} function. See \code{?build_query()} for further information.}
+\item{...}{arguments will be passed to \code{build_query()} function. See \code{?build_query()} for further information.}
 }
 \value{
 a data.frame
 }
 \description{
-This function loops collects tweets containing strings or hashtags
+This function collects tweets containing strings or hashtags
 between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_";
 User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will
-save the result as a RDS file, otherwise, it will return the results as a data.frame.
+save the result as a RDS file, otherwise it will return the results as a dataframe.
 }
 \examples{
 \dontrun{

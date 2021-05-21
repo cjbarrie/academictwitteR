@@ -15,7 +15,7 @@
 #' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
 #' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
 #' @param verbose If `FALSE`, query progress messages are suppressed
-#' @param ... arguements will be passed to `built_query()` function. See `?build_query()` for further information.
+#' @param ... arguments will be passed to `build_query()` function. See `?build_query()` for further information.
 #' 
 #' @return a data.frame
 #' @export

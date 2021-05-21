@@ -24,7 +24,7 @@ bibliography: paper.bib
 
 # Statement of need
 
-In January, 2021, Twitter announced the "Academic Research Product Track." This provides academic researchers with greatly expanded access to Twitter data. Existing R packages for querying the Twitter API, such as the popular ``rtweet`` package [@rtweet], are yet to introduce functionality to allow users to connect to the new v2 API endpoints with Academic Research Product Track credentials. The ``academictwitteR`` package [@academictwitteR] is built with academic research in mind. It encourages efficient and responsible storage of data, given the likely large amounts of data being collected, as well as a number of shortcut functions to access new v2 API endpoints.
+In January, 2021, Twitter announced the "Academic Research Product Track." This provides academic researchers with greatly expanded access to Twitter data. Existing R packages for querying the Twitter API, such as the popular ``rtweet`` package [@rtweet], are yet to introduce functionality to allow users to connect to the new v2 API endpoints with Academic Research Product Track credentials. The ``academictwitteR`` package [@academictwitteR] is built with academic research in mind. It encourages efficient and responsible storage of data, given the likely large amounts of data being collected, as well as a number of shortcut and query building functions to access new v2 API endpoints.
 
 # Summary
 
@@ -38,7 +38,9 @@ Authorization for the Academic Research Product Track provides access to the Twi
 
 The ``academictwitteR`` package was designed: 1) to make the Academic Research Product Track easily accessible for R users by providing dedicated functions to query the the v2 API endpoints; 2) to encourage academic researchers efficiently and safely to store their data.
 
-The functions allow the user to combine multiple conditions when filtering tweet content. In particular, queries that include conjunction-required operators, can also be accessed via a set of "shortcut" functions for accessing e.g. tweets containing media content. Data is stored in serialized form as RDS files or as separate JSON files. The former represents the most efficient storage solution for native R data-file formats; the latter helps mitigate loss by storing data as separate JSONs for each pagination token (or up to 500 tweets). Convenience functions are also included to bind tweet- and user-level information stored as JSON files.
+The functions allow the user to collect tweets from (or to) specified users and to collect tweets containing specified words or sets of words. In particular, queries that include so-called "conjunction-required"" operators can also be accessed via a set of shortcut functions for accessing e.g. tweets containing media content, tweets containing geographic location information, or tweets containing urls. Additionally, separate query builder functions allow the user to specify complex queries to incorporate into the API call. 
+
+Data is stored in serialized form as RDS files or as separate JSON files. The former represents the most efficient storage solution for native R data-file formats; the latter helps mitigate loss by storing data as separate JSONs for each pagination token (or up to 500 tweets). Convenience functions are also included to bind tweet- and user-level information stored as JSON files, and to pick up data collection where it left off in the case of unplanned interruption.
 
 # References
 

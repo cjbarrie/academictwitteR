@@ -33,7 +33,7 @@ get_media_tweets(
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 
-\item{...}{arguements will be passed to \code{built_query()} function. See \code{?build_query()} for further information.}
+\item{...}{arguments will be passed to \code{build_query()} function. See \code{?build_query()} for further information.}
 }
 \value{
 a data.frame
@@ -43,7 +43,7 @@ This function collects tweets containing the strings or hashtags between specifi
 that also contain a media object, such as a photo, GIF, or video, as determined by Twitter. Tweet-level
 data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a
 series of JSONs beginning "users_". If a filename is supplied, this function will save the result
-as a RDS file, otherwise, it will return the results as a dataframe.
+as a RDS file, otherwise it will return the results as a dataframe.
 }
 \examples{
 \dontrun{

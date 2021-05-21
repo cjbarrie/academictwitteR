@@ -11,14 +11,14 @@ resume_collection(data_path, bearer_token, ...)
 
 \item{bearer_token}{string, bearer token}
 
-\item{...}{arguements will be passed to \code{get_all_tweets()} function. See \code{?get_all_tweets()} for further information.}
+\item{...}{arguments will be passed to \code{get_all_tweets()} function. See \code{?get_all_tweets()} for further information.}
 }
 \value{
 a data.frame
 }
 \description{
-This function resume previous interrupted collection session.
-#' For this function to work, export_query must be set to "TRUE" during the original collection.
+This function resumes a previous interrupted collection session.
+For this function to work, export_query must be set to "TRUE" during the original collection.
 }
 \examples{
 \dontrun{
