@@ -134,6 +134,18 @@ fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, 
   }
 }
 
+check_bearer <- function(bearer_token){
+  if(missing(bearer_token)){
+    stop("bearer token must be specified.")
+  }
+  if(substr(bearer_token,1,7)=="Bearer "){
+    bearer <- bearer_token
+  } else{
+    bearer <- paste0("Bearer ",bearer_token)
+  }
+  return(bearer)
+}
+
 check_data_path <- function(data_path, file, bind_tweets){
   #warning re data storage recommendations if no data path set
   if (is.null(data_path)) {
@@ -192,3 +204,5 @@ df_to_json <- function(df, data_path){
   jsonlite::write_json(df$includes,
                        paste0(data_path, "users_", df$data$id[nrow(df$data)], ".json"))
 }
+
+

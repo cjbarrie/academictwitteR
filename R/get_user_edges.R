@@ -41,24 +41,33 @@ get_user_following <- function(x, bearer_token, ...){
 }
 
 get_user_edges <- function(x, bearer_token, wt, verbose = TRUE){
-  if(missing(bearer_token)){
-    stop("bearer token must be specified.")
-  }
-  if(substr(bearer_token,1,7)=="Bearer "){
-    bearer <- bearer_token
-  } else{
-    bearer <- paste0("Bearer ",bearer_token)
-  }
+  bearer <- check_bearer(bearer_token)
   
-  #endpoint
-  url <- "https://api.twitter.com/2/users"
+  url <- "https://api.twitter.com/2/users/"
   
   if(wt == "followers"){
-    follows <- "/followers"
+    endpoint <- "/followers"
+    params <- list(
+      "max_results" = 1000,
+      "user.fields" = "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld"
+    )
   } else if (wt == "following"){
-    follows <- "/following"
+    endpoint <- "/following"
+    params <- list(
+      "max_results" = 1000,
+      "user.fields" = "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld"
+    )
+  } else if (wt == "liked_tweets"){
+    endpoint <- "/liked_tweets"
+    params <- list(
+      "max_results" = 100,
+      "tweet.fields" = "attachments,author_id,context_annotations,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld",
+      "user.fields" = "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld",
+      "expansions" = "author_id,entities.mentions.username,geo.place_id,in_reply_to_user_id,referenced_tweets.id,referenced_tweets.id.author_id",
+      "place.fields" = "contained_within,country,country_code,full_name,geo,id,name,place_type"
+    )
   } else {
-    stop("Unknown wt")
+    stop("Unknown request type")
   }
   
   new_df <- data.frame()
@@ -66,22 +75,26 @@ get_user_edges <- function(x, bearer_token, wt, verbose = TRUE){
     cat(paste0("Processing ",x[i],"\n"))
     next_token <- ""
     while (!is.null(next_token)) {
-      userurl <- paste0(url,"/",x[i],follows)
+      requrl <- paste0(url,x[i],endpoint)
       
-      params = list("max_results" = 1000)
       if(next_token!=""){
         params[["pagination_token"]] <- next_token
       }
       
       # Sending GET Request
-      r <- httr::GET(userurl,httr::add_headers(Authorization = bearer),query=params)
+      r <- httr::GET(requrl,httr::add_headers(Authorization = bearer),query=params)
       
       # Fix random 503 errors
       count <- 0
       while(httr::status_code(r)==503 & count<4){
-        r <- httr::GET(userurl,httr::add_headers(Authorization = bearer),query=params)
+        r <- httr::GET(requrl,httr::add_headers(Authorization = bearer),query=params)
         count <- count+1
         Sys.sleep(count*5)
+      }
+      if(httr::status_code(r)==429){
+        cat("Rate limit reached, sleeping... \n")
+        Sys.sleep(900)
+        r <- httr::GET(requrl,httr::add_headers(Authorization = bearer),query=params)
       }
       
       # Catch other errors
@@ -95,10 +108,10 @@ get_user_edges <- function(x, bearer_token, wt, verbose = TRUE){
       dat <- jsonlite::fromJSON(httr::content(r, "text"))
       next_token <- dat$meta$next_token #this is NULL if there are no pages left
       new_rows <- dat$data
-      new_rows$fromid <- x[i]
+      new_rows$from_id <- x[i]
       new_df <- dplyr::bind_rows(new_df, new_rows) # add new rows
       
-      cat("Total follows: ",nrow(new_df), "\n")
+      cat("Total data points: ",nrow(new_df), "\n")
       Sys.sleep(1)
       if (is.null(next_token)) {
         if(verbose) {
@@ -108,6 +121,7 @@ get_user_edges <- function(x, bearer_token, wt, verbose = TRUE){
         }
         break
       }
+      Sys.sleep(1)
     }
   }
   return(new_df)
