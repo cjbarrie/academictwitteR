@@ -1,4 +1,4 @@
-get_tweets <- function(q="",n=500,start_time,end_time,token,next_token=""){
+get_tweets <- function(q="",page_n=500,start_time,end_time,token,next_token=""){
   # if(n>500){
   #   warning("n too big. Using 500 instead")
   #   n <- 500
@@ -26,7 +26,7 @@ get_tweets <- function(q="",n=500,start_time,end_time,token,next_token=""){
   #parameters
   params = list(
     "query" = q,
-    "max_results" = n,
+    "max_results" = page_n,
     "start_time" = start_time,
     "end_time" = end_time, 		
     "tweet.fields" = "attachments,author_id,context_annotations,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld",
@@ -46,6 +46,11 @@ get_tweets <- function(q="",n=500,start_time,end_time,token,next_token=""){
     count <- count+1
     Sys.sleep(count*5)
   }
+  if(httr::status_code(r)==429){
+    cat("Rate limit reached, sleeping... \n")
+    Sys.sleep(900)
+    r <- httr::GET(url,httr::add_headers(Authorization = bearer),query=params)
+  }
   
   if(httr::status_code(r)!=200){
     stop(paste("something went wrong. Status code:", httr::status_code(r)))
@@ -57,7 +62,7 @@ get_tweets <- function(q="",n=500,start_time,end_time,token,next_token=""){
   dat
 }
 
-fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, end_tweets, bearer_token, page_n, verbose){
+fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, end_tweets, bearer_token, n, page_n, verbose){
   nextoken <- ""
   df.all <- data.frame()
   toknum <- 0
@@ -66,7 +71,7 @@ fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, 
     df <-
       get_tweets(
         q = built_query,
-        n = page_n,
+        page_n = page_n,
         start_time = start_tweets,
         end_time = end_tweets,
         token = bearer_token,
@@ -106,11 +111,14 @@ fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, 
       )
     }
     Sys.sleep(3.1)
+    if (ntweets > n){ # Check n
+      df.all <- df.all[1:n,] # remove extra
+      cat("Amount of tweets exceeds ", n, ": finishing collection.\n")
+      break
+    }
     if (is.null(nextoken)) {
       if(verbose) {
-        cat("This is the last page for",
-            built_query,
-            ": finishing collection. \n")
+        cat("This is the last page for", built_query, ": finishing collection.\n")
       }
       break
     }
@@ -203,6 +211,18 @@ df_to_json <- function(df, data_path){
                        paste0(data_path, "data_", df$data$id[nrow(df$data)], ".json"))
   jsonlite::write_json(df$includes,
                        paste0(data_path, "users_", df$data$id[nrow(df$data)], ".json"))
+}
+
+create_storage_dir <- function(data_path, export_query, built_query, start_tweets, end_tweets){
+  if (!is.null(data_path)){
+    create_data_dir(data_path)
+    if (isTRUE(export_query)){ # Note export_query is called only if data path is supplied
+      # Writing query to file (for resuming)
+      filecon <- file(paste0(data_path,"query"))
+      writeLines(c(built_query,start_tweets,end_tweets), filecon)
+      close(filecon)
+    }
+  }
 }
 
 
