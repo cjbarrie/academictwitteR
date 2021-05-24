@@ -13,6 +13,7 @@
 #' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
 #' @param export_query If `TRUE`, queries are exported to data_path
 #' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
+#' @param page_n integer, amount of tweets to be returned by per page
 #' @param verbose If `FALSE`, query progress messages are suppressed
 #' @param ... arguments will be passed to `build_query()` function. See `?build_query()` for further information.
 #' 
@@ -34,7 +35,8 @@ get_all_tweets <-
            data_path = NULL,
            export_query = TRUE,
            bind_tweets = TRUE,
-           verbose = TRUE, 
+           page_n = 500,
+           verbose = TRUE,
            ...) {
     
     # Check if path ending with "/"
@@ -62,5 +64,5 @@ get_all_tweets <-
     }
     
     # Fetch data
-    return(fetch_data(built_query, data_path, file, bind_tweets, start_tweets, end_tweets, bearer_token, verbose))
+    return(fetch_data(built_query, data_path, file, bind_tweets, start_tweets, end_tweets, bearer_token, page_n, verbose))
   }
