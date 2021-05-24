@@ -13,3 +13,4 @@ paper.md
 demo.R
 cran-comments.md
 ^CRAN-RELEASE$
+^\.github$
