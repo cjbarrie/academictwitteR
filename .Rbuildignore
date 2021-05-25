@@ -13,4 +13,5 @@ paper.md
 demo.R
 cran-comments.md
 ^CRAN-RELEASE$
+^CODE_OF_CONDUCT\.md$
 ^\.github$
