@@ -9,6 +9,7 @@
 #' @param start_tweets string, starting date
 #' @param end_tweets  string, ending date
 #' @param bearer_token string, bearer token
+#' @param n integer, amount of tweets to be fetched
 #' @param file string, name of the resulting RDS file
 #' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
 #' @param export_query If `TRUE`, queries are exported to data_path
@@ -31,6 +32,7 @@ get_all_tweets <-
            start_tweets,
            end_tweets,
            bearer_token,
+           n = 100,
            file = NULL,
            data_path = NULL,
            export_query = TRUE,
@@ -52,17 +54,8 @@ get_all_tweets <-
     # Build query
     built_query <- build_query(query, ...)
         
-    # Create storage direction
-    if (!is.null(data_path)){
-      create_data_dir(data_path)
-      if (isTRUE(export_query)){ # Note export_query is called only if data path is supplied
-        # Writing query to file (for resuming)
-        filecon <- file(paste0(data_path,"query"))
-        writeLines(c(built_query,start_tweets,end_tweets), filecon)
-        close(filecon)
-      }
-    }
+    create_storage_dir(data_path, export_query, built_query, start_tweets, end_tweets)
     
     # Fetch data
-    return(fetch_data(built_query, data_path, file, bind_tweets, start_tweets, end_tweets, bearer_token, page_n, verbose))
+    return(fetch_data(built_query, data_path, file, bind_tweets, start_tweets, end_tweets, bearer_token, n, page_n, verbose))
   }
