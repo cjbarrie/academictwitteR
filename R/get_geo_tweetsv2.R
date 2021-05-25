@@ -93,7 +93,7 @@ get_geo_tweets <-
       df <-
         get_tweets(
           q = paste0('has:geo ', query),
-          n = 500,
+          page_n = 500,
           start_time = start_tweets,
           end_time = end_tweets,
           token = bearer_token,

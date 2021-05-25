@@ -224,5 +224,3 @@ create_storage_dir <- function(data_path, export_query, built_query, start_tweet
     }
   }
 }
-
-
