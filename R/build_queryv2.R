@@ -82,7 +82,7 @@ build_query <- function(query,
     query <- paste(query, "is:retweet")
   }
   
-  if(isFALSE(is_retweet)) {
+  if(!isTRUE(is_retweet)) {
     query <- paste(query, "-is:retweet")
   }
   
