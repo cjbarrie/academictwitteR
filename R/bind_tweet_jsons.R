@@ -7,7 +7,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' bind_tweet_jsons("data_path = "data/"")
+#' bind_tweet_jsons(data_path = "data/")
 #' }
 bind_tweet_jsons <- function(data_path) {
   if(substr(data_path, nchar(data_path), nchar(data_path)) != "/"){
