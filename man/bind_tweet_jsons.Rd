@@ -17,6 +17,6 @@ Bind tweets stored as JSON files
 }
 \examples{
 \dontrun{
-bind_tweet_jsons("data_path = "data/"")
+bind_tweet_jsons(data_path = "data/")
 }
 }

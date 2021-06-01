@@ -23,6 +23,7 @@
 #' @param has_videos If `TRUE`, only tweets containing contain native Twitter videos, uploaded directly to Twitter will be returned
 #' @param has_geo If `TRUE`, only tweets containing Tweet-specific geolocation data provided by the Twitter user will be returned
 #' @param lang string, a single BCP 47 language identifier e.g. "fr"
+#' @param conversation_id string, return tweets that share the specified conversation ID
 #'
 #' @return a query string
 #' @export
@@ -36,7 +37,7 @@
 #' 
 #' @importFrom utils menu
 #' 
-build_query <- function(query,
+build_query <- function(query = NULL,
                         exclude = NULL,
                         is_retweet = NULL, 
                         is_reply = FALSE, 
@@ -56,7 +57,8 @@ build_query <- function(query,
                         has_images = FALSE,
                         has_videos = FALSE,
                         has_geo = FALSE,
-                        lang= NULL) {
+                        lang= NULL,
+                        conversation_id = NULL) {
   
   if(isTRUE(length(query) >1)) {
     query <- paste("(",paste(query, collapse = " OR "),")", sep = "")
@@ -78,12 +80,12 @@ build_query <- function(query,
     stop("Select either point radius or bounding box")
   }
   
-  if(isTRUE(is_retweet)) {
-    query <- paste(query, "is:retweet")
-  }
-  
-  if(!isTRUE(is_retweet)) {
-    query <- paste(query, "-is:retweet")
+  if(!is.null(is_retweet)){
+    if(isTRUE(is_retweet)) {
+      query <- paste(query, "is:retweet")
+    } else if(is_retweet == FALSE) {
+      query <- paste(query, "-is:retweet")
+    }
   }
   
   if(isTRUE(is_reply)) {
@@ -204,7 +206,9 @@ build_query <- function(query,
   
   if(!is.null(lang)) {
     query <- paste(query, paste0("lang:", lang))
-    
+  }
+  if(!is.null(conversation_id)) {
+    query <- paste(query, paste0("conversation_id:", conversation_id))
   }
   
   return(query)
