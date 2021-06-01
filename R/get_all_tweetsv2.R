@@ -24,11 +24,21 @@
 #' @examples
 #' \dontrun{
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-#' get_all_tweets("BLM", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", 
-#'                bearer_token, data_path = "data/")
+#' 
+#' get_all_tweets(query = "BLM", 
+#'                start_tweets = "2020-01-01T00:00:00Z", 
+#'                end_tweets = "2020-01-05T00:00:00Z", 
+#'                bearer_token = bearer_token, 
+#'                data_path = "data")
+#'                
+#' get_all_tweets(start_tweets = "2021-01-01T00:00:00Z", 
+#'                end_tweets = "2021-06-01T00:00:00Z",
+#'                bearer_token = bearer_token, 
+#'                n = 200, 
+#'                conversation_id = "1392887366507970561")
 #' }
 get_all_tweets <-
-  function(query,
+  function(query = NULL,
            start_tweets,
            end_tweets,
            bearer_token,

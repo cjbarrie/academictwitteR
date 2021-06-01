@@ -5,7 +5,7 @@
 \title{Build tweet query}
 \usage{
 build_query(
-  query,
+  query = NULL,
   exclude = NULL,
   is_retweet = NULL,
   is_reply = FALSE,
@@ -25,7 +25,8 @@ build_query(
   has_images = FALSE,
   has_videos = FALSE,
   has_geo = FALSE,
-  lang = NULL
+  lang = NULL,
+  conversation_id = NULL
 )
 }
 \arguments{
@@ -70,6 +71,8 @@ build_query(
 \item{has_geo}{If \code{TRUE}, only tweets containing Tweet-specific geolocation data provided by the Twitter user will be returned}
 
 \item{lang}{string, a single BCP 47 language identifier e.g. "fr"}
+
+\item{conversation_id}{string, return tweets that share the specified conversation ID}
 }
 \value{
 a query string
