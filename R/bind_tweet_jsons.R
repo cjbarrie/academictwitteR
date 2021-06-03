@@ -21,6 +21,11 @@ bind_tweet_jsons <- function(data_path) {
       recursive = T,
       include.dirs = T
     )
+  
+  if(length(files)<1){
+    stop("There are no files matching the pattern `data_` in the specified directory.")
+  }
+  
   files <- paste(data_path, files, sep = "")
   
   pb = utils::txtProgressBar(min = 0,
