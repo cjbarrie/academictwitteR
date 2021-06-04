@@ -4,7 +4,7 @@
 \alias{resume_collection}
 \title{Resume previous collection}
 \usage{
-resume_collection(data_path, bearer_token, ...)
+resume_collection(data_path, bearer_token = get_bearer(), ...)
 }
 \arguments{
 \item{data_path}{string, name of an existing data_path}

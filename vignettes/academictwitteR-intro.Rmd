@@ -37,14 +37,25 @@ In summary the Academic Research product track allows the authorized user:
 2. A higher monthly tweet cap (10m--or 20x what was previously possible with the standard v1.1 API)
 3. Ability to access these data with more precise filters permitted by the v2 API
 
+## Setting up your bearer token
 
-## Querying the Twitter API with `academictwitteR`
+Please refer to [this vignette](academictwitteR-auth.html) on how to get your own bearer token. You can supply this bearer token in every request. But an easier and securer way is to set up your bearer token.
 
 We begin by loading the package with:
 
 ```{r setup}
 library(academictwitteR)
 ```
+
+And then launch `set_bearer`. You will be prompted for your bearer token. By default, it will be stored your bearer token as a hidden file in your home directory.
+
+```{r, eval = FALSE}
+set_bearer()
+```
+
+You can then obtain your bearer token with `get_bearer`. It is also the default for all data collection functions.
+
+## Querying the Twitter API with `academictwitteR`
 
 The workhorse function of `academictwitteR` when it comes to collecting tweets containing a particular string or hashtag is `get_all_tweets()`.
 
@@ -55,7 +66,6 @@ tweets <-
     "#BLM OR #BlackLivesMatter",
     "2020-01-01T00:00:00Z",
     "2020-01-05T00:00:00Z",
-    bearer_token,
     file = "blmtweets"
   )
   
@@ -80,7 +90,6 @@ tweets <-
     "#BLM OR #BlackLivesMatter",
     "2020-01-01T00:00:00Z",
     "2020-01-05T00:00:00Z",
-    bearer_token,
     data_path = "data/"
     bind_tweets = FALSE
   )
@@ -98,13 +107,9 @@ Note that the `get_all_tweets()` function always returns a data.frame object unl
 Users can then use the `bind_tweet_jsons` and `bind_user_jsons` convenience functions to bundle the JSONs into a data.frame object for analysis in R as such:
 
 ```{r, eval=FALSE}
-
 tweets <- bind_tweet_jsons(data_path = "data/")
-
 ```
 
 ```{r, eval=FALSE}
-
 users <- bind_user_jsons(data_path = "data/")
-
 ```

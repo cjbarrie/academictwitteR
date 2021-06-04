@@ -15,6 +15,6 @@
 #' users <- "2244994945"
 #' get_liked_tweets(users, bearer_token)
 #' }
-get_liked_tweets <- function(x, bearer_token, ...){
+get_liked_tweets <- function(x, bearer_token = get_bearer(), ...){
   get_user_edges(x, bearer_token, wt = "liked_tweets", ...)
 }

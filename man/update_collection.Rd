@@ -4,7 +4,7 @@
 \alias{update_collection}
 \title{Update previous collection session}
 \usage{
-update_collection(data_path, end_tweets, bearer_token, ...)
+update_collection(data_path, end_tweets, bearer_token = get_bearer(), ...)
 }
 \arguments{
 \item{data_path}{string, name of an existing data_path}

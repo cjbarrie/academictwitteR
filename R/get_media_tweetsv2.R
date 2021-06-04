@@ -29,7 +29,7 @@ get_media_tweets <-
   function(query,
            start_tweets,
            end_tweets,
-           bearer_token,
+           bearer_token = get_bearer(),
            file = NULL,
            data_path = NULL,
            bind_tweets = TRUE,

@@ -62,7 +62,7 @@ get_tweets <- function(q="",page_n=500,start_time,end_time,token,next_token=""){
   dat
 }
 
-fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, end_tweets, bearer_token, n, page_n, verbose){
+fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, end_tweets, bearer_token = get_bearer(), n, page_n, verbose){
   nextoken <- ""
   df.all <- data.frame()
   toknum <- 0

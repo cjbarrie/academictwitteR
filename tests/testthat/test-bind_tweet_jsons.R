@@ -1,5 +1,3 @@
-context("bind_tweet_jsons")
-
 
 empty_dir <- tempdir()
 

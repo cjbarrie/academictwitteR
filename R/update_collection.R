@@ -17,7 +17,7 @@
 #' update_collection(data_path = "data", "2020-01-03T00:00:00Z", bearer_token)
 #' }
 
-update_collection <- function(data_path, end_tweets, bearer_token, ...){
+update_collection <- function(data_path, end_tweets, bearer_token = get_bearer(), ...){
   if(!dir.exists(file.path(data_path))){
     stop("Directory ", data_path, " doesn't exist.")
   }

@@ -15,7 +15,7 @@
 #' users <- "2244994945"
 #' get_user_followers(users, bearer_token)
 #' }
-get_user_followers <- function(x, bearer_token, ...){
+get_user_followers <- function(x, bearer_token = get_bearer(), ...){
   get_user_edges(x, bearer_token, wt = "followers", ...)
 }
 

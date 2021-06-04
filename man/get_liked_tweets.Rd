@@ -4,7 +4,7 @@
 \alias{get_liked_tweets}
 \title{Get liked tweets}
 \usage{
-get_liked_tweets(x, bearer_token, ...)
+get_liked_tweets(x, bearer_token = get_bearer(), ...)
 }
 \arguments{
 \item{x}{string containing one user id or a vector of user ids}
