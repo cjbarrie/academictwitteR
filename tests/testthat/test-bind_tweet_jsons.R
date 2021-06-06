@@ -1,5 +1,4 @@
-context("bind_tweet_jsons")
-
+## context("bind_tweet_jsons")
 
 empty_dir <- tempdir()
 
@@ -23,3 +22,11 @@ test_that("Error on finding no jsons to bind", {
   expect_error(bind_tweet_jsons(temp_dir))
 })
 
+
+test_that("real data", {
+  expect_error(bind_tweet_jsons("../testdata/commtwitter"), NA)
+})
+
+test_that("trailing slash", {
+  expect_error(bind_tweet_jsons("../testdata/commtwitter/"), NA)
+})
