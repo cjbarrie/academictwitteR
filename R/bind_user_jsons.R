@@ -10,16 +10,7 @@
 #' bind_user_jsons("data_path = "data/"")
 #' }
 bind_user_jsons <- function(data_path) {
-  # parse and bind
-  files <-
-    list.files(
-      path = file.path(data_path),
-      pattern = "^users_",
-      recursive = T,
-      include.dirs = T
-    )
-  files <- paste(data_path, files, sep = "")
-  
+  files <- ls_files(data_path, "^users_")  
   pb = utils::txtProgressBar(min = 0,
                              max = length(files),
                              initial = 0)

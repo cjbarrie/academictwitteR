@@ -1,4 +1,3 @@
-
 empty_dir <- tempdir()
 
 my_cars <- mtcars
@@ -15,9 +14,21 @@ test_that("Expect sucess in binding two jsons", {
 })
 
 unlink(empty_dir, recursive = TRUE)
-temp_dir <- tempdir()
+
+temp_dir <-  paste0(tempdir(), "/", paste0(sample(letters, 20), collapse = ""))
+dir.create(temp_dir)
 
 test_that("Error on finding no jsons to bind", {
   expect_error(bind_tweet_jsons(temp_dir))
 })
 
+
+test_that("real data", {
+  expect_error(bind_tweet_jsons("../testdata/commtwitter"), NA)
+})
+
+test_that("trailing slash", {
+  expect_error(bind_tweet_jsons("../testdata/commtwitter/"), NA)
+})
+
+unlink(temp_dir)
