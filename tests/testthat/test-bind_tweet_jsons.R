@@ -1,4 +1,5 @@
-empty_dir <- tempdir()
+empty_dir <- paste0(tempdir(), "/", paste0(sample(letters, 20), collapse = ""))
+dir.create(empty_dir)
 
 my_cars <- mtcars
 my_cars$model <- rownames(my_cars)
