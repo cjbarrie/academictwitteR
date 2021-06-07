@@ -30,7 +30,7 @@ get_to_tweets <-
   function(users,
            start_tweets,
            end_tweets,
-           bearer_token,
+           bearer_token = get_bearer(),
            n = 100,
            file = NULL,
            data_path = NULL,

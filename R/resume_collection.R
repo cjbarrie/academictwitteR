@@ -16,7 +16,7 @@
 #' resume_collection(data_path = "data", bearer_token)
 #' }
 
-resume_collection <- function(data_path, bearer_token, ...){
+resume_collection <- function(data_path, bearer_token = get_bearer(), ...){
   if(!dir.exists(file.path(data_path))){
     stop("Directory ", data_path, " doesn't exist.")
   }

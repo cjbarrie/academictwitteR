@@ -1,5 +1,3 @@
-## context("bind_tweet_jsons")
-
 empty_dir <- paste0(tempdir(), "/", paste0(sample(letters, 20), collapse = ""))
 dir.create(empty_dir)
 

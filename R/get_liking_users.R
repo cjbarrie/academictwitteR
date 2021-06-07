@@ -15,7 +15,7 @@
 #' tweet <- "1387744422729748486"
 #' get_liking_users(tweet, bearer_token)
 #' }
-get_liking_users <- function(x, bearer_token, verbose = TRUE){
+get_liking_users <- function(x, bearer_token = get_bearer(), verbose = TRUE){
   bearer <- check_bearer(bearer_token)
   
   url <- "https://api.twitter.com/2/tweets/"

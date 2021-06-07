@@ -14,7 +14,7 @@
 #' users <- c("2244994945", "6253282")
 #' get_user_profile(users, bearer_token)
 #' }
-get_user_profile <- function(x, bearer_token){
+get_user_profile <- function(x, bearer_token = get_bearer()){
   if(missing(bearer_token)){
     stop("bearer token must be specified.")  
   }

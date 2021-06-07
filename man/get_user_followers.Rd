@@ -4,7 +4,7 @@
 \alias{get_user_followers}
 \title{Get user followers}
 \usage{
-get_user_followers(x, bearer_token, ...)
+get_user_followers(x, bearer_token = get_bearer(), ...)
 }
 \arguments{
 \item{x}{string containing one user id or a vector of user ids}
