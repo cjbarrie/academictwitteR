@@ -1,7 +1,7 @@
 # academictwitteR <img src="man/figures/academictwitteRhex.png" width="160px" align="right" />
 
 [![v2](https://img.shields.io/endpoint?url=https%3A%2F%2Ftwbadges.glitch.me%2Fbadges%2Fv2)](https://developer.twitter.com/en/docs/twitter-api)
-[![DOI](https://zenodo.org/badge/340095903.svg)](https://zenodo.org/badge/latestdoi/340095903)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.03272/status.svg)](https://doi.org/10.21105/joss.03272) 
 [![](https://www.r-pkg.org/badges/version/academictwitteR)](https://cran.r-project.org/package=academictwitteR)
 ![Downloads](https://cranlogs.r-pkg.org/badges/academictwitteR)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/academictwitteR)](https://cran.r-project.org/package=academictwitteR)
@@ -12,25 +12,29 @@
 
 Repo containing code to for R package <tt>academictwitteR</tt> to collect tweets from v2 API endpoint for the Academic Research Product Track.
 
-```
+
 To cite package ‘academictwitteR’ in publications use:
 
-  Christopher Barrie and Justin Chun-ting Ho (2021). academictwitteR: 
-  Access the Twitter Academic Research Product Track V2 API Endpoint. 
-  R package version 0.1.0.
-  https://github.com/cjbarrie/academictwitteR. doi:10.5281/zenodo.4714637
+  Barrie, Christopher and Ho, Justin Chun-ting. 2021. "academictwitteR: 
+  an R package to access the Twitter Academic Research Product Track v2 API endpoint."
+  *Journal of Open Source Software* 6(62):1-2.
 
-A BibTeX entry for LaTeX users is
+A BibTeX entry for LaTeX users is:
 
-@Manual{academictwitteR,
-  title = {academictwitteR: 
-  Access the Twitter Academic Research Product Track V2 API Endpoint},
-  author ={Christopher Barrie and Justin Chun-ting Ho},
-  year = 2021,
-  note = {R package version 0.1.0},
-  url = {https://github.com/cjbarrie/academictwitteR},
-  doi = {10.5281/zenodo.4714637}
+```
+@article{BarrieHo2021,
+  doi = {10.21105/joss.03272},
+  url = {https://doi.org/10.21105/joss.03272},
+  year = {2021},
+  publisher = {The Open Journal},
+  volume = {6},
+  number = {62},
+  pages = {1-2},
+  author = {Christopher Barrie and Justin Chun-ting Ho},
+  title = {academictwitteR: an R package to access the Twitter Academic Research Product Track v2 API endpoint},
+  journal = {Journal of Open Source Software}
 }
+
   
 ```
 
