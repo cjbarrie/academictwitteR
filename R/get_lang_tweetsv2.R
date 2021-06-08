@@ -42,5 +42,5 @@ get_lang_tweets <-
     if (missing(lang)) {
       stop("language must be specified for get_lang_tweets() function")
     }
-    get_all_tweets(query, start_tweets, end_tweets, bearer_token, lang=lang, ...)
+    get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, lang = lang, ...)
   }

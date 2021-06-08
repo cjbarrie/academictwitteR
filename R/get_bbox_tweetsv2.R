@@ -43,5 +43,5 @@ get_bbox_tweets <-
     if (missing(bbox)) {
       stop("bbox coordinates must be specified for get_bbox_tweets() function")
     }
-    get_all_tweets(query, start_tweets, end_tweets, bearer_token, bbox=bbox, ...)
+    get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, bbox = bbox, ...)
   }

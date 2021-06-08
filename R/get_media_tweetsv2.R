@@ -35,5 +35,5 @@ get_media_tweets <-
            bind_tweets = TRUE,
            verbose = TRUE,
            ...) {
-    get_all_tweets(query, start_tweets, end_tweets, bearer_token, has_media=TRUE, ...)
+    get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, has_media = TRUE,...)
   }

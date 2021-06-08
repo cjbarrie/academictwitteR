@@ -44,6 +44,5 @@ get_radius_tweets <-
     if (missing(radius)) {
       stop("radius must be specified for get_radius_tweets() function")
     }
-    get_all_tweets(query, start_tweets, end_tweets, bearer_token, point_radius = radius, ...)
-
+    get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, point_radius = radius, ...)
   }

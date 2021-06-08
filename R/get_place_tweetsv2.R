@@ -42,5 +42,5 @@ get_place_tweets <-
     if (missing(place)) {
       stop("place must be specified for get_place_tweets() function")
     }
-    get_all_tweets(query, start_tweets, end_tweets, bearer_token, place=place, ...)
+    get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, place = place, ...)
   }

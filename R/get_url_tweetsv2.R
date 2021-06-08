@@ -36,6 +36,6 @@ get_url_tweets <-
            bind_tweets = TRUE,
            verbose = TRUE,
            ...) {
-        query <- add_query_prefix(query, "url:")
-        get_all_tweets(query, start_tweets, end_tweets, bearer_token, n, ...)
-      }
+    query <- add_query_prefix(query, "url:")
+    get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose,...)
+  }
