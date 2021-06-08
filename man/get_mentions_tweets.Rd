@@ -9,6 +9,7 @@ get_mentions_tweets(
   start_tweets,
   end_tweets,
   bearer_token = get_bearer(),
+  n = 100,
   file = NULL,
   data_path = NULL,
   bind_tweets = TRUE,
@@ -24,6 +25,8 @@ get_mentions_tweets(
 \item{end_tweets}{string, ending date}
 
 \item{bearer_token}{string, bearer token}
+
+\item{n}{integer, amount of tweets to be fetched}
 
 \item{file}{string, name of the resulting RDS file}
 
