@@ -224,3 +224,8 @@ create_storage_dir <- function(data_path, export_query, built_query, start_tweet
     }
   }
 }
+
+
+.gen_random_dir <- function() {
+  paste0(tempdir(), "/", paste0(sample(letters, 20), collapse = ""))
+}
