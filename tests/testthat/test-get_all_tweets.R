@@ -53,11 +53,15 @@ with_mock_api({
     unlink(emptydir, recursive = TRUE)
   })
   test_that("param: verbose", {
-    ## verbose should also be tested; but there is still message in all cases
-
-    ## emptydir <- academictwitteR:::.gen_random_dir()  
-    ## expect_silent(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = FALSE, data_path = emptydir, bind_tweets = FALSE))
-    ## unlink(emptydir, recursive = TRUE)
+    emptydir <- academictwitteR:::.gen_random_dir()  
+    expect_silent(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = FALSE, data_path = emptydir, bind_tweets = FALSE))
+    unlink(emptydir, recursive = TRUE)
+    ## warning suppression, no data_path
+    emptydir <- academictwitteR:::.gen_random_dir()
+    expect_silent(get_all_tweets("#commtwitter", start_tweets = "2021-06-01T00:00:00Z", 
+                                 end_tweets = "2021-06-05T00:00:00Z", bind_tweets = TRUE, 
+                                 data_path = NULL, verbose = FALSE))
+    unlink(emptydir, recursive = TRUE)
     ## test for output
     emptydir <- academictwitteR:::.gen_random_dir()  
     expect_output(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir, bind_tweets = FALSE))

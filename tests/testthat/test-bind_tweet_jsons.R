@@ -32,4 +32,8 @@ test_that("trailing slash", {
   expect_error(bind_tweet_jsons("../testdata/commtwitter/"), NA)
 })
 
+test_that("verbose = FALSE", {
+  expect_silent(bind_tweet_jsons("../testdata/commtwitter/", verbose = FALSE))
+})
+
 unlink(temp_dir)

@@ -34,4 +34,8 @@ test_that("real data: data_path with trailing slash #97", {
   expect_error(bind_user_jsons("../testdata/commtwitter/"), NA)
 })
 
+test_that("verbose = FALSE", {
+  expect_silent(bind_user_jsons("../testdata/commtwitter/", verbose = FALSE))
+})
+
 unlink(temp_dir)

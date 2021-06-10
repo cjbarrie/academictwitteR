@@ -18,7 +18,7 @@ ls_files <- function(data_path, pattern) {
 #' Bind tweets stored as JSON files
 #'
 #' @param data_path string, file path to directory of stored tweets data saved as data_*id*.json
-#'
+#' @param verbose If `FALSE`, messages are suppressed
 #' @return a data.frame
 #' @export
 #'
@@ -26,19 +26,20 @@ ls_files <- function(data_path, pattern) {
 #' \dontrun{
 #' bind_tweet_jsons(data_path = "data/")
 #' }
-bind_tweet_jsons <- function(data_path) {
+bind_tweet_jsons <- function(data_path, verbose = TRUE) {
   files <- ls_files(data_path, "^data_")
-  pb = utils::txtProgressBar(min = 0,
-                             max = length(files),
-                             initial = 0)
-  
+  if (verbose) {
+    pb <- utils::txtProgressBar(min = 0, max = length(files), initial = 0)
+  }
   json.df.all <- data.frame()
   for (i in seq_along(files)) {
     filename = files[[i]]
     json.df <- jsonlite::read_json(filename, simplifyVector = TRUE)
     json.df.all <- dplyr::bind_rows(json.df.all, json.df)
-    utils::setTxtProgressBar(pb, i)
+    if (verbose) {
+      utils::setTxtProgressBar(pb, i)
+    }
   }
-  cat("\n")
+  .vcat(verbose, "\n")
   return(json.df.all)
 }
