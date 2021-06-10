@@ -16,7 +16,7 @@ with_mock_api({
     emptydir <- academictwitteR:::.gen_random_dir()
     ## "Normal" usage; at least the default
     expect_error(w0 <- capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", )), NA)
-    unlink(emptydir)
+    unlink(emptydir, recursive = TRUE)
   })
   test_that("params: data_path", {
   emptydir <- academictwitteR:::.gen_random_dir()
@@ -27,7 +27,7 @@ with_mock_api({
   w2 <- capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir))
   expect_match(w2, "Tweets will be bound", all = FALSE)
   expect_match(w2, "Directory already exists", all = FALSE)
-  unlink(emptydir)
+  unlink(emptydir, recursive = TRUE)
   })
   test_that("param: bind_tweets", {
     emptydir <- academictwitteR:::.gen_random_dir()
@@ -42,7 +42,7 @@ with_mock_api({
     }), NA)
     expect_equal(z1, NULL) ## nothing is returned; only side effect
     expect_true(identical(w3, character(0))) ## no warning
-    unlink(emptydir)
+    unlink(emptydir, recursive = TRUE)
     ## No data_path; no side effect
     emptydir <- academictwitteR:::.gen_random_dir()
     expect_error({
@@ -50,38 +50,40 @@ with_mock_api({
     }, NA)
     expect_true(length(list.files(emptydir)) == 0) ## No side effect
     expect_false(identical(w4, character(0))) ## tons of warnings
-    unlink(emptydir)
+    unlink(emptydir, recursive = TRUE)
   })
   test_that("param: verbose", {
     ## verbose should also be tested; but there is still message in all cases
 
     ## emptydir <- academictwitteR:::.gen_random_dir()  
     ## expect_silent(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = FALSE, data_path = emptydir, bind_tweets = FALSE))
-    ## unlink(emptydir)
+    ## unlink(emptydir, recursive = TRUE)
     ## test for output
     emptydir <- academictwitteR:::.gen_random_dir()  
     expect_output(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir, bind_tweets = FALSE))
-    unlink(emptydir)
+    unlink(emptydir, recursive = TRUE)
   })
-  ## Until issue #144 is resolved
-  ## test_that("param: file", {
-  ##   emptydir <- academictwitteR:::.gen_random_dir()
-  ##   temp_RDS <- "aaa.RDS"
-  ##   expect_error(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir, bind_tweets = FALSE, file = temp_RDS), NA)
-  ##   expect_true(file.exists(temp_RDS))
-  ##   x <- readRDS(temp_RDS)
-  ##   expect_true("data.frame" %in% class(x))
-  ## })
+  test_that("param: file", {
+    emptydir <- academictwitteR:::.gen_random_dir()
+    temp_RDS <- "aaa.RDS"
+    expect_error(capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir, bind_tweets = FALSE, file = temp_RDS)), NA)
+    expect_true(file.exists(temp_RDS))
+    expect_false(file.exists(paste0(temp_RDS, ".rds")))
+    x <- readRDS(temp_RDS)
+    expect_true("data.frame" %in% class(x))
+    unlink(temp_RDS)
+    unlink(emptydir, recursive = TRUE)
+  })
 
   test_that("param: export_query", {
     emptydir <- academictwitteR:::.gen_random_dir()  
     capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir, bind_tweets = FALSE, export_query = TRUE))
     expect_true(file.exists(paste0(emptydir, "/query")))
-    unlink(emptydir)
+    unlink(emptydir, recursive = TRUE)
 
     emptydir <- academictwitteR:::.gen_random_dir()  
     capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir, bind_tweets = FALSE, export_query = FALSE))
     expect_false(file.exists(paste0(emptydir, "/query")))
-    unlink(emptydir)
+    unlink(emptydir, recursive = TRUE)
   })  
 })
