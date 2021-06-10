@@ -128,7 +128,7 @@ fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, 
     return(df.all) # return to data.frame
   }
   if (!is.null(file)) {
-    saveRDS(df.all, file = paste0(file, ".rds")) # save as RDS
+    saveRDS(df.all, file = file) # save as RDS
     return(df.all) # return data.frame
   }
   
