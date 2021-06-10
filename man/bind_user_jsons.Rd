@@ -4,10 +4,12 @@
 \alias{bind_user_jsons}
 \title{Bind user information stored as JSON files}
 \usage{
-bind_user_jsons(data_path)
+bind_user_jsons(data_path, verbose = TRUE)
 }
 \arguments{
 \item{data_path}{string, file path to directory of stored tweets data saved as users_\emph{id}.json}
+
+\item{verbose}{If \code{FALSE}, messages are suppressed}
 }
 \value{
 a data.frame

@@ -4,10 +4,12 @@
 \alias{bind_tweet_jsons}
 \title{Bind tweets stored as JSON files}
 \usage{
-bind_tweet_jsons(data_path)
+bind_tweet_jsons(data_path, verbose = TRUE)
 }
 \arguments{
 \item{data_path}{string, file path to directory of stored tweets data saved as data_\emph{id}.json}
+
+\item{verbose}{If \code{FALSE}, messages are suppressed}
 }
 \value{
 a data.frame
