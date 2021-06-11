@@ -39,3 +39,20 @@ bind_tweets <- function(data_path, user = FALSE, verbose = TRUE) {
   .vcat(verbose, "\n")
   return(json.df.all)
 }
+
+ls_files <- function(data_path, pattern) {
+  ## parse and bind
+  files <-
+    list.files(
+      path = file.path(data_path),
+      pattern = pattern,
+      recursive = T,
+      include.dirs = T,
+      full.names = T
+    )
+  
+  if (length(files) < 1) {
+    stop(paste0("There are no files matching the pattern `", pattern, "` in the specified directory."), call. = FALSE)
+  }
+  return(files)
+}

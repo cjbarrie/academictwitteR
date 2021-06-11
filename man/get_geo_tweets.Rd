@@ -9,10 +9,12 @@ get_geo_tweets(
   start_tweets,
   end_tweets,
   bearer_token = get_bearer(),
+  n = 100,
   file = NULL,
   data_path = NULL,
   bind_tweets = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  ...
 )
 }
 \arguments{
@@ -24,6 +26,8 @@ get_geo_tweets(
 
 \item{bearer_token}{string, bearer token}
 
+\item{n}{integer, amount of tweets to be fetched}
+
 \item{file}{string, name of the resulting RDS file}
 
 \item{data_path}{string, if supplied, fetched data can be saved to the designated path as jsons}
@@ -31,6 +35,8 @@ get_geo_tweets(
 \item{bind_tweets}{If \code{TRUE}, tweets captured are bound into a data.frame for assignment}
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
+
+\item{...}{arguments will be passed to \code{build_query()} function. See \code{?build_query()} for further information.}
 }
 \value{
 a data.frame
