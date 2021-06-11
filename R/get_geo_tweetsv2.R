@@ -23,6 +23,7 @@ get_geo_tweets <-
            start_tweets,
            end_tweets,
            bearer_token = get_bearer(),
+           n = 100,
            file = NULL,
            data_path = NULL,
            bind_tweets = TRUE,

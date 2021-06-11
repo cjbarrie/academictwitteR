@@ -104,12 +104,12 @@ Note that the `get_all_tweets()` function always returns a data.frame object unl
 
 ## Binding JSON files into data.frame objects
 
-Users can then use the `bind_tweet_jsons` and `bind_user_jsons` convenience functions to bundle the JSONs into a data.frame object for analysis in R as such:
+Users can then use the `bind_tweets` convenience function to bundle the JSONs into a data.frame object for analysis in R as such:
 
 ```{r, eval=FALSE}
-tweets <- bind_tweet_jsons(data_path = "data/")
+tweets <- bind_tweet(data_path = "data/")
 ```
 
 ```{r, eval=FALSE}
-users <- bind_user_jsons(data_path = "data/")
+users <- bind_user(data_path = "data/", user = TRUE)
 ```
