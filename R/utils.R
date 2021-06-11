@@ -134,7 +134,7 @@ fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, 
   
   if (!is.null(data_path) &
       is.null(file) & bind_tweets == F) {
-    .vcat(verbose, "Data stored as JSONs: use bind_tweets_json function to bundle into data.frame")
+    .vcat(verbose, "Data stored as JSONs: use bind_tweets function to bundle into data.frame")
   }
 }
 

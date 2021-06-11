@@ -27,19 +27,5 @@ ls_files <- function(data_path, pattern) {
 #' bind_tweet_jsons(data_path = "data/")
 #' }
 bind_tweet_jsons <- function(data_path, verbose = TRUE) {
-  files <- ls_files(data_path, "^data_")
-  if (verbose) {
-    pb <- utils::txtProgressBar(min = 0, max = length(files), initial = 0)
-  }
-  json.df.all <- data.frame()
-  for (i in seq_along(files)) {
-    filename = files[[i]]
-    json.df <- jsonlite::read_json(filename, simplifyVector = TRUE)
-    json.df.all <- dplyr::bind_rows(json.df.all, json.df)
-    if (verbose) {
-      utils::setTxtProgressBar(pb, i)
-    }
-  }
-  .vcat(verbose, "\n")
-  return(json.df.all)
+  bind_tweets(data_path = data_path, user = FALSE, verbose = verbose)
 }
