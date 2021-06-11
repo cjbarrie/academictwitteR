@@ -171,19 +171,13 @@ tweets <-
 
 , which would collect all tweets containing the hashtags "#BLM" or "BlackLivesMatter" over a six-year period. 
 
-Users can then use the `bind_tweet_jsons` and `bind_user_jsons` convenience functions to bundle the jsons into a data.frame object for analysis in R as such:
+Users can then use the `bind_tweets` convenience function to bundle the jsons into a data.frame object for analysis in R as such:
 
 ```{r}
-
-tweets <- bind_tweet_jsons(data_path = "data/")
-
+tweets <- bind_tweets(data_path = "data/")
+users <- bind_tweets(data_path = "data/", user = TRUE)
 ```
 
-```{r}
-
-users <- bind_user_jsons(data_path = "data/")
-
-```
 ## Arguments
 
 `get_all_tweets()` accepts a range of arguments, which can be combined to generate a more precise query.
