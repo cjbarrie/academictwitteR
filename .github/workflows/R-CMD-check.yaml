@@ -30,6 +30,7 @@ jobs:
     env:
       RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      TWITTER_BEARER: ${{ secrets.TWITTER_BEARER }}
 
     steps:
       - uses: actions/checkout@v2

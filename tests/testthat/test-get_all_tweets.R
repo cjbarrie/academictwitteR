@@ -3,9 +3,6 @@
 ## Also, we cannot test params: query, page_n, start_time, end_time with mock_api because these params are related to the GET request.
 
 ## Github secret has not been set yet!
-ORI_BEARER <- Sys.getenv("TWITTER_BEARER")
-
-Sys.setenv("TWITTER_BEARER" = "ABC")
 
 test_that("defensive programming", {
   expect_error(capture_warnings(get_all_tweets(query = "#commtwitter", end_tweets = "2021-06-05T00:00:00Z")))
@@ -99,4 +96,3 @@ with_mock_api({
   })  
 })
 
-Sys.setenv("TWITTER_BEARER" = ORI_BEARER)
