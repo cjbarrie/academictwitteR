@@ -14,7 +14,7 @@ with_mock_api({
     ORI_BEARER <- Sys.getenv("TWITTER_BEARER")
     Sys.setenv("TWITTER_BEARER" = "")
     expect_error(w1 <- capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir)))
-    Sys.setenv("TWITTER_BEARER" = ORI_BEARER)  
+    Sys.setenv("TWITTER_BEARER" = "ABC")  
     expect_error(w1 <- capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir)), NA)
     unlink(emptydir)
     Sys.setenv("TWITTER_BEARER" = ORI_BEARER)  

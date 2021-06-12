@@ -94,13 +94,18 @@ fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, 
     nextoken <-
       df$meta$next_token #this is NULL if there are no pages left
     toknum <- toknum + 1
-    ntweets <- ntweets + nrow(df$data)
+    if (is.null(df$data)) {
+      n_newtweets <- 0
+    } else {
+      n_newtweets <- nrow(df$data)
+    }
+    ntweets <- ntweets + n_newtweets
     .vcat(verbose, 
         "query: <",
         built_query,
         ">: ",
         "(tweets captured this page: ",
-        nrow(df$data),
+        n_newtweets,
         "). Total pages queried: ",
         toknum,
         ". Total tweets ingested: ",
