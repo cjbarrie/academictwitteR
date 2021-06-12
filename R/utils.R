@@ -174,10 +174,12 @@ check_data_path <- function(data_path, file, bind_tweets, verbose = TRUE){
 
 create_data_dir <- function(data_path, verbose = TRUE){
   #create folders for storage
-  ifelse(!dir.exists(file.path(data_path)),
-         dir.create(file.path(data_path), showWarnings = FALSE),
-         .vwarn(verbose,"Directory already exists. Existing JSON files may be parsed and returned, choose a new path if this is not intended.")
-         )
+  if (dir.exists(file.path(data_path))) {
+    .vwarn(verbose, "Directory already exists. Existing JSON files may be parsed and returned, choose a new path if this is not intended.")
+    invisible(data_path)
+  }
+  dir.create(file.path(data_path), showWarnings = FALSE)
+    invisible(data_path)  
 }
 
 df_to_json <- function(df, data_path){
@@ -189,9 +191,9 @@ df_to_json <- function(df, data_path){
                        paste0(data_path, "users_", df$data$id[nrow(df$data)], ".json"))
 }
 
-create_storage_dir <- function(data_path, export_query, built_query, start_tweets, end_tweets){
+create_storage_dir <- function(data_path, export_query, built_query, start_tweets, end_tweets, verbose){
   if (!is.null(data_path)){
-    create_data_dir(data_path)
+    create_data_dir(data_path, verbose)
     if (isTRUE(export_query)){ # Note export_query is called only if data path is supplied
       # Writing query to file (for resuming)
       filecon <- file(paste0(data_path,"query"))

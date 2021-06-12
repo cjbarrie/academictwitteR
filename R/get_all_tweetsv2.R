@@ -64,7 +64,7 @@ get_all_tweets <-
     # Build query
     built_query <- build_query(query, ...)
         
-    create_storage_dir(data_path = data_path, export_query = export_query, built_query = built_query, start_tweets = start_tweets, end_tweets = end_tweets)
+    create_storage_dir(data_path = data_path, export_query = export_query, built_query = built_query, start_tweets = start_tweets, end_tweets = end_tweets, verbose = verbose)
     
     # Fetch data
     return(fetch_data(built_query = built_query, data_path = data_path, file = file, bind_tweets = bind_tweets, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n , page_n = page_n, verbose = verbose))

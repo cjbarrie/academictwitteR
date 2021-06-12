@@ -62,6 +62,11 @@ with_mock_api({
                                  end_tweets = "2021-06-05T00:00:00Z", bind_tweets = TRUE, 
                                  data_path = NULL, verbose = FALSE))
     unlink(emptydir, recursive = TRUE)
+    ## existing dir
+    emptydir <- academictwitteR:::.gen_random_dir()  
+    dir.create(emptydir)
+    expect_silent(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = FALSE, data_path = emptydir, bind_tweets = FALSE))
+    unlink(emptydir, recursive = TRUE)    
     ## test for output
     emptydir <- academictwitteR:::.gen_random_dir()  
     expect_output(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir, bind_tweets = FALSE))
