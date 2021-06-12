@@ -12,6 +12,7 @@ name: R-CMD-check
 
 jobs:
   R-CMD-check:
+    environment: TWITTER_BEARER
     runs-on: ${{ matrix.config.os }}
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
@@ -30,6 +31,7 @@ jobs:
     env:
       RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      TWITTER_BEARER: ${{ secrets.TWITTER_BEARER }}
 
     steps:
       - uses: actions/checkout@v2
