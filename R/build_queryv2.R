@@ -3,6 +3,9 @@
 #' Build tweet query according to targeted parameters, can then be input to main \code{\link{get_all_tweets}} function as query parameter.
 #'
 #' @param query string or character vector, search query or queries
+#' @param users string or character vector, user handles to collect tweets from the specified users
+#' @param reply_to string or character vector, user handles to collect replies to the specified users
+#' @param retweets_of string or character vector, user handles to collects retweets of tweets the specified users
 #' @param exclude string or character vector, tweets containing the keyword(s) will be excluded
 #' @param is_retweet If `TRUE`, only retweets will be returned; if `FALSE`, retweets will not be returned, only tweets will be returned; if `NULL`, both retweets and tweets will be returned.
 #' @param is_reply If `TRUE`, only reply tweets will be returned
@@ -23,6 +26,7 @@
 #' @param has_videos If `TRUE`, only tweets containing contain native Twitter videos, uploaded directly to Twitter will be returned
 #' @param has_geo If `TRUE`, only tweets containing Tweet-specific geolocation data provided by the Twitter user will be returned
 #' @param lang string, a single BCP 47 language identifier e.g. "fr"
+#' @param url string, url
 #' @param conversation_id string, return tweets that share the specified conversation ID
 #'
 #' @return a query string
@@ -39,6 +43,9 @@
 #' 
 build_query <- function(query = NULL,
                         exclude = NULL,
+                        users = NULL,
+                        reply_to = NULL,
+                        retweets_of = NULL,
                         is_retweet = NULL, 
                         is_reply = FALSE, 
                         is_quote = FALSE,
@@ -58,10 +65,23 @@ build_query <- function(query = NULL,
                         has_videos = FALSE,
                         has_geo = FALSE,
                         lang= NULL,
-                        conversation_id = NULL) {
+                        conversation_id = NULL,
+                        url = NULL) {
   
   if(isTRUE(length(query) >1)) {
     query <- paste("(",paste(query, collapse = " OR "),")", sep = "")
+  }
+  
+  if(!is.null(users)){
+    query <- paste(query, add_query_prefix(users, "from:"))
+  }
+  
+  if(!is.null(reply_to)){
+    query <- paste(query, add_query_prefix(reply_to, "to:"))
+  }
+  
+  if(!is.null(retweets_of)){
+    query <- paste(query, add_query_prefix(retweets_of, "retweets_of:"))
   }
   
   if(!is.null(exclude)) {
@@ -207,8 +227,13 @@ build_query <- function(query = NULL,
   if(!is.null(lang)) {
     query <- paste(query, paste0("lang:", lang))
   }
+  
   if(!is.null(conversation_id)) {
     query <- paste(query, paste0("conversation_id:", conversation_id))
+  }
+  
+  if(!is.null(url)) {
+    query <- paste(query, paste0('url:"', url, '"'))
   }
   
   return(query)
