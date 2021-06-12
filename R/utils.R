@@ -108,7 +108,6 @@ fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, 
         ". \n",
         sep = ""
         )
-    Sys.sleep(3.1)
     if (ntweets > n){ # Check n
       df.all <- df.all[1:n,] # remove extra
       .vcat(verbose, "Amount of tweets exceeds ", n, ": finishing collection.\n")
