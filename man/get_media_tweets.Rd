@@ -2,7 +2,8 @@
 % Please edit documentation in R/deprecated_functions.R
 \name{get_media_tweets}
 \alias{get_media_tweets}
-\title{Get tweets for query containing media}
+\title{Get tweets for query containing media
+`r lifecycle::badge("deprecated")}
 \usage{
 get_media_tweets(
   query,

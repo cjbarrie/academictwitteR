@@ -2,7 +2,8 @@
 % Please edit documentation in R/deprecated_functions.R
 \name{get_image_tweets}
 \alias{get_image_tweets}
-\title{Get tweets containing images}
+\title{Get tweets containing images
+`r lifecycle::badge("deprecated")}
 \usage{
 get_image_tweets(
   query,

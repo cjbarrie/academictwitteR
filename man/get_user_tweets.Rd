@@ -2,7 +2,13 @@
 % Please edit documentation in R/deprecated_functions.R
 \name{get_user_tweets}
 \alias{get_user_tweets}
-\title{Get tweets from user}
+\title{Get tweets from user
+`r lifecycle::badge("deprecated")
+
+This function collects tweets of a user or set of users between specified date ranges.
+Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level
+data is stored as a series of JSONs beginning "users_". If a filename is supplied, this
+function will save the result as a RDS file, otherwise it will return the results as a dataframe.}
 \usage{
 get_user_tweets(
   users,
@@ -42,6 +48,9 @@ get_user_tweets(
 a data frame
 }
 \description{
+Get tweets from user
+`r lifecycle::badge("deprecated")
+
 This function collects tweets of a user or set of users between specified date ranges.
 Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level
 data is stored as a series of JSONs beginning "users_". If a filename is supplied, this

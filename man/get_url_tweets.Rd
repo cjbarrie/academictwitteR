@@ -2,7 +2,8 @@
 % Please edit documentation in R/deprecated_functions.R
 \name{get_url_tweets}
 \alias{get_url_tweets}
-\title{Get tweets containing URL}
+\title{Get tweets containing URL
+`r lifecycle::badge("deprecated")}
 \usage{
 get_url_tweets(
   query,

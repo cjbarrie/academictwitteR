@@ -2,7 +2,8 @@
 % Please edit documentation in R/deprecated_functions.R
 \name{get_radius_tweets}
 \alias{get_radius_tweets}
-\title{Get tweets within radius buffer}
+\title{Get tweets within radius buffer
+`r lifecycle::badge("deprecated")}
 \usage{
 get_radius_tweets(
   query,

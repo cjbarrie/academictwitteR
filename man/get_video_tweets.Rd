@@ -2,7 +2,8 @@
 % Please edit documentation in R/deprecated_functions.R
 \name{get_video_tweets}
 \alias{get_video_tweets}
-\title{Get tweets for query containing videos}
+\title{Get tweets for query containing videos
+`r lifecycle::badge("deprecated")}
 \usage{
 get_video_tweets(
   query,

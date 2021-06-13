@@ -2,7 +2,8 @@
 % Please edit documentation in R/deprecated_functions.R
 \name{get_place_tweets}
 \alias{get_place_tweets}
-\title{Get tweets with place parameter}
+\title{Get tweets with place parameter
+`r lifecycle::badge("deprecated")}
 \usage{
 get_place_tweets(
   query,

@@ -2,7 +2,8 @@
 % Please edit documentation in R/deprecated_functions.R
 \name{get_bbox_tweets}
 \alias{get_bbox_tweets}
-\title{Get tweets within bounding box}
+\title{Get tweets within bounding box
+`r lifecycle::badge("deprecated")}
 \usage{
 get_bbox_tweets(
   query,

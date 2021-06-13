@@ -2,7 +2,8 @@
 % Please edit documentation in R/deprecated_functions.R
 \name{get_country_tweets}
 \alias{get_country_tweets}
-\title{Get tweets with country parameter}
+\title{Get tweets with country parameter
+`r lifecycle::badge("deprecated")}
 \usage{
 get_country_tweets(
   query,

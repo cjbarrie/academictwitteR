@@ -2,7 +2,8 @@
 % Please edit documentation in R/deprecated_functions.R
 \name{get_lang_tweets}
 \alias{get_lang_tweets}
-\title{Get tweets in particular language}
+\title{Get tweets in particular language
+`r lifecycle::badge("deprecated")}
 \usage{
 get_lang_tweets(
   query,

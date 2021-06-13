@@ -2,7 +2,8 @@
 % Please edit documentation in R/deprecated_functions.R
 \name{get_geo_tweets}
 \alias{get_geo_tweets}
-\title{Get tweets for query containing geo information}
+\title{Get tweets for query containing geo information
+`r lifecycle::badge("deprecated")}
 \usage{
 get_geo_tweets(
   query,

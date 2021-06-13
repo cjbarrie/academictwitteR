@@ -2,7 +2,8 @@
 % Please edit documentation in R/deprecated_functions.R
 \name{get_mentions_tweets}
 \alias{get_mentions_tweets}
-\title{Get tweets for query containing mentions of another user}
+\title{Get tweets for query containing mentions of another user
+`r lifecycle::badge("deprecated")}
 \usage{
 get_mentions_tweets(
   query,

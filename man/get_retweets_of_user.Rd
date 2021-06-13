@@ -2,7 +2,8 @@
 % Please edit documentation in R/deprecated_functions.R
 \name{get_retweets_of_user}
 \alias{get_retweets_of_user}
-\title{Get retweets of user}
+\title{Get retweets of user
+`r lifecycle::badge("deprecated")}
 \usage{
 get_retweets_of_user(
   users,

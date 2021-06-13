@@ -2,7 +2,8 @@
 % Please edit documentation in R/deprecated_functions.R
 \name{get_to_tweets}
 \alias{get_to_tweets}
-\title{Get tweets to users}
+\title{Get tweets to users
+`r lifecycle::badge("deprecated")}
 \usage{
 get_to_tweets(
   users,

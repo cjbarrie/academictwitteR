@@ -35,22 +35,15 @@ bind_tweet_jsons <- function(data_path, verbose = TRUE) {
 }
 
 #' Get retweets of user
+#' `r lifecycle::badge("deprecated")
 #'
 #' This function collects retweets of tweets by a user or set of users between specified date ranges.
 #' Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as
 #' a series of JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file,
 #' otherwise it will return the results as a dataframe.
 #'
+#' @inheritParams get_all_tweets
 #' @param users character vector, user handles from which to collect data
-#' @param start_tweets string, starting date
-#' @param end_tweets  string, ending date
-#' @param bearer_token string, bearer token
-#' @param n integer, amount of tweets to be fetched
-#' @param file string, name of the resulting RDS file
-#' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
-#' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
-#' @param verbose If `FALSE`, query progress messages are suppressed
-#' @param ... arguments will be passed to `build_query()` function. See `?build_query()` for further information.
 #'
 #' @return a data frame
 #' @keywords internal
@@ -75,27 +68,20 @@ get_retweets_of_user <-
            verbose = TRUE,
            ...) {
     query <- add_query_prefix(users, "retweets_of:")
-    lifecycle::deprecate_soft("0.2.0", "get_retweets_of_user()", "get_all_tweets(retweets_of = username)")
+    lifecycle::deprecate_soft("0.2.0", "get_retweets_of_user()", details =  "Please use `get_all_tweets(retweets_of = users)` instead.")
     get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, ...)
   }
 
 #' Get tweets to users
-#'
+#' `r lifecycle::badge("deprecated")
+#' 
 #' This function collects tweets between specified date ranges that are
 #' in reply to the specified user(s). Tweet-level data is stored in a data/ path as a series of JSONs beginning
 #' "data_"; User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied,
 #' this function will save the result as a RDS file, otherwise it will return the results as a dataframe.
 #'
 #' @param users character vector, user handles from which to collect data
-#' @param start_tweets string, starting date
-#' @param end_tweets  string, ending date
-#' @param bearer_token string, bearer token
-#' @param n integer, amount of tweets to be fetched
-#' @param file string, name of the resulting RDS file
-#' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
-#' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
-#' @param verbose If `FALSE`, query progress messages are suppressed
-#' @param ... arguments will be passed to `build_query()` function. See `?build_query()` for further information.
+#' @inheritParams get_all_tweets
 #'
 #' @return a data frame
 #' @keywords internal
@@ -120,28 +106,21 @@ get_to_tweets <-
            verbose = TRUE,
            ...) {
     query <- add_query_prefix(users, "to:")
-    lifecycle::deprecate_soft("0.2.0", "get_to_tweets()", "get_all_tweets(reply_to = username)")
+    lifecycle::deprecate_soft("0.2.0", "get_to_tweets()", details = "Please use `get_all_tweets(reply_to = users)` instead.")
     get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose,...)
   }
 
 
 #' Get tweets from user
-#'
+#' `r lifecycle::badge("deprecated")
+#'  
 #' This function collects tweets of a user or set of users between specified date ranges.
 #' Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level
 #' data is stored as a series of JSONs beginning "users_". If a filename is supplied, this
 #' function will save the result as a RDS file, otherwise it will return the results as a dataframe.
 #'
 #' @param users character vector, user handles from which to collect data
-#' @param start_tweets string, starting date
-#' @param end_tweets  string, ending date
-#' @param bearer_token string, bearer token
-#' @param n integer, amount of tweets to be fetched
-#' @param file string, name of the resulting RDS file
-#' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
-#' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
-#' @param verbose If `FALSE`, query progress messages are suppressed
-#' @param ... arguments will be passed to `build_query()` function. See `?build_query()` for further information.
+#' @inheritParams get_all_tweets
 #'
 #' @return a data frame
 #' @keywords internal
@@ -166,11 +145,12 @@ get_user_tweets <-
            verbose = TRUE,
            ...) {
     query <- add_query_prefix(users, "from:")
-    lifecycle::deprecate_soft("0.2.0", "get_user_tweets()", "get_all_tweets(users = username)")
+    lifecycle::deprecate_soft("0.2.0", "get_user_tweets()", details = "Please use `get_all_tweets(users = users) instead.`")
     get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose,...)
   }
 
 #' Get tweets for query containing videos
+#' `r lifecycle::badge("deprecated")
 #'
 #' This function collects tweets containing strings or hashtags between specified date ranges
 #' that also contain native Twitter videos, uploaded directly to Twitter. This will not match
@@ -201,11 +181,12 @@ get_video_tweets <-
            bind_tweets = TRUE,
            verbose = TRUE,
            ...) {
-    lifecycle::deprecate_soft("0.2.0", "get_video_tweets()", "get_all_tweets(has_videos = TRUE)")
+    lifecycle::deprecate_soft("0.2.0", "get_video_tweets()", details = "Please use `get_all_tweets(has_videos = TRUE)` instead.")
     get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, has_videos = TRUE,...)
   }
 
 #' Get tweets within radius buffer
+#' `r lifecycle::badge("deprecated")
 #'
 #' This function collects tweets containing strings or hashtags
 #' between specified date ranges filtering by radius buffer. Tweet-level data is stored in a data/
@@ -244,11 +225,12 @@ get_radius_tweets <-
     if (missing(radius)) {
       stop("radius must be specified for get_radius_tweets() function")
     }
-    lifecycle::deprecate_soft("0.2.0", "get_radius_tweets()", "get_all_tweets(point_radius = radius)")
+    lifecycle::deprecate_soft("0.2.0", "get_radius_tweets()", details = "Please use `get_all_tweets(point_radius = radius)` instead.")
     get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, point_radius = radius, ...)
   }
 
 #' Get tweets within bounding box
+#' `r lifecycle::badge("deprecated")
 #'
 #' This function collects tweets containing strings or hashtags
 #' between specified date ranges filtering by bounding box. Tweet-level data is stored in a data/
@@ -286,11 +268,12 @@ get_bbox_tweets <-
     if (missing(bbox)) {
       stop("bbox coordinates must be specified for get_bbox_tweets() function")
     }
-    lifecycle::deprecate_soft("0.2.0", "get_bbox_tweets()", "get_all_tweets(bbox = bbox)")
+    lifecycle::deprecate_soft("0.2.0", "get_bbox_tweets()", details = "Please use `get_all_tweets(bbox = bbox)` instead.")
     get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, bbox = bbox, ...)
   }
 
 #' Get tweets for query containing mentions of another user
+#' `r lifecycle::badge("deprecated")
 #'
 #' This function collects tweets containing strings or
 #' hashtags between specified date ranges that also contain mentions of another Twitter user. Tweet-level data
@@ -320,11 +303,12 @@ get_mentions_tweets <-
            bind_tweets = TRUE,
            verbose = TRUE,
            ...) {
-    lifecycle::deprecate_soft("0.2.0", "get_mentions_tweets()", "get_all_tweets(has_mentions = TRUE)")
+    lifecycle::deprecate_soft("0.2.0", "get_mentions_tweets()", details = "Please use `get_all_tweets(has_mentions = TRUE)` instead.")
     get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, has_mentions = TRUE, ...)
   }
 
 #' Get tweets in particular language
+#' `r lifecycle::badge("deprecated")
 #'
 #' This function collects tweets containing strings or hashtags
 #' between specified date ranges filtering by language. Tweet-level data is stored in a data/
@@ -361,11 +345,12 @@ get_lang_tweets <-
     if (missing(lang)) {
       stop("language must be specified for get_lang_tweets() function")
     }
-    lifecycle::deprecate_soft("0.2.0", "get_lang_tweets()", "get_all_tweets(lang = lang)")
+    lifecycle::deprecate_soft("0.2.0", "get_lang_tweets()", details = "Please use `get_all_tweets(lang = lang)` instead.")
     get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, lang = lang, ...)
   }
 
 #' Get tweets with country parameter
+#' `r lifecycle::badge("deprecated")
 #'
 #' This function collects tweets containing strings or hashtags
 #' between specified date ranges filtering by country. Tweet-level data is stored in a data/
@@ -402,11 +387,12 @@ get_country_tweets <-
     if (missing(country)) {
       stop("country must be specified for get_country_tweets() function")
     }
-    lifecycle::deprecate_soft("0.2.0", "get_country_tweets()", "get_all_tweets(country = country)")
+    lifecycle::deprecate_soft("0.2.0", "get_country_tweets()", details = "Please use `get_all_tweets(country = country)` instead.")
     get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, country = country, ...)
   }
 
 #' Get tweets with place parameter
+#' `r lifecycle::badge("deprecated")
 #'
 #' This function collects tweets containing strings or hashtags
 #' between specified date ranges filtering by place. Tweet-level data is stored in a data/
@@ -443,11 +429,12 @@ get_place_tweets <-
     if (missing(place)) {
       stop("place must be specified for get_place_tweets() function")
     }
-    lifecycle::deprecate_soft("0.2.0", "get_place_tweets()", "get_all_tweets(place = place)")
+    lifecycle::deprecate_soft("0.2.0", "get_place_tweets()", details = "Please use `get_all_tweets(place = place)` instead.")
     get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, place = place, ...)
   }
 
 #' Get tweets containing images
+#' `r lifecycle::badge("deprecated")
 #'
 #' This function collects tweets containing strings or
 #' hashtags between specified date ranges that also contain (a recognized URL to) an image. Tweet-level data
@@ -477,11 +464,12 @@ get_image_tweets <-
            bind_tweets = TRUE,
            verbose = TRUE,
            ...) {
-    lifecycle::deprecate_soft("0.2.0", "get_image_tweets()", "get_all_tweets(has_images = TRUE)")
+    lifecycle::deprecate_soft("0.2.0", "get_image_tweets()", details = "Please use `get_all_tweets(has_images = TRUE)` instead.")
     get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, has_images = TRUE,...)
   }
 
 #' Get tweets for query containing media
+#' `r lifecycle::badge("deprecated")
 #'
 #' This function collects tweets containing the strings or hashtags between specified date ranges
 #' that also contain a media object, such as a photo, GIF, or video, as determined by Twitter. Tweet-level
@@ -511,29 +499,21 @@ get_media_tweets <-
            bind_tweets = TRUE,
            verbose = TRUE,
            ...) {
-    lifecycle::deprecate_soft("0.2.0", "get_media_tweets()", "get_all_tweets(has_media = TRUE)")
+    lifecycle::deprecate_soft("0.2.0", "get_media_tweets()", details = "Please use `get_all_tweets(has_media = TRUE)` instead.")
     get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, has_media = TRUE,...)
   }
 
 
 #' Get tweets containing URL
-#'
+#' `r lifecycle::badge("deprecated")
+#' 
 #' This function collects tweets containing a given url between specified date ranges.
 #' Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_"; User-level data is stored as a series of
 #' JSONs beginning "users_". If a filename is supplied, this function will save the result as a RDS file, otherwise
 #' it will return the results as a dataframe.
 #'
 #' @param query string, url
-#' @param start_tweets string, starting date
-#' @param end_tweets  string, ending date
-#' @param bearer_token string, bearer token
-#' @param n integer, amount of tweets to be fetched
-#' @param file string, name of the resulting RDS file
-#' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
-#' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
-#' @param verbose If `FALSE`, query progress messages are suppressed
-#' @param ... arguments will be passed to `build_query()` function. See `?build_query()` for further information.
-#'
+#' @inheritParams get_all_tweets
 #' @return a data.frame
 #' @keywords internal
 #' @export
@@ -556,12 +536,13 @@ get_url_tweets <-
            verbose = TRUE,
            ...) {
     query <- add_query_prefix(query, "url:")
-    lifecycle::deprecate_soft("0.2.0", "get_url_tweets()", "get_all_tweets(url = url)")
+    lifecycle::deprecate_soft("0.2.0", "get_url_tweets()", details = "Please use `get_all_tweets(url = url)` instead.")
     get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose,...)
   }
 
 #' Get tweets for query containing geo information
-#'
+#' `r lifecycle::badge("deprecated")
+#' 
 #' This function collects tweets containing strings or 
 #' hashtags between specified date ranges that also contain Tweet-specific geolocation data provided by the 
 #' Twitter user. This can be either a location in the form of a Twitter place, with the corresponding display 
@@ -593,6 +574,6 @@ get_geo_tweets <-
            verbose = TRUE,
            ...) {
     query <- paste0('has:geo ', query)
-    lifecycle::deprecate_soft("0.2.0", "get_geo_tweets()", "get_all_tweets(has:geo = TRUE)")
+    lifecycle::deprecate_soft("0.2.0", "get_geo_tweets()", details = "Please use `get_all_tweets(has:geo = TRUE)` instead.")
     get_all_tweets(query = query, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n, file = file, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose,...)
   }
