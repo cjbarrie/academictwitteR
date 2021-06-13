@@ -86,7 +86,6 @@ jobs:
         run: |
           options(crayon.enabled = TRUE)
           rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
-          devtools::install(quick = TRUE, upgrade = FALSE)
           sink("bigtest.txt"); devtools::test(reporter = "summary"); sink(file = NULL)
         shell: Rscript {0}
 
