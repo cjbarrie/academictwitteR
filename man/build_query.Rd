@@ -7,9 +7,6 @@
 build_query(
   query = NULL,
   exclude = NULL,
-  users = NULL,
-  reply_to = NULL,
-  retweets_of = NULL,
   is_retweet = NULL,
   is_reply = FALSE,
   is_quote = FALSE,
@@ -29,20 +26,13 @@ build_query(
   has_videos = FALSE,
   has_geo = FALSE,
   lang = NULL,
-  conversation_id = NULL,
-  url = NULL
+  conversation_id = NULL
 )
 }
 \arguments{
 \item{query}{string or character vector, search query or queries}
 
 \item{exclude}{string or character vector, tweets containing the keyword(s) will be excluded}
-
-\item{users}{string or character vector, user handles to collect tweets from the specified users}
-
-\item{reply_to}{string or character vector, user handles to collect replies to the specified users}
-
-\item{retweets_of}{string or character vector, user handles to collects retweets of tweets the specified users}
 
 \item{is_retweet}{If \code{TRUE}, only retweets will be returned; if \code{FALSE}, retweets will not be returned, only tweets will be returned; if \code{NULL}, both retweets and tweets will be returned.}
 
@@ -83,8 +73,6 @@ build_query(
 \item{lang}{string, a single BCP 47 language identifier e.g. "fr"}
 
 \item{conversation_id}{string, return tweets that share the specified conversation ID}
-
-\item{url}{string, url}
 }
 \value{
 a query string
@@ -94,8 +82,8 @@ Build tweet query according to targeted parameters, can then be input to main \c
 }
 \examples{
 \dontrun{
-query <- build_query("happy", is_retweet = FALSE,
-                     point_radius = TRUE, place = "new york",
+query <- build_query("happy", is_retweet = FALSE, 
+                     point_radius = TRUE, place = "new york", 
                      country = "US")
 }
 

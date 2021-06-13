@@ -1,11 +1,8 @@
-#' Build tweet query
-#'
+#' Build tweet query 
+#' 
 #' Build tweet query according to targeted parameters, can then be input to main \code{\link{get_all_tweets}} function as query parameter.
 #'
 #' @param query string or character vector, search query or queries
-#' @param users string or character vector, user handles to collect tweets from the specified users
-#' @param reply_to string or character vector, user handles to collect replies to the specified users
-#' @param retweets_of string or character vector, user handles to collects retweets of tweets the specified users
 #' @param exclude string or character vector, tweets containing the keyword(s) will be excluded
 #' @param is_retweet If `TRUE`, only retweets will be returned; if `FALSE`, retweets will not be returned, only tweets will be returned; if `NULL`, both retweets and tweets will be returned.
 #' @param is_reply If `TRUE`, only reply tweets will be returned
@@ -26,7 +23,6 @@
 #' @param has_videos If `TRUE`, only tweets containing contain native Twitter videos, uploaded directly to Twitter will be returned
 #' @param has_geo If `TRUE`, only tweets containing Tweet-specific geolocation data provided by the Twitter user will be returned
 #' @param lang string, a single BCP 47 language identifier e.g. "fr"
-#' @param url string, url
 #' @param conversation_id string, return tweets that share the specified conversation ID
 #'
 #' @return a query string
@@ -34,24 +30,21 @@
 #'
 #' @examples
 #' \dontrun{
-#' query <- build_query("happy", is_retweet = FALSE,
-#'                      point_radius = TRUE, place = "new york",
+#' query <- build_query("happy", is_retweet = FALSE, 
+#'                      point_radius = TRUE, place = "new york", 
 #'                      country = "US")
 #' }
-#'
+#' 
 #' @importFrom utils menu
-#'
+#' 
 build_query <- function(query = NULL,
                         exclude = NULL,
-                        users = NULL,
-                        reply_to = NULL,
-                        retweets_of = NULL,
-                        is_retweet = NULL,
-                        is_reply = FALSE,
+                        is_retweet = NULL, 
+                        is_reply = FALSE, 
                         is_quote = FALSE,
                         is_verified = FALSE,
-                        place = NULL,
-                        country = NULL,
+                        place = NULL, 
+                        country = NULL, 
                         point_radius = NULL,
                         bbox = NULL,
                         geo_query = FALSE,
@@ -65,23 +58,10 @@ build_query <- function(query = NULL,
                         has_videos = FALSE,
                         has_geo = FALSE,
                         lang= NULL,
-                        conversation_id = NULL,
-                        url = NULL) {
+                        conversation_id = NULL) {
   
   if(isTRUE(length(query) >1)) {
     query <- paste("(",paste(query, collapse = " OR "),")", sep = "")
-  }
-  
-  if(!is.null(users)){
-    query <- paste(query, add_query_prefix(users, "from:"))
-  }
-  
-  if(!is.null(reply_to)){
-    query <- paste(query, add_query_prefix(reply_to, "to:"))
-  }
-  
-  if(!is.null(retweets_of)){
-    query <- paste(query, add_query_prefix(retweets_of, "retweets_of:"))
   }
   
   if(!is.null(exclude)) {
@@ -130,8 +110,8 @@ build_query <- function(query = NULL,
   
   if(isTRUE(geo_query)) {
     if(response <- menu(c("Point radius", "Bounding box"), title="Which geo buffer type type do you want?") ==1) {
-      x <- readline("What is longitude? ")
-      y <- readline("What is latitude? ")
+      x <- readline("What is longitude? ")  
+      y <- readline("What is latitude? ")  
       z <- readline("What is radius? ")
       
       zn<- as.integer(z)
@@ -147,44 +127,44 @@ build_query <- function(query = NULL,
       query <- paste(query, paste0("point_radius:","[", r,"]"))
     }
     else if(response <- menu(c("Point radius", "Bounding box"), title="Which geo buffer type type do you want?") ==2) {
-      w <- readline("What is west longitude? ")
-      x <- readline("What is south latitude? ")
-      y <- readline("What is east longitude? ")
-      z <- readline("What is north latitude? ")
+        w <- readline("What is west longitude? ")  
+        x <- readline("What is south latitude? ")
+        y <- readline("What is east longitude? ")
+        z <- readline("What is north latitude? ")
+
+        z <- paste(w,x,y,z)
+
+        query <- paste(query, paste0("bounding_box:","[", z,"]"))
+      }
       
-      z <- paste(w,x,y,z)
-      
-      query <- paste(query, paste0("bounding_box:","[", z,"]"))
     }
-    
-  }
   
   if(!is.null(point_radius)) {
     x <- point_radius[1]
     y <- point_radius[2]
     z <- point_radius[3]
-    
+
     zn<- as.numeric(z)
     while(zn>25) {
       cat("Radius must be less than 25 miles")
       z <- readline("Input new radius: ")
       zn<- as.numeric(z)
     }
-    
+
     z <- paste0(z, "mi")
-    
+
     r <- paste(x,y,z)
     query <- paste(query, paste0("point_radius:","[", r,"]"))
   }
-  
+
   if(!is.null(bbox)) {
     w <- bbox[1]
     x <- bbox[2]
     y <- bbox[3]
     z <- bbox[4]
-    
+
     z <- paste(w,x,y,z)
-    
+
     query <- paste(query, paste0("bounding_box:","[", z,"]"))
   }
   
@@ -227,13 +207,8 @@ build_query <- function(query = NULL,
   if(!is.null(lang)) {
     query <- paste(query, paste0("lang:", lang))
   }
-  
   if(!is.null(conversation_id)) {
     query <- paste(query, paste0("conversation_id:", conversation_id))
-  }
-  
-  if(!is.null(url)) {
-    query <- paste(query, paste0('url:"', url, '"'))
   }
   
   return(query)
