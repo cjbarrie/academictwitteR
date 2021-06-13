@@ -70,6 +70,7 @@ jobs:
         run: |
           pak::local_install_dev_deps(upgrade = TRUE)
           pak::pkg_install("rcmdcheck")
+          pak::pkg_install("devtools")
         shell: Rscript {0}
 
       - name: Session info
@@ -85,11 +86,12 @@ jobs:
         run: |
           options(crayon.enabled = TRUE)
           rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+          sink("bigtest.txt"); devtools::test(reporter = "summary"); sink(file = NULL)
         shell: Rscript {0}
 
       - name: Show testthat output
         if: always()
-        run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
+        run: cat 'bigtest.txt' || true
         shell: bash
 
       - name: Upload check results
