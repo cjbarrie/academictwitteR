@@ -15,7 +15,6 @@ jobs:
     environment: TWITTER_BEARER
     runs-on: macOS-latest
     env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       TWITTER_BEARER: ${{ secrets.TWITTER_BEARER }}
     steps:
       - uses: actions/checkout@v2
