@@ -22,3 +22,4 @@ cran-comments.md
 ^tests/testthat/test-set_bearer\.R
 
 
+^codecov\.yml$

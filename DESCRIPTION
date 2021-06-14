@@ -42,6 +42,7 @@ Suggests:
     devtools,
     testthat (>= 3.0.0),
     httptest,
-    lifecycle
+    lifecycle,
+    covr
 VignetteBuilder: knitr
 Config/testthat/edition: 3

@@ -12,7 +12,6 @@ name: R-CMD-check
 
 jobs:
   R-CMD-check:
-    environment: TWITTER_BEARER
     runs-on: ${{ matrix.config.os }}
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})

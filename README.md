@@ -1,10 +1,13 @@
 # academictwitteR <img src="man/figures/academictwitteRhex.png" width="160px" align="right" />
 
+<!-- badges: start -->
 [![v2](https://img.shields.io/endpoint?url=https%3A%2F%2Ftwbadges.glitch.me%2Fbadges%2Fv2)](https://developer.twitter.com/en/docs/twitter-api)
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.03272/status.svg)](https://doi.org/10.21105/joss.03272) 
 [![](https://www.r-pkg.org/badges/version/academictwitteR)](https://cran.r-project.org/package=academictwitteR)
 ![Downloads](https://cranlogs.r-pkg.org/badges/academictwitteR)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/academictwitteR)](https://cran.r-project.org/package=academictwitteR)
+[![Codecov test coverage](https://codecov.io/gh/cjbarrie/academictwitteR/branch/master/graph/badge.svg)](https://codecov.io/gh/cjbarrie/academictwitteR?branch=master)
+<!-- badges: end -->
 
 
 [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cbarrie.svg?style=social&label=Follow%20%40cbarrie)](https://twitter.com/cbarrie)
