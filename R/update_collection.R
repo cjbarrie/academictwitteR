@@ -30,7 +30,7 @@ update_collection <- function(data_path, end_tweets, bearer_token = get_bearer()
   
   # Get the date of last tweet
   existing_df <- bind_tweet_jsons(data_path)
-  start_tweets <- max(existing_df$created_at) 
+  start_tweets <- .shift_second(max(existing_df$created_at))
   
   # add "/" at the end
   if(substr(data_path, nchar(data_path), nchar(data_path)) != "/"){
@@ -42,4 +42,9 @@ update_collection <- function(data_path, end_tweets, bearer_token = get_bearer()
   
   cat("Query:",lastquery,"\n Original start date:",original_start,"\n Collection start date:",start_tweets,"\n End date:",end_tweets,"\n")
   get_all_tweets(lastquery, start_tweets, end_tweets, bearer_token, data_path = data_path, export_query = FALSE, ...)
+}
+
+.shift_second <- function(input_date_str, added_sec = 1) {
+  newdate <- lubridate::ymd_hms(input_date_str) + lubridate::seconds(added_sec)
+  base::format(newdate, "%Y-%m-%dT%H:%M:%SZ")
 }
