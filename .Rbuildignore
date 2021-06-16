@@ -20,6 +20,5 @@ cran-comments.md
 ^tests/testthat/test-emptyreturn\.R
 ^tests/testthat/test-get_all_tweets\.R
 ^tests/testthat/test-set_bearer\.R
-
-
+^tests/testthat/test-update\.R
 ^codecov\.yml$
