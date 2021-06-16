@@ -1,3 +1,8 @@
+test_that("defensive programming", {
+    expect_error(resume_collection(academictwitteR:::.gen_random_dir()))
+})
+
+
 ## require(httptest)
 ## start_capturing(simplify = FALSE)
 ## ori_test <- "../testdata/commtwitter/"
