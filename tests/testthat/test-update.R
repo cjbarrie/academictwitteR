@@ -8,6 +8,15 @@
 ## unlink(test_dir, recursive = TRUE)
 ## stop_capturing()
 
+test_that("defensive programming", {
+    ori_test <- "../testdata/commtwitter/"
+    test_dir <- academictwitteR:::.gen_random_dir()
+    dir.create(test_dir)
+    z <- file.copy(list.files(ori_test, full.names = TRUE, recursive = TRUE), test_dir, recursive = TRUE)
+    expect_error(update_collection(test_dir, bind_tweets = FALSE))
+    expect_error(update_collection(academictwitteR:::.gen_random_dir(), bind_tweets = FALSE))
+    unlink(test_dir)
+})
 
 
 with_mock_api({
