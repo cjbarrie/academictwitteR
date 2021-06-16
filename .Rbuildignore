@@ -22,4 +22,5 @@ cran-comments.md
 ^tests/testthat/test-set_bearer\.R
 ^tests/testthat/test-update\.R
 ^tests/testthat/test-resume\.R
+^tests/testthat/test-get_user_functions\.R
 ^codecov\.yml$
