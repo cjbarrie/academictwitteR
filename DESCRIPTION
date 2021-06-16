@@ -35,7 +35,8 @@ Depends:
 Imports: 
     dplyr,
     httr,
-    jsonlite
+    jsonlite,
+    lubridate
 Suggests: 
     knitr,
     rmarkdown,
