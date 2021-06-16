@@ -4,12 +4,14 @@
 \alias{resume_collection}
 \title{Resume previous collection}
 \usage{
-resume_collection(data_path, bearer_token = get_bearer(), ...)
+resume_collection(data_path, bearer_token = get_bearer(), verbose = TRUE, ...)
 }
 \arguments{
 \item{data_path}{string, name of an existing data_path}
 
 \item{bearer_token}{string, bearer token}
+
+\item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 
 \item{...}{arguments will be passed to \code{get_all_tweets()} function. See \code{?get_all_tweets()} for further information.}
 }
