@@ -28,9 +28,13 @@ get_liking_users <- function(x, bearer_token = get_bearer(), verbose = TRUE){
   new_df <- data.frame()
   for(i in 1:length(x)){
     cat(paste0("Processing ",x[i],"\n"))
-      requrl <- paste0(url,x[i],endpoint)
-
-      # Sending GET Request
+    requrl <- paste0(url,x[i],endpoint)
+    next_token <- ""
+    while(!is.null(next_token)) {
+      if(next_token!=""){
+        params[["pagination_token"]] <- next_token
+      }
+      ## Sending GET Request
       r <- httr::GET(requrl,httr::add_headers(Authorization = bearer),query=params)
       
       # Fix random 503 errors
@@ -71,5 +75,6 @@ get_liking_users <- function(x, bearer_token = get_bearer(), verbose = TRUE){
         Sys.sleep(900)
       }
     }
+  }
   return(new_df)
 }
