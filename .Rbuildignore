@@ -23,4 +23,5 @@ cran-comments.md
 ^tests/testthat/test-update\.R
 ^tests/testthat/test-resume\.R
 ^tests/testthat/test-get_user_functions\.R
+^tests/testthat/test-get_liked_tweets\.R
 ^codecov\.yml$
