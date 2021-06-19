@@ -32,7 +32,7 @@ get_user_tweets(
 
 \item{bearer_token}{string, bearer token}
 
-\item{n}{integer, amount of tweets to be fetched}
+\item{n}{integer, upper limit of tweets to be fetched}
 
 \item{file}{string, name of the resulting RDS file}
 

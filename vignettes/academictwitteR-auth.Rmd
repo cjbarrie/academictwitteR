@@ -91,5 +91,5 @@ Beside the panel for Bearer Token, you will see an option to Regenerate the toke
 
 Once you have the Bearer Token, you are ready to use `academictwitteR`.
 
-It would be nicer to store your Bearer Token as an environmental variable. Please consult `?get_bearer` for more details.
+It is not advisable to save your bearer token within your scripts. Instead, we advise saving it as an environment variable. Please consult `?get_bearer` for more details.
 

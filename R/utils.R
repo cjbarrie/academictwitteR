@@ -115,7 +115,7 @@ fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, 
         )
     if (ntweets > n){ # Check n
       df.all <- df.all[1:n,] # remove extra
-      .vcat(verbose, "Amount of tweets exceeds ", n, ": finishing collection.\n")
+      .vcat(verbose, "Total tweets ingested now exceeds ", n, ": finishing collection.\n")
       break
     }
     if (is.null(nextoken)) {
@@ -223,4 +223,15 @@ create_storage_dir <- function(data_path, export_query, built_query, start_tweet
   if (bool) {
     warning(..., call. = FALSE)
   }
+}
+
+.process_qparam <- function(param, param_str,query) {
+  if(!is.null(param)){
+    if(isTRUE(param)) {
+      query <- paste(query, param_str)
+    } else if(param == FALSE) {
+      query <- paste(query, paste0("-", param_str))
+    }
+  }
+  return(query)
 }

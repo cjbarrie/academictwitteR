@@ -6,28 +6,27 @@
 \usage{
 build_query(
   query = NULL,
-  exclude = NULL,
   users = NULL,
   reply_to = NULL,
   retweets_of = NULL,
+  exclude = NULL,
   is_retweet = NULL,
-  is_reply = FALSE,
-  is_quote = FALSE,
-  is_verified = FALSE,
+  is_reply = NULL,
+  is_quote = NULL,
+  is_verified = NULL,
+  remove_promoted = FALSE,
+  has_hashtags = NULL,
+  has_cashtags = NULL,
+  has_links = NULL,
+  has_mentions = NULL,
+  has_media = NULL,
+  has_images = NULL,
+  has_videos = NULL,
+  has_geo = NULL,
   place = NULL,
   country = NULL,
   point_radius = NULL,
   bbox = NULL,
-  geo_query = FALSE,
-  remove_promoted = FALSE,
-  has_hashtags = FALSE,
-  has_cashtags = FALSE,
-  has_links = FALSE,
-  has_mentions = FALSE,
-  has_media = FALSE,
-  has_images = FALSE,
-  has_videos = FALSE,
-  has_geo = FALSE,
   lang = NULL,
   conversation_id = NULL,
   url = NULL
@@ -36,21 +35,39 @@ build_query(
 \arguments{
 \item{query}{string or character vector, search query or queries}
 
-\item{exclude}{string or character vector, tweets containing the keyword(s) will be excluded}
-
 \item{users}{string or character vector, user handles to collect tweets from the specified users}
 
 \item{reply_to}{string or character vector, user handles to collect replies to the specified users}
 
 \item{retweets_of}{string or character vector, user handles to collects retweets of tweets the specified users}
 
-\item{is_retweet}{If \code{TRUE}, only retweets will be returned; if \code{FALSE}, retweets will not be returned, only tweets will be returned; if \code{NULL}, both retweets and tweets will be returned.}
+\item{exclude}{string or character vector, tweets containing the keyword(s) will be excluded}
 
-\item{is_reply}{If \code{TRUE}, only reply tweets will be returned}
+\item{is_retweet}{If \code{TRUE}, only retweets will be returned; if \code{FALSE}, retweets will be excluded; if \code{NULL}, both retweets and other tweet types will be returned.}
 
-\item{is_quote}{If \code{TRUE}, only quote tweets will be returned}
+\item{is_reply}{If \code{TRUE}, only replies will be returned; if \code{FALSE}, replies will be excluded; if \code{NULL}, both replies and other tweet types will be returned.}
 
-\item{is_verified}{If \code{TRUE}, only tweets whose authors are verified by Twitter will be returned}
+\item{is_quote}{If \code{TRUE}, only quote tweets will be returned; if \code{FALSE}, quote tweets will be excluded; if \code{NULL}, both quote tweets and other tweet types will be returned.}
+
+\item{is_verified}{If \code{TRUE}, only tweets from verified accounts will be returned; if \code{FALSE}, tweets from verified accounts will be excluded; if \code{NULL}, both verified account tweets and tweets from non-verified accounts will be returned.}
+
+\item{remove_promoted}{If \code{TRUE}, tweets created for promotion only on ads.twitter.com are removed}
+
+\item{has_hashtags}{If \code{TRUE}, only tweets containing hashtags will be returned; if \code{FALSE}, tweets containing hashtags will be excluded; if \code{NULL}, both tweets containing hashtags and tweets without hashtags will be returned.}
+
+\item{has_cashtags}{If \code{TRUE}, only tweets containing cashtags will be returned; if \code{FALSE}, tweets containing cashtags will be excluded; if \code{NULL}, both tweets containing cashtags and tweets without cashtags will be returned.}
+
+\item{has_links}{If \code{TRUE}, only tweets containing links (and media) will be returned; if \code{FALSE}, tweets containing links (and media) will be excluded; if \code{NULL}, both tweets containing links (and media) and tweets without links (and media) will be returned.}
+
+\item{has_mentions}{If \code{TRUE}, only tweets containing mentions will be returned; if \code{FALSE}, tweets containing mentions will be excluded; if \code{NULL}, both tweets containing mentions and tweets without mentions will be returned.}
+
+\item{has_media}{If \code{TRUE}, only tweets containing media such as a photo, GIF, or video (as determined by Twitter) will be returned will be returned; if \code{FALSE}, tweets containing media will be excluded; if \code{NULL}, both tweets containing media and tweets without media will be returned.}
+
+\item{has_images}{If \code{TRUE}, only tweets containing (recognized URLs to) images will be returned will be returned will be returned; if \code{FALSE}, tweets containing images will be excluded; if \code{NULL}, both tweets containing images and tweets without images will be returned.}
+
+\item{has_videos}{If \code{TRUE},  only tweets containing contain videos (recognized as native videos uploaded directly to Twitter) will be returned will be returned; if \code{FALSE}, tweets containing videos will be excluded; if \code{NULL}, both tweets containing videos and tweets without videos will be returned.}
+
+\item{has_geo}{If \code{TRUE}, only tweets containing geo information (Tweet-specific geolocation data provided by the Twitter user) will be returned; if \code{FALSE}, tweets containing geo information will be excluded; if \code{NULL}, both tweets containing geo information and tweets without geo information will be returned.}
 
 \item{place}{string, name of place e.g. "London"}
 
@@ -59,26 +76,6 @@ build_query(
 \item{point_radius}{numeric, a vector of two point coordinates latitude, longitude, and point radius distance (in miles)}
 
 \item{bbox}{numeric, a vector of four bounding box coordinates from west longitude to north latitude}
-
-\item{geo_query}{If \code{TRUE} user will be prompted to enter relevant information for bounding box or point radius geo buffers}
-
-\item{remove_promoted}{If \code{TRUE}, tweets created for promotion only on ads.twitter.com are removed}
-
-\item{has_hashtags}{If \code{TRUE}, only tweets containing hashtags will be returned}
-
-\item{has_cashtags}{If \code{TRUE}, only tweets containing cashtags will be returned}
-
-\item{has_links}{If \code{TRUE}, only tweets containing links and media will be returned}
-
-\item{has_mentions}{If \code{TRUE}, only tweets containing mentions will be returned}
-
-\item{has_media}{If \code{TRUE}, only tweets containing a recognized media object, such as a photo, GIF, or video, as determined by Twitter will be returned}
-
-\item{has_images}{If \code{TRUE}, only tweets containing a recognized URL to an image will be returned}
-
-\item{has_videos}{If \code{TRUE}, only tweets containing contain native Twitter videos, uploaded directly to Twitter will be returned}
-
-\item{has_geo}{If \code{TRUE}, only tweets containing Tweet-specific geolocation data provided by the Twitter user will be returned}
 
 \item{lang}{string, a single BCP 47 language identifier e.g. "fr"}
 
@@ -90,12 +87,17 @@ build_query(
 a query string
 }
 \description{
-Build tweet query according to targeted parameters, can then be input to main \code{\link{get_all_tweets}} function as query parameter.
+Build tweet query according to targeted parameters. This function is already called within the main
+\code{\link{get_all_tweets}} function.
+}
+\details{
+It may also be called separately and the output saved as
+a character object query string to be input as query parameter to \code{\link{get_all_tweets}}.
 }
 \examples{
 \dontrun{
 query <- build_query("happy", is_retweet = FALSE,
-                     point_radius = TRUE, place = "new york",
+                     place = "new york",
                      country = "US")
 }
 
