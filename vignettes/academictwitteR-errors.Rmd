@@ -1,0 +1,31 @@
+---
+title: "Understanding API errors"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Understanding API errors}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+The table below gives an overview of the common errors you may encounter when using the Twitter Academic Research Product Track API. The meaning and solutions for these errors are taken from the Twitter API Response codes and errors help page [here](https://developer.twitter.com/en/support/twitter-api/error-troubleshooting).
+
+
+| Error | Text                  | Meaning                                                                                                                                                                                                                          | Solution                                                                                                                                                                                                                                                                                                            |
+| ----- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 400   | Bad request           | The request was invalid or cannot be otherwise served. An accompanying error message will explain further. Requests without authentication or with invalid query parameters are considered invalid and will yield this response. | Double check that your query is valid.                                                                                                                                                                                                                                                                              |
+| 401   | Unauthorized          | There was a problem authenticating your request. This could be due to missing or incorrect authentication credentials. This may also be returned in other undefined circumstances.                                               | Check that you are using the correct authentication method and that your credentials are correct. Consult the authorization vignette [here](academictwitteR-auth.html) on how to get authorization for using the Academic Research Product Track and make sure you have correctly specified your bearer token. See \`?get\_bearer\` for more details. |
+| 403   | Forbidden             | The request is understood, but it has been refused or access is not allowed. An accompanying error message will explain why.                                                                                                     | Check that your data plan includes access to the endpoint you’re trying to use. You may also need to get your App allowlisted.                                                                                                                                                                                      |
+| 404   | Not Found             | The URI requested is invalid or the resource requested, such as a user, does not exist.                                                                                                                                          | Check that you are using valid parameters and the correct URI for the endpoint you’re using.                                                                                                                                                                                                                        |
+| 429   | Too Many Requests     | Returned when a request cannot be served due to the App's rate limit having been exhausted for the resource.                                                                                                                     | Check the number of requests per timeframe allowed with the endpoint you’re using. Wait for the timeframe to reset.                                                                                                                                                                                                 |
+| 500   | Internal Server Error | Something is broken. This is usually a temporary error, for example in a high load situation or if an endpoint is temporarily having issues.                                                                                     | Check the Twitter API status page or the developer community forum in case others are having similar issues, or simply wait and try again later.                                                                                                                                                                    |
+| 503   | Service Unavailable   | The Twitter servers are up, but overloaded with requests. Try again later.                                                                                                                                                       | Check the Twitter API status page or the developer community forum in case others are having similar issues, or simply wait and try again later.                                                                                                                                                                    |                              |

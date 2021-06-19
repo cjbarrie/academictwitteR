@@ -28,7 +28,7 @@ get_all_tweets(
 
 \item{bearer_token}{string, bearer token}
 
-\item{n}{integer, amount of tweets to be fetched}
+\item{n}{integer, upper limit of tweets to be fetched}
 
 \item{file}{string, name of the resulting RDS file}
 
@@ -48,10 +48,22 @@ get_all_tweets(
 a data.frame
 }
 \description{
-This function collects tweets containing strings or hashtags
-between specified date ranges. Tweet-level data is stored in a data/ path as a series of JSONs beginning "data_";
-User-level data is stored as a series of JSONs beginning "users_". If a filename is supplied, this function will
-save the result as a RDS file, otherwise it will return the results as a dataframe.
+This function collects tweets by query string or strings
+between specified date ranges.
+}
+\details{
+The function can also collect tweets by users. These may be specified alongside
+a query string or without. When no query string is supplied, the function collects
+all tweets by that user.
+
+If a filename is supplied, the function will
+save the result as a RDS file.
+
+If a data path is supplied, the function will also return
+tweet-level data in a data/ path as a series of JSONs beginning "data_";
+while user-level data will be returned as a series of JSONs beginning "users_".
+
+When bind_tweets is \code{TRUE}, the function returns a data frame.
 }
 \examples{
 \dontrun{
@@ -60,13 +72,20 @@ bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 get_all_tweets(query = "BLM", 
                start_tweets = "2020-01-01T00:00:00Z", 
                end_tweets = "2020-01-05T00:00:00Z", 
-               bearer_token = bearer_token, 
-               data_path = "data")
-               
+               bearer_token = get_bearer(), 
+               data_path = "data",
+               n = 500)
+  
+get_all_tweets(users = c("cbarrie", "jack"),
+               start_tweets = "2021-01-01T00:00:00Z", 
+               end_tweets = "2021-06-01T00:00:00Z",
+               bearer_token = get_bearer(), 
+               n = 1000)
+                            
 get_all_tweets(start_tweets = "2021-01-01T00:00:00Z", 
                end_tweets = "2021-06-01T00:00:00Z",
-               bearer_token = bearer_token, 
-               n = 200, 
+               bearer_token = get_bearer(), 
+               n = 1500, 
                conversation_id = "1392887366507970561")
 }
 }

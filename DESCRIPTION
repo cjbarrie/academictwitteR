@@ -36,7 +36,8 @@ Imports:
     dplyr,
     httr,
     jsonlite,
-    lubridate
+    lubridate,
+    usethis
 Suggests: 
     knitr,
     rmarkdown,
