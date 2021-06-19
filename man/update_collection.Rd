@@ -4,14 +4,22 @@
 \alias{update_collection}
 \title{Update previous collection session}
 \usage{
-update_collection(data_path, end_tweets, bearer_token, ...)
+update_collection(
+  data_path,
+  end_tweets,
+  bearer_token = get_bearer(),
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{data_path}{string, name of an existing data_path}
 
-\item{end_tweets}{string, new end date for data collection, it must be later then the original start date.}
+\item{end_tweets}{string, ending date}
 
 \item{bearer_token}{string, bearer token}
+
+\item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 
 \item{...}{arguments will be passed to \code{get_all_tweets()} function. See \code{?get_all_tweets()} for further information.}
 }

@@ -89,4 +89,7 @@ Beside the panel for Bearer Token, you will see an option to Regenerate the toke
 ![](files/twitterdev6.png){width=80%}
 </center>
 
-Once you have the Bearer Token, you are ready to use `academictwitteR`!
+Once you have the Bearer Token, you are ready to use `academictwitteR`.
+
+It would be nicer to store your Bearer Token as an environmental variable. Please consult `?get_bearer` for more details.
+

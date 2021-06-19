@@ -1,4 +1,4 @@
-get_tweets <- function(q="",n=500,start_time,end_time,token,next_token=""){
+get_tweets <- function(q="",page_n=500,start_time,end_time,token,next_token="", verbose = TRUE){
   # if(n>500){
   #   warning("n too big. Using 500 instead")
   #   n <- 500
@@ -26,7 +26,7 @@ get_tweets <- function(q="",n=500,start_time,end_time,token,next_token=""){
   #parameters
   params = list(
     "query" = q,
-    "max_results" = n,
+    "max_results" = page_n,
     "start_time" = start_time,
     "end_time" = end_time, 		
     "tweet.fields" = "attachments,author_id,context_annotations,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld",
@@ -46,18 +46,23 @@ get_tweets <- function(q="",n=500,start_time,end_time,token,next_token=""){
     count <- count+1
     Sys.sleep(count*5)
   }
+  if(httr::status_code(r)==429){
+    .vcat(verbose, "Rate limit reached, sleeping... \n")
+    Sys.sleep(900)
+    r <- httr::GET(url,httr::add_headers(Authorization = bearer),query=params)
+  }
   
   if(httr::status_code(r)!=200){
     stop(paste("something went wrong. Status code:", httr::status_code(r)))
   }
   if(httr::headers(r)$`x-rate-limit-remaining`=="1"){
-    warning(paste("x-rate-limit-remaining=1. Resets at",as.POSIXct(as.numeric(httr::headers(r)$`x-rate-limit-reset`), origin="1970-01-01")))
+    .vwarn(verbose, paste("x-rate-limit-remaining=1. Resets at",as.POSIXct(as.numeric(httr::headers(r)$`x-rate-limit-reset`), origin="1970-01-01")))
   }
   dat <- jsonlite::fromJSON(httr::content(r, "text"))
   dat
 }
 
-fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, end_tweets, bearer_token, verbose){
+fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, end_tweets, bearer_token = get_bearer(), n, page_n, verbose){
   nextoken <- ""
   df.all <- data.frame()
   toknum <- 0
@@ -66,7 +71,7 @@ fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, 
     df <-
       get_tweets(
         q = built_query,
-        n = 500,
+        page_n = page_n,
         start_time = start_tweets,
         end_time = end_tweets,
         token = bearer_token,
@@ -88,30 +93,33 @@ fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, 
     
     nextoken <-
       df$meta$next_token #this is NULL if there are no pages left
-    if(verbose) {
-      toknum <- toknum + 1
-      ntweets <- ntweets + nrow(df$data)
-      cat(
+    toknum <- toknum + 1
+    if (is.null(df$data)) {
+      n_newtweets <- 0
+    } else {
+      n_newtweets <- nrow(df$data)
+    }
+    ntweets <- ntweets + n_newtweets
+    .vcat(verbose, 
         "query: <",
         built_query,
         ">: ",
         "(tweets captured this page: ",
-        nrow(df$data),
+        n_newtweets,
         "). Total pages queried: ",
         toknum,
         ". Total tweets ingested: ",
         ntweets, 
         ". \n",
         sep = ""
-      )
+        )
+    if (ntweets > n){ # Check n
+      df.all <- df.all[1:n,] # remove extra
+      .vcat(verbose, "Amount of tweets exceeds ", n, ": finishing collection.\n")
+      break
     }
-    Sys.sleep(3.1)
     if (is.null(nextoken)) {
-      if(verbose) {
-        cat("This is the last page for",
-            built_query,
-            ": finishing collection. \n")
-      }
+      .vcat(verbose, "This is the last page for", built_query, ": finishing collection.\n")
       break
     }
   }
@@ -120,7 +128,7 @@ fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, 
     return(df.all) # return to data.frame
   }
   if (!is.null(file)) {
-    saveRDS(df.all, file = paste0(file, ".rds")) # save as RDS
+    saveRDS(df.all, file = file) # save as RDS
     return(df.all) # return data.frame
   }
   
@@ -130,26 +138,30 @@ fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, 
   
   if (!is.null(data_path) &
       is.null(file) & bind_tweets == F) {
-    cat("Data stored as JSONs: use bind_tweets_json function to bundle into data.frame")
+    .vcat(verbose, "Data stored as JSONs: use bind_tweets function to bundle into data.frame")
   }
 }
 
-check_data_path <- function(data_path, file, bind_tweets){
+check_bearer <- function(bearer_token){
+  if(missing(bearer_token)){
+    stop("bearer token must be specified.")
+  }
+  if(substr(bearer_token,1,7)=="Bearer "){
+    bearer <- bearer_token
+  } else{
+    bearer <- paste0("Bearer ",bearer_token)
+  }
+  return(bearer)
+}
+
+check_data_path <- function(data_path, file, bind_tweets, verbose = TRUE){
   #warning re data storage recommendations if no data path set
   if (is.null(data_path)) {
-    warning(
-      "Recommended to specify a data path in order to mitigate data loss when ingesting large amounts of data.",
-      call. = FALSE,
-      immediate. = TRUE
-    )
+    .vwarn(verbose, "Recommended to specify a data path in order to mitigate data loss when ingesting large amounts of data.")
   }
   #warning re data.frame object and necessity of assignment
   if (is.null(data_path) & is.null(file)) {
-    warning(
-      "Tweets will not be stored as JSONs or as a .rds file and will only be available in local memory if assigned to an object.",
-      call. = FALSE,
-      immediate. = TRUE
-    )
+    .vwarn(verbose, "Tweets will not be stored as JSONs or as a .rds file and will only be available in local memory if assigned to an object.")
   }
   #stop clause for if user sets bind_tweets to FALSE but sets no data path
   if (is.null(data_path) & bind_tweets == F) {
@@ -157,31 +169,22 @@ check_data_path <- function(data_path, file, bind_tweets){
   }
   #warning re binding of tweets when a data path and file path have been set but bind_tweets is set to FALSE
   if (!is.null(data_path) & !is.null(file) & bind_tweets == F) {
-    warning(
-      "Tweets will still be bound in local memory to generate .rds file. Argument (bind_tweets = F) only valid when just a data path has been specified.",
-      call. = FALSE,
-      immediate. = TRUE
-    )
+    .vwarn(verbose, "Tweets will still be bound in local memory to generate .rds file. Argument (bind_tweets = F) only valid when just a data path has been specified.")
   }
   #warning re data storage and memory limits when setting bind_tweets to TRUE 
   if (!is.null(data_path) & is.null(file) & bind_tweets == T) {
-    warning(
-      "Tweets will be bound in local memory as well as stored as JSONs.",
-      call. = FALSE,
-      immediate. = TRUE
-    )
+    .vwarn(verbose, "Tweets will be bound in local memory as well as stored as JSONs.")
   }
 }
 
-create_data_dir <- function(data_path){
+create_data_dir <- function(data_path, verbose = TRUE){
   #create folders for storage
-  ifelse(!dir.exists(file.path(data_path)),
-         dir.create(file.path(data_path), showWarnings = FALSE),
-         warning(
-           "Directory already exists. Existing JSON files may be parsed and returned, choose a new path if this is not intended.",
-           call. = FALSE,
-           immediate. = TRUE
-         ))
+  if (dir.exists(file.path(data_path))) {
+    .vwarn(verbose, "Directory already exists. Existing JSON files may be parsed and returned, choose a new path if this is not intended.")
+    invisible(data_path)
+  }
+  dir.create(file.path(data_path), showWarnings = FALSE)
+    invisible(data_path)  
 }
 
 df_to_json <- function(df, data_path){
@@ -191,4 +194,33 @@ df_to_json <- function(df, data_path){
                        paste0(data_path, "data_", df$data$id[nrow(df$data)], ".json"))
   jsonlite::write_json(df$includes,
                        paste0(data_path, "users_", df$data$id[nrow(df$data)], ".json"))
+}
+
+create_storage_dir <- function(data_path, export_query, built_query, start_tweets, end_tweets, verbose){
+  if (!is.null(data_path)){
+    create_data_dir(data_path, verbose)
+    if (isTRUE(export_query)){ # Note export_query is called only if data path is supplied
+      # Writing query to file (for resuming)
+      filecon <- file(paste0(data_path,"query"))
+      writeLines(c(built_query,start_tweets,end_tweets), filecon)
+      close(filecon)
+    }
+  }
+}
+
+
+.gen_random_dir <- function() {
+  paste0(tempdir(), "/", paste0(sample(letters, 20), collapse = ""))
+}
+
+.vcat <- function(bool, ...) {
+  if (bool) {
+    cat(...)
+  }
+}
+
+.vwarn <- function(bool, ...) {
+  if (bool) {
+    warning(..., call. = FALSE)
+  }
 }

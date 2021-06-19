@@ -5,14 +5,16 @@
 \title{Get tweets from full archive search}
 \usage{
 get_all_tweets(
-  query,
+  query = NULL,
   start_tweets,
   end_tweets,
-  bearer_token,
+  bearer_token = get_bearer(),
+  n = 100,
   file = NULL,
   data_path = NULL,
   export_query = TRUE,
   bind_tweets = TRUE,
+  page_n = 500,
   verbose = TRUE,
   ...
 )
@@ -26,6 +28,8 @@ get_all_tweets(
 
 \item{bearer_token}{string, bearer token}
 
+\item{n}{integer, amount of tweets to be fetched}
+
 \item{file}{string, name of the resulting RDS file}
 
 \item{data_path}{string, if supplied, fetched data can be saved to the designated path as jsons}
@@ -33,6 +37,8 @@ get_all_tweets(
 \item{export_query}{If \code{TRUE}, queries are exported to data_path}
 
 \item{bind_tweets}{If \code{TRUE}, tweets captured are bound into a data.frame for assignment}
+
+\item{page_n}{integer, amount of tweets to be returned by per page}
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 
@@ -50,7 +56,17 @@ save the result as a RDS file, otherwise it will return the results as a datafra
 \examples{
 \dontrun{
 bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-get_all_tweets("BLM", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", 
-               bearer_token, data_path = "data/")
+
+get_all_tweets(query = "BLM", 
+               start_tweets = "2020-01-01T00:00:00Z", 
+               end_tweets = "2020-01-05T00:00:00Z", 
+               bearer_token = bearer_token, 
+               data_path = "data")
+               
+get_all_tweets(start_tweets = "2021-01-01T00:00:00Z", 
+               end_tweets = "2021-06-01T00:00:00Z",
+               bearer_token = bearer_token, 
+               n = 200, 
+               conversation_id = "1392887366507970561")
 }
 }

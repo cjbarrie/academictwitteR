@@ -5,8 +5,11 @@
 \title{Build tweet query}
 \usage{
 build_query(
-  query,
+  query = NULL,
   exclude = NULL,
+  users = NULL,
+  reply_to = NULL,
+  retweets_of = NULL,
   is_retweet = NULL,
   is_reply = FALSE,
   is_quote = FALSE,
@@ -25,13 +28,21 @@ build_query(
   has_images = FALSE,
   has_videos = FALSE,
   has_geo = FALSE,
-  lang = NULL
+  lang = NULL,
+  conversation_id = NULL,
+  url = NULL
 )
 }
 \arguments{
 \item{query}{string or character vector, search query or queries}
 
 \item{exclude}{string or character vector, tweets containing the keyword(s) will be excluded}
+
+\item{users}{string or character vector, user handles to collect tweets from the specified users}
+
+\item{reply_to}{string or character vector, user handles to collect replies to the specified users}
+
+\item{retweets_of}{string or character vector, user handles to collects retweets of tweets the specified users}
 
 \item{is_retweet}{If \code{TRUE}, only retweets will be returned; if \code{FALSE}, retweets will not be returned, only tweets will be returned; if \code{NULL}, both retweets and tweets will be returned.}
 
@@ -49,7 +60,7 @@ build_query(
 
 \item{bbox}{numeric, a vector of four bounding box coordinates from west longitude to north latitude}
 
-\item{geo_query}{If \code{TRUE} user will be propmted to enter relevant information for bounding box or point radius geo buffers}
+\item{geo_query}{If \code{TRUE} user will be prompted to enter relevant information for bounding box or point radius geo buffers}
 
 \item{remove_promoted}{If \code{TRUE}, tweets created for promotion only on ads.twitter.com are removed}
 
@@ -70,6 +81,10 @@ build_query(
 \item{has_geo}{If \code{TRUE}, only tweets containing Tweet-specific geolocation data provided by the Twitter user will be returned}
 
 \item{lang}{string, a single BCP 47 language identifier e.g. "fr"}
+
+\item{conversation_id}{string, return tweets that share the specified conversation ID}
+
+\item{url}{string, url}
 }
 \value{
 a query string
@@ -79,8 +94,8 @@ Build tweet query according to targeted parameters, can then be input to main \c
 }
 \examples{
 \dontrun{
-query <- build_query("happy", is_retweet = FALSE, 
-                     point_radius = TRUE, place = "new york", 
+query <- build_query("happy", is_retweet = FALSE,
+                     point_radius = TRUE, place = "new york",
                      country = "US")
 }
 

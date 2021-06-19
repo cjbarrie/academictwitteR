@@ -4,7 +4,7 @@
 \alias{get_user_profile}
 \title{Get user profile}
 \usage{
-get_user_profile(x, bearer_token)
+get_user_profile(x, bearer_token = get_bearer())
 }
 \arguments{
 \item{x}{string containing one user id or a vector of user ids}

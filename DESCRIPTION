@@ -1,6 +1,6 @@
 Package: academictwitteR
-Title: academictwitteR: an R package to access the Twitter Academic Research Product Track v2 API endpoint
-Version: 0.0.0.9000
+Title: Access the Twitter Academic Research Product Track V2 API Endpoint
+Version: 0.2.0
 Authors@R: 
     c(person(given = "Christopher",
            family = "Barrie",
@@ -11,8 +11,13 @@ Authors@R:
            family = "Ho",
            role = c("aut"),
            email = "justin.chunting.ho@sciencespo.fr",
-           comment = c(ORCID = "0000-0002-7884-1059")))
-Description: Package to query the Twitter Academic Research Product Track,
+           comment = c(ORCID = "0000-0002-7884-1059")),
+	   person(given = "Chung-hong",
+	   family = "Chan",
+	   role = c("ctb"),
+	   email = "chainsawtiney@gmail.com",
+	   comment = c(ORCID = "0000-0002-6232-7530")))
+Description: Package to query the Twitter Academic Research Product Track (<https://developer.twitter.com/en/solutions/academic-research>),
     providing access to full-archive search and other v2 API endpoints. Functions
     are written with academic research in mind. They provide flexibility in how 
     the user wishes to store collected data, and encourage regular storage of data
@@ -23,15 +28,22 @@ License: MIT + file LICENSE
 URL: https://github.com/cjbarrie/academictwitteR
 BugReports: https://github.com/cjbarrie/academictwitteR/issues
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.1.9001
+Depends:
+    R (>= 3.4)
 Imports: 
     dplyr,
     httr,
-    jsonlite
+    jsonlite,
+    lubridate
 Suggests: 
     knitr,
     rmarkdown,
-    devtools
+    devtools,
+    testthat (>= 3.0.0),
+    httptest,
+    lifecycle,
+    covr
 VignetteBuilder: knitr
+Config/testthat/edition: 3

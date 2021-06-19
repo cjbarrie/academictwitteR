@@ -10,3 +10,17 @@ includes\*.*
 twittterv2r.Rproj
 paper.bib
 paper.md
+demo.R
+cran-comments.md
+^CRAN-RELEASE$
+^CODE_OF_CONDUCT\.md$
+^\.github$
+^tests/testthat/api\.twitter\.com/
+^tests/testthat/test-deprecate\.R
+^tests/testthat/test-emptyreturn\.R
+^tests/testthat/test-get_all_tweets\.R
+^tests/testthat/test-set_bearer\.R
+^tests/testthat/test-update\.R
+^tests/testthat/test-resume\.R
+^tests/testthat/test-get_user_functions\.R
+^codecov\.yml$

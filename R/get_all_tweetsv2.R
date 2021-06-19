@@ -9,10 +9,12 @@
 #' @param start_tweets string, starting date
 #' @param end_tweets  string, ending date
 #' @param bearer_token string, bearer token
+#' @param n integer, amount of tweets to be fetched
 #' @param file string, name of the resulting RDS file
 #' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
 #' @param export_query If `TRUE`, queries are exported to data_path
 #' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
+#' @param page_n integer, amount of tweets to be returned by per page
 #' @param verbose If `FALSE`, query progress messages are suppressed
 #' @param ... arguments will be passed to `build_query()` function. See `?build_query()` for further information.
 #' 
@@ -22,19 +24,31 @@
 #' @examples
 #' \dontrun{
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-#' get_all_tweets("BLM", "2020-01-01T00:00:00Z", "2020-01-05T00:00:00Z", 
-#'                bearer_token, data_path = "data/")
+#' 
+#' get_all_tweets(query = "BLM", 
+#'                start_tweets = "2020-01-01T00:00:00Z", 
+#'                end_tweets = "2020-01-05T00:00:00Z", 
+#'                bearer_token = bearer_token, 
+#'                data_path = "data")
+#'                
+#' get_all_tweets(start_tweets = "2021-01-01T00:00:00Z", 
+#'                end_tweets = "2021-06-01T00:00:00Z",
+#'                bearer_token = bearer_token, 
+#'                n = 200, 
+#'                conversation_id = "1392887366507970561")
 #' }
 get_all_tweets <-
-  function(query,
+  function(query = NULL,
            start_tweets,
            end_tweets,
-           bearer_token,
+           bearer_token = get_bearer(),
+           n = 100,
            file = NULL,
            data_path = NULL,
            export_query = TRUE,
            bind_tweets = TRUE,
-           verbose = TRUE, 
+           page_n = 500,
+           verbose = TRUE,
            ...) {
     
     # Check if path ending with "/"
@@ -45,22 +59,13 @@ get_all_tweets <-
     }
     
     # Check file storage conditions
-    check_data_path(data_path, file, bind_tweets)
+    check_data_path(data_path = data_path, file = file, bind_tweets = bind_tweets, verbose = verbose)
 
     # Build query
     built_query <- build_query(query, ...)
         
-    # Create storage direction
-    if (!is.null(data_path)){
-      create_data_dir(data_path)
-      if (isTRUE(export_query)){ # Note export_query is called only if data path is supplied
-        # Writing query to file (for resuming)
-        filecon <- file(paste0(data_path,"query"))
-        writeLines(c(built_query,start_tweets,end_tweets), filecon)
-        close(filecon)
-      }
-    }
+    create_storage_dir(data_path = data_path, export_query = export_query, built_query = built_query, start_tweets = start_tweets, end_tweets = end_tweets, verbose = verbose)
     
     # Fetch data
-    return(fetch_data(built_query, data_path, file, bind_tweets, start_tweets, end_tweets, bearer_token, verbose))
+    return(fetch_data(built_query = built_query, data_path = data_path, file = file, bind_tweets = bind_tweets, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n , page_n = page_n, verbose = verbose))
   }

@@ -14,16 +14,8 @@
 #' users <- c("2244994945", "6253282")
 #' get_user_profile(users, bearer_token)
 #' }
-get_user_profile <- function(x, bearer_token){
-  if(missing(bearer_token)){
-    stop("bearer token must be specified.")  
-  }
-  if(substr(bearer_token,1,7)=="Bearer "){
-    bearer <- bearer_token
-  } else{
-    bearer <- paste0("Bearer ",bearer_token)
-  }
-  
+get_user_profile <- function(x, bearer_token = get_bearer()){
+  bearer <- check_bearer(bearer_token)
   #endpoint
   url <- "https://api.twitter.com/2/users"
   

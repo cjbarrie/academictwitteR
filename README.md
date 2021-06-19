@@ -1,39 +1,56 @@
 # academictwitteR <img src="man/figures/academictwitteRhex.png" width="160px" align="right" />
 
+<!-- badges: start -->
 [![v2](https://img.shields.io/endpoint?url=https%3A%2F%2Ftwbadges.glitch.me%2Fbadges%2Fv2)](https://developer.twitter.com/en/docs/twitter-api)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.03272/status.svg)](https://doi.org/10.21105/joss.03272) 
+[![](https://www.r-pkg.org/badges/version/academictwitteR)](https://cran.r-project.org/package=academictwitteR)
+![Downloads](https://cranlogs.r-pkg.org/badges/academictwitteR)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/academictwitteR)](https://cran.r-project.org/package=academictwitteR)
+[![Codecov test coverage](https://codecov.io/gh/cjbarrie/academictwitteR/branch/master/graph/badge.svg)](https://codecov.io/gh/cjbarrie/academictwitteR?branch=master)
+<!-- badges: end -->
 
-[![DOI](https://zenodo.org/badge/340095903.svg)](https://zenodo.org/badge/latestdoi/340095903)
+
+[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cbarrie.svg?style=social&label=Follow%20%40cbarrie)](https://twitter.com/cbarrie)
+[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/justin_ct_ho.svg?style=social&label=Follow%20%40justin_ct_ho)](https://twitter.com/justin_ct_ho)
 
 Repo containing code to for R package <tt>academictwitteR</tt> to collect tweets from v2 API endpoint for the Academic Research Product Track.
 
-```
+
 To cite package ‘academictwitteR’ in publications use:
 
-  Christopher Barrie and Justin Chun-ting Ho (2021). academictwitteR:
-  an R package to access the Twitter Academic Research
-  Product Track v2 API endpoint. R package version 0.0.0.9000.
-  https://github.com/cjbarrie/academictwitteR. doi:10.5281/zenodo.4714637
+  - Barrie, Christopher and Ho, Justin Chun-ting. (2021). academictwitteR: an R package to access the Twitter Academic Research Product Track v2 API endpoint. *Journal of Open Source Software*, 6(62), 3272, https://doi.org/10.21105/joss.03272
 
-A BibTeX entry for LaTeX users is
+A BibTeX entry for LaTeX users is:
 
-@Manual{academictwitteR,
+```
+@article{BarrieHo2021,
+  doi = {10.21105/joss.03272},
+  url = {https://doi.org/10.21105/joss.03272},
+  year = {2021},
+  publisher = {The Open Journal},
+  volume = {6},
+  number = {62},
+  pages = {1-2},
+  author = {Christopher Barrie and Justin Chun-ting Ho},
   title = {academictwitteR: an R package to access the Twitter Academic Research Product Track v2 API endpoint},
-  author ={Christopher Barrie and Justin Chun-ting Ho},
-  year = 2021,
-  note = {R package version 0.0.0.9000},
-  url = {https://github.com/cjbarrie/academictwitteR},
-  doi = {10.5281/zenodo.4714637}
+  journal = {Journal of Open Source Software}
 }
+
   
 ```
 
 ## Installation
 
-You can install the development package with:
+You can install the package with:
+``` r
+install.packages("academictwitteR")
+```
 
+Alternatively, you can install the development version with:
 ``` r
 devtools::install_github("cjbarrie/academictwitteR", build_vignettes = TRUE)
 ```
+
 
 Get started by reading `vignette("academictwitteR-intro")`.
 
@@ -157,18 +174,72 @@ tweets <-
 
 , which would collect all tweets containing the hashtags "#BLM" or "BlackLivesMatter" over a six-year period. 
 
-Users can then use the `bind_tweet_jsons` and `bind_user_jsons` convenience functions to bundle the jsons into a data.frame object for analysis in R as such:
+Users can then use the `bind_tweets` convenience function to bundle the jsons into a data.frame object for analysis in R as such:
 
 ```{r}
-
-tweets <- bind_tweet_jsons(data_path = "data/")
-
+tweets <- bind_tweets(data_path = "data/")
+users <- bind_tweets(data_path = "data/", user = TRUE)
 ```
 
+## Arguments
+
+`get_all_tweets()` accepts a range of arguments, which can be combined to generate a more precise query.
+
+| Arguments   |     Description      |
+|----------|:-------------:|
+|query | Search query or queries e.g. "cat"
+|exclude | Tweets containing the keyword(s) will be excluded "grumpy" e.g.
+|is_retweet | If `TRUE`, only retweets will be returned; if `FALSE`, retweets will not be returned, only tweets will be returned; if `NULL`, both retweets and tweets will be returned.
+|is_reply | If `TRUE`, only reply tweets will be returned
+|is_quote | If `TRUE`, only quote tweets will be returned
+|is_verified |If `TRUE`, only tweets whose authors are verified by Twitter will be returned
+|place | Name of place e.g. "London"
+|country | Name of country as ISO alpha-2 code e.g. "GB"
+|point_radius | A vector of two point coordinates latitude, longitude, and point radius distance (in miles)
+|bbox | A vector of four bounding box coordinates from west longitude to north latitude
+|geo_query | If `TRUE` user will be prompted to enter relevant information for bounding box or point radius geo buffers
+|remove_promoted | If `TRUE`, tweets created for promotion only on ads.twitter.com are removed
+|has_hashtags | If `TRUE`, only tweets containing hashtags will be returned
+|has_cashtags | If `TRUE`, only tweets containing cashtags will be returned
+|has_links | If `TRUE`, only tweets containing links and media will be returned
+|has_mentions |If `TRUE`, only tweets containing mentions will be returned
+|has_media |If `TRUE`, only tweets containing a recognized media object, such as a photo, GIF, or video, as determined by Twitter will be returned
+|has_images |If `TRUE`, only tweets containing a recognized URL to an image will be returned
+|has_videos |If `TRUE`, only tweets containing contain native Twitter videos, uploaded directly to Twitter will be returned
+|has_geo |If `TRUE`, only tweets containing Tweet-specific geolocation data provided by the Twitter user will be returned
+|lang | A single BCP 47 language identifier e.g. "fr"
+
+An example would be:
 ```{r}
+bearer_token <- "" # Insert bearer token
 
-users <- bind_user_jsons(data_path = "data/")
+tweets <-
+  get_all_tweets(
+    query = "cat",
+    exclude = "grumpy",
+    "2020-01-01T00:00:00Z",
+    "2020-01-02T00:00:00Z",
+    bearer_token,
+    has_images = TRUE,
+    has_hashtags = TRUE,
+    country = "GB",
+    lang = "en"
+  )
+```
+The above query will fetch all tweets that contain the word "cat" but not "grumpy", posted on 1 January 2020 in the UK, have an image attachment, include at least one hashtag, and are written in English.
 
+## Interruption and Continuation
+
+The package offers two functions to deal with interruption and continue previous data collection session. If you have set a data_path and export_query was set to "TRUE" during the original collection, you can use `resume_collection()` to resume a previous interrupted collection session. An example would be:
+```{r}
+bearer_token <- ""
+resume_collection(data_path = "data", bearer_token)
+```
+
+If a previous data collection session is completed, you can use `update_collection()` to continue data collection with a new end date. This function is particularly useful for getting data for ongoing events. An example would be:
+```{r}
+bearer_token <- ""
+update_collection(data_path = "data", "2020-05-10T00:00:00Z", bearer_token)
 ```
 
 ## Note on v2 Twitter API
@@ -199,3 +270,8 @@ users_df <-
 ## Acknowledgements
 
 Function originally taken from [Gist](https://gist.github.com/schochastics/1ff42c0211916d73fc98ba8ad0dcb261#file-get_tweets-r-L14) by [https://github.com/schochastics](https://github.com/schochastics).
+
+
+## Code of Conduct
+
+Please note that the academictwitteR project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.

@@ -1,12 +1,10 @@
 #' Resume previous collection
 #'
 #' This function resumes a previous interrupted collection session.
-#' #' For this function to work, export_query must be set to "TRUE" during the original collection.
+#' For this function to work, export_query must be set to "TRUE" during the original collection.
 #' 
-#' @param data_path string, name of an existing data_path
-#' @param bearer_token string, bearer token
-#' @param ... arguments will be passed to `get_all_tweets()` function. See `?get_all_tweets()` for further information.
-#' 
+#' @inheritParams update_collection
+#'
 #' @return a data.frame
 #' @export
 #'
@@ -16,7 +14,7 @@
 #' resume_collection(data_path = "data", bearer_token)
 #' }
 
-resume_collection <- function(data_path, bearer_token, ...){
+resume_collection <- function(data_path, bearer_token = get_bearer(), verbose = TRUE, ...){
   if(!dir.exists(file.path(data_path))){
     stop("Directory ", data_path, " doesn't exist.")
   }
@@ -24,9 +22,9 @@ resume_collection <- function(data_path, bearer_token, ...){
   lastquery <- metadata[1]
   startdate <- metadata[2]
   
-  existing_df <- bind_tweet_jsons(data_path)
+  existing_df <- bind_tweets(data_path, verbose = verbose)
   enddate <- min(existing_df$created_at)
   
-  cat("Query:",lastquery,"\nStart date:",startdate,"\n End date:",enddate,"\n")
-  get_all_tweets(lastquery, startdate, enddate, bearer_token, data_path = data_path, export_query = FALSE, ...)
+  .vcat(verbose, "Query:",lastquery,"\nStart date:",startdate,"\n End date:",enddate,"\n")
+  get_all_tweets(lastquery, startdate, enddate, bearer_token, data_path = data_path, export_query = FALSE, verbose = verbose, ...)
 }

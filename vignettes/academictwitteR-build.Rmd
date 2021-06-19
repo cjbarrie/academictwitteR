@@ -187,7 +187,7 @@ tweets <-
   
 ```
 
-What if we were unsatisifed with the accuracy of our geo parameters and we wanted to be sure that our tweets were actually coming from a particular place? Let's say we are interested in central Seattle, as shown in the map below.
+What if we were unsatisfied with the accuracy of our geo parameters and we wanted to be sure that our tweets were actually coming from a particular place? Let's say we are interested in central Seattle, as shown in the map below.
 
 ![](files/seattle.png){width=70%}
 
@@ -302,33 +302,20 @@ query
   
 ```
 
-## Building user queries with `build_user_query()`
+## Building user queries with `get_user_tweets()`
 
 What if we had a number of users in which we were interested but we weren't interested in all of their tweets? Say we wanted only to collect tweets that weren't retweets but contained images, and that were in the English language?
 
-We can achieve this by building a query with `build_user_query` and passing the resulting character vector of users and parameters to the `get_user_tweets()` function as follows:
-
-```{r}
-
-users <- c("cbarrie", "justin_ct_ho")
-
-users_params <-
-  build_user_query(users,
-                   is_retweet = F,
-                   has_media = T,
-                   lang = "en")
-
-users_params
-
-```
-
-
-We would then enter our new vector of users with added parameters to the `get_user_tweets()` function as follows:
+We can achieve this by building a query with `get_user_tweets()`, the fuction will turn a character vector of users into a query and pass to the  `get_all_tweets()` function along with other parameters:
 
 ```{r, eval=FALSE}
+users <- c("cbarrie", "justin_ct_ho")
 tweets <-
-  get_user_tweets(users_params,
+  get_user_tweets(users,
                   "2018-01-01T00:00:00Z",
                   "2020-04-05T00:00:00Z",
-                  bearer_token)
+                  bearer_token,
+                  is_retweet = FALSE,
+                  has_media = TRUE,
+                  lang = "en")
 ```

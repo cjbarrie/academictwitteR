@@ -8,3 +8,5 @@ test.R
 inst/doc
 .DS_Store
 twittterv2r.Rproj
+demo.R
+\.academictwitteR_token
