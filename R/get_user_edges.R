@@ -41,7 +41,7 @@ get_user_following <- function(x, bearer_token = get_bearer(), ...){
 }
 
 get_user_edges <- function(x, bearer_token, wt, verbose = TRUE){
-  bearer <- check_bearer(bearer_token)
+  bearer_token <- check_bearer(bearer_token)
   
   url <- "https://api.twitter.com/2/users/"
   
@@ -80,32 +80,7 @@ get_user_edges <- function(x, bearer_token, wt, verbose = TRUE){
       if(next_token!=""){
         params[["pagination_token"]] <- next_token
       }
-      
-      # Sending GET Request
-      r <- httr::GET(requrl,httr::add_headers(Authorization = bearer),query=params)
-      
-      # Fix random 503 errors
-      count <- 0
-      while(httr::status_code(r)==503 & count<4){
-        r <- httr::GET(requrl,httr::add_headers(Authorization = bearer),query=params)
-        count <- count+1
-        Sys.sleep(count*5)
-      }
-      if(httr::status_code(r)==429){
-        cat("Rate limit reached, sleeping... \n")
-        Sys.sleep(900)
-        r <- httr::GET(requrl,httr::add_headers(Authorization = bearer),query=params)
-      }
-      
-      # Catch other errors
-      if(httr::status_code(r)!=200){
-        stop(paste("something went wrong. Status code:", httr::status_code(r)))
-      }
-      if(httr::headers(r)$`x-rate-limit-remaining`=="1"){
-        warning(paste("x-rate-limit-remaining=1. Resets at",as.POSIXct(as.numeric(httr::headers(r)$`x-rate-limit-reset`), origin="1970-01-01")))
-      }
-      
-      dat <- jsonlite::fromJSON(httr::content(r, "text"))
+      dat <- make_query(url = requrl, params = params, bearer_token = bearer_token, verbose = verbose)      
       next_token <- dat$meta$next_token #this is NULL if there are no pages left
       new_rows <- dat$data
       new_rows$from_id <- x[i]
