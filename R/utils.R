@@ -24,7 +24,7 @@ get_tweets <- function(q="",page_n=500,start_time,end_time,token,next_token="", 
   #endpoint
   url <- "https://api.twitter.com/2/tweets/search/all"
   #parameters
-  params = list(
+  params <- list(
     "query" = q,
     "max_results" = page_n,
     "start_time" = start_time,
@@ -132,12 +132,12 @@ fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, 
     return(df.all) # return data.frame
   }
   
-  if (!is.null(data_path) & bind_tweets==T) {
+  if (!is.null(data_path) & bind_tweets) {
     return(df.all) # return data.frame
   }
   
   if (!is.null(data_path) &
-      is.null(file) & bind_tweets == F) {
+      is.null(file) & !bind_tweets) {
     .vcat(verbose, "Data stored as JSONs: use bind_tweets function to bundle into data.frame")
   }
 }
@@ -164,15 +164,15 @@ check_data_path <- function(data_path, file, bind_tweets, verbose = TRUE){
     .vwarn(verbose, "Tweets will not be stored as JSONs or as a .rds file and will only be available in local memory if assigned to an object.")
   }
   #stop clause for if user sets bind_tweets to FALSE but sets no data path
-  if (is.null(data_path) & bind_tweets == F) {
-    stop("Argument (bind_tweets = F) only valid when a data_path is specified.")
+  if (is.null(data_path) & !bind_tweets) {
+    stop("Argument (bind_tweets = FALSE) only valid when a data_path is specified.")
   }
   #warning re binding of tweets when a data path and file path have been set but bind_tweets is set to FALSE
-  if (!is.null(data_path) & !is.null(file) & bind_tweets == F) {
-    .vwarn(verbose, "Tweets will still be bound in local memory to generate .rds file. Argument (bind_tweets = F) only valid when just a data path has been specified.")
+  if (!is.null(data_path) & !is.null(file) & !bind_tweets) {
+    .vwarn(verbose, "Tweets will still be bound in local memory to generate .rds file. Argument (bind_tweets = FALSE) only valid when just a data path has been specified.")
   }
   #warning re data storage and memory limits when setting bind_tweets to TRUE 
-  if (!is.null(data_path) & is.null(file) & bind_tweets == T) {
+  if (!is.null(data_path) & is.null(file) & bind_tweets) {
     .vwarn(verbose, "Tweets will be bound in local memory as well as stored as JSONs.")
   }
 }
@@ -184,7 +184,7 @@ create_data_dir <- function(data_path, verbose = TRUE){
     invisible(data_path)
   }
   dir.create(file.path(data_path), showWarnings = FALSE)
-    invisible(data_path)  
+  invisible(data_path)  
 }
 
 df_to_json <- function(df, data_path){
@@ -234,4 +234,11 @@ create_storage_dir <- function(data_path, export_query, built_query, start_tweet
     }
   }
   return(query)
+}
+
+add_query_prefix <- function(x, prefix){
+  q <- paste0(prefix, x)
+  q <- paste(q, collapse = " OR ")
+  q <- paste0("(",q,")")
+  return(q)
 }

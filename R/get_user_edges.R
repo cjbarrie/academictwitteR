@@ -71,7 +71,7 @@ get_user_edges <- function(x, bearer_token, wt, verbose = TRUE){
   }
   
   new_df <- data.frame()
-  for(i in 1:length(x)){
+  for(i in seq_along(x)){
     cat(paste0("Processing ",x[i],"\n"))
     next_token <- ""
     while (!is.null(next_token)) {
