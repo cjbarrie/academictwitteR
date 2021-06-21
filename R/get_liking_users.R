@@ -26,7 +26,7 @@ get_liking_users <- function(x, bearer_token = get_bearer(), verbose = TRUE){
   )
   
   new_df <- data.frame()
-  for(i in 1:length(x)){
+  for(i in seq_along(x)){
     cat(paste0("Processing ",x[i],"\n"))
     requrl <- paste0(url,x[i],endpoint)
     next_token <- ""

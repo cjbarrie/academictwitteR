@@ -26,7 +26,7 @@ bind_tweets <- function(data_path, user = FALSE, verbose = TRUE) {
   }  
   json.df.all <- data.frame()
   for (i in seq_along(files)) {
-    filename = files[[i]]
+    filename <- files[[i]]
     json.df <- jsonlite::read_json(filename, simplifyVector = TRUE)
     if (user) {
       json.df <- json.df$users
