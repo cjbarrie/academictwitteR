@@ -191,9 +191,9 @@ df_to_json <- function(df, data_path){
   # check input
   # if data path is supplied and file name given, generate data.frame object within loop and JSONs
   jsonlite::write_json(df$data,
-                       paste0(data_path, "data_", df$data$id[nrow(df$data)], ".json"))
+                       file.path(data_path, paste0("data_", df$data$id[nrow(df$data)], ".json")))
   jsonlite::write_json(df$includes,
-                       paste0(data_path, "users_", df$data$id[nrow(df$data)], ".json"))
+                       file.path(data_path, paste0("users_", df$data$id[nrow(df$data)], ".json")))
 }
 
 create_storage_dir <- function(data_path, export_query, built_query, start_tweets, end_tweets, verbose){
@@ -201,7 +201,7 @@ create_storage_dir <- function(data_path, export_query, built_query, start_tweet
     create_data_dir(data_path, verbose)
     if (isTRUE(export_query)){ # Note export_query is called only if data path is supplied
       # Writing query to file (for resuming)
-      filecon <- file(paste0(data_path,"query"))
+      filecon <- file(file.path(data_path, "query"))
       writeLines(c(built_query,start_tweets,end_tweets), filecon)
       close(filecon)
     }
@@ -210,7 +210,7 @@ create_storage_dir <- function(data_path, export_query, built_query, start_tweet
 
 
 .gen_random_dir <- function() {
-  paste0(tempdir(), "/", paste0(sample(letters, 20), collapse = ""))
+  file.path(tempdir(), paste0(sample(letters, 20), collapse = ""))
 }
 
 .vcat <- function(bool, ...) {
