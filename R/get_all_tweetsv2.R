@@ -67,15 +67,7 @@ get_all_tweets <-
            bind_tweets = TRUE,
            page_n = 500,
            verbose = TRUE,
-           ...) {
-    
-    # Check if path ending with "/"
-    if (!is.null(data_path)){
-      if(substr(data_path, nchar(data_path), nchar(data_path)) != "/"){
-        data_path <- paste0(data_path,"/")
-        }
-    }
-    
+           ...) {    
     # Check file storage conditions
     check_data_path(data_path = data_path, file = file, bind_tweets = bind_tweets, verbose = verbose)
 

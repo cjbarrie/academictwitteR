@@ -29,12 +29,7 @@ update_collection <- function(data_path, end_tweets, bearer_token = get_bearer()
   # Get the date of last tweet
   existing_df <- bind_tweets(data_path, verbose = verbose)
   start_tweets <- .shift_second(max(existing_df$created_at))
-  
-  # add "/" at the end
-  if(substr(data_path, nchar(data_path), nchar(data_path)) != "/"){
-    data_path <- paste0(data_path,"/")
-  }
-  filecon <- file(paste0(data_path,"query"))
+  filecon <- file(file.path(data_path, "query"))
   writeLines(c(lastquery,original_start,end_tweets), filecon)
   close(filecon)
   
