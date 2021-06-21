@@ -25,5 +25,7 @@ cran-comments.md
 ^tests/testthat/test-get_user_functions\.R
 ^tests/testthat/test-get_liked_tweets\.R
 ^tests/testthat/test-get_liking_users\.R
+^tests/testthat/test-make_query\.R
+^tests/testthat/test-real\.R
 ^tests/testdata/.+\.RDS
 ^codecov\.yml$
