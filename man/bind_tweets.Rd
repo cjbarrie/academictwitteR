@@ -4,14 +4,20 @@
 \alias{bind_tweets}
 \title{Bind information stored as JSON files}
 \usage{
-bind_tweets(data_path, user = FALSE, verbose = TRUE)
+bind_tweets(data_path, user = FALSE, verbose = TRUE, output_format = NA)
 }
 \arguments{
 \item{data_path}{string, file path to directory of stored tweets data saved as data_\emph{id}.json and users_\emph{id}.json}
 
-\item{user}{If \code{FALSE}, this function binds JSON files into a data frame containing tweets; data frame containing user information otherwise}
+\item{user}{If \code{FALSE}, this function binds JSON files into a data frame containing tweets; data frame containing user information otherwise. Ignore if \code{output_format} is not NA}
 
 \item{verbose}{If \code{FALSE}, messages are suppressed}
+
+\item{output_format}{string, if it is not NA, this function return an unprocessed data.frame containing either tweets or user information. Currently, this function supports the following format(s)
+\itemize{
+\item{"raw"}{List of data frames; Note: not all data frames are in Boyce-Codd 3rd Normal Form}
+\item{"tidy"}{Tidy format; all essential columns are available}
+}}
 }
 \value{
 a data.frame containing either tweets or user information
