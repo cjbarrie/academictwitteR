@@ -5,7 +5,7 @@
 \title{Get tweets composed by a single user}
 \usage{
 get_user_timeline(
-  user_id,
+  x,
   start_tweets,
   end_tweets,
   bearer_token = get_bearer(),
@@ -20,6 +20,8 @@ get_user_timeline(
 )
 }
 \arguments{
+\item{x}{string containing one user id or a vector of user ids}
+
 \item{start_tweets}{string, starting date}
 
 \item{end_tweets}{string, ending date}
@@ -41,8 +43,6 @@ get_user_timeline(
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 
 \item{...}{arguments will be passed to \code{build_query()} function. See \code{?build_query()} for further information.}
-
-\item{query}{string or character vector, search query or queries}
 }
 \value{
 a data.frame
@@ -64,11 +64,10 @@ When bind_tweets is \code{TRUE}, the function returns a data frame.
 \dontrun{
 bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
-get_user_timeline(query = "BLM", 
-               start_tweets = "2020-01-01T00:00:00Z", 
-               end_tweets = "2020-01-05T00:00:00Z", 
-               bearer_token = get_bearer(), 
-               data_path = "data",
-               n = 500)
+get_user_timeline("2244994945",
+                  start_tweets = "2020-01-01T00:00:00Z", 
+                  end_tweets = "2021-05-14T00:00:00Z",
+                  bearer_token = bearer_token,
+                  n = 200)
 }
 }

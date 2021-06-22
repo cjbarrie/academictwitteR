@@ -38,7 +38,7 @@
 #'                   n = 200)
 #' }
 get_user_timeline <-
-  function(user_id,
+  function(x,
            start_tweets,
            end_tweets,
            bearer_token = get_bearer(),
@@ -72,7 +72,7 @@ get_user_timeline <-
     )
     
     new_df <- data.frame()
-    for(user in user_id){
+    for(user in x){
       .vcat(verbose, "user: ", user, "\n")
       
       # Building url using user_id
