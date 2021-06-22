@@ -11,7 +11,7 @@
 #' 
 #' When bind_tweets is `TRUE`, the function returns a data frame.
 #'
-#' @param query string or character vector, search query or queries
+#' @param x string containing one user id or a vector of user ids
 #' @param start_tweets string, starting date
 #' @param end_tweets  string, ending date
 #' @param bearer_token string, bearer token
@@ -31,12 +31,11 @@
 #' \dontrun{
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 #' 
-#' get_user_timeline(query = "BLM", 
-#'                start_tweets = "2020-01-01T00:00:00Z", 
-#'                end_tweets = "2020-01-05T00:00:00Z", 
-#'                bearer_token = get_bearer(), 
-#'                data_path = "data",
-#'                n = 500)
+#' get_user_timeline("2244994945",
+#'                   start_tweets = "2020-01-01T00:00:00Z", 
+#'                   end_tweets = "2021-05-14T00:00:00Z",
+#'                   bearer_token = bearer_token,
+#'                   n = 200)
 #' }
 get_user_timeline <-
   function(user_id,
@@ -72,12 +71,17 @@ get_user_timeline <-
       "place.fields" = "contained_within,country,country_code,full_name,geo,id,name,place_type"
     )
     
-    .vcat(verbose, "user: ", user_id, "\n")
-    
-    # Building url using user_id
-    endpoint_url <- paste0("https://api.twitter.com/2/users/", user_id, "/tweets")
-    
-    # Get tweets
-    get_tweets(params = params, endpoint_url = endpoint_url, page_token_name = "pagination_token", n = n, file = file, bearer_token = bearer_token, 
-               export_query = export_query, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose)
+    new_df <- data.frame()
+    for(user in user_id){
+      .vcat(verbose, "user: ", user, "\n")
+      
+      # Building url using user_id
+      endpoint_url <- paste0("https://api.twitter.com/2/users/", user, "/tweets")
+      
+      # Get tweets
+      new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, page_token_name = "pagination_token", n = n, file = file, bearer_token = bearer_token, 
+                             export_query = export_query, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose)
+      new_df <- dplyr::bind_rows(new_df, new_rows)
+    }
+    new_df
   }
