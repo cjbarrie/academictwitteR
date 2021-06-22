@@ -33,7 +33,7 @@ make_query <- function(url, params, bearer_token, max_error = 4, verbose = TRUE)
 get_tweets <- function(params, endpoint_url, page_token_name = "next_token", n, file, bearer_token, data_path, export_query, bind_tweets, verbose) {
   
   # Check file storage conditions
-  create_storage_dir(data_path = data_path, export_query = export_query, built_query = built_query, start_tweets = start_tweets, end_tweets = end_tweets, verbose = verbose)
+  create_storage_dir(data_path = data_path, export_query = export_query, built_query = params[["query"]], start_tweets = params[["start_time"]], end_tweets = params[["end_time"]], verbose = verbose)
   
   # Start Data Collection Loop
   next_token <- ""
