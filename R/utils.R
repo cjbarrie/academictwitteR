@@ -64,14 +64,12 @@ get_tweets <- function(params, endpoint_url, page_token_name = "next_token", n, 
       n_newtweets <- nrow(df$data)
     }
     ntweets <- ntweets + n_newtweets
-    .vcat(verbose, "query: <", params[["query"]], ">: ", 
-          "(tweets captured this page: ", n_newtweets, "). Total pages queried: ", toknum, 
-          ". Total tweets ingested: ", ntweets, ". \n",
+    .vcat(verbose, "Total pages queried: ", toknum, " (tweets captured this page: ", n_newtweets, ").\n",
           sep = ""
     )
-    if (ntweets > n){ # Check n
+    if (ntweets >= n){ # Check n
       df.all <- df.all[1:n,] # remove extra
-      .vcat(verbose, "Total tweets ingested now exceeds ", n, ": finishing collection.\n")
+      .vcat(verbose, "Total tweets captured now reach", n, ": finishing collection.\n")
       break
     }
     if (is.null(next_token)) {
