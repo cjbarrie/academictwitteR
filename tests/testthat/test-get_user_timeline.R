@@ -20,5 +20,3 @@ with_mock_api({
     expect_false(identical(z, character(0)))
   })
 })
-
-
