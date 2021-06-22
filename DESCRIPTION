@@ -36,8 +36,11 @@ Imports:
     dplyr,
     httr,
     jsonlite,
+    magrittr,
     lubridate,
-    usethis
+    usethis,
+    tibble,
+    tidyr
 Suggests: 
     knitr,
     rmarkdown,

@@ -5,6 +5,10 @@
 #' @param data_path string, file path to directory of stored tweets data saved as data_*id*.json and users_*id*.json
 #' @param user If `FALSE`, this function binds JSON files into a data frame containing tweets; data frame containing user information otherwise
 #' @param verbose If `FALSE`, messages are suppressed
+#' @param format string, if it is not NA, this function return an unprocessed data.frame containing either tweets or user information. Currently, this function supports the following format(s)
+#' \itemize{
+#'    \item{"3nf"}{Boyce-Codd Third Normal Form.}
+#' }
 #' @return a data.frame containing either tweets or user information
 #' @export
 #'
@@ -15,7 +19,7 @@
 #' # bind json files in the directory "data" into a data frame containing user information
 #' bind_tweets(data_path = "data/", user = TRUE)
 #' }
-bind_tweets <- function(data_path, user = FALSE, verbose = TRUE) {
+bind_tweets <- function(data_path, user = FALSE, verbose = TRUE, format = NA) {
   if(user) {
     files <- ls_files(data_path, "^users_")
   } else {
