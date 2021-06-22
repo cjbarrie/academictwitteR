@@ -30,27 +30,72 @@ make_query <- function(url, params, bearer_token, max_error = 4, verbose = TRUE)
   jsonlite::fromJSON(httr::content(r, "text"))
 }
 
-get_tweets <- function(q = "", page_n = 500, start_time, end_time, bearer_token, next_token = "", verbose = TRUE) {
-  if (missing(start_time)) {
-    stop("start time must be specified.")
+get_tweets <- function(params, endpoint_url, page_token_name = "next_token", n, file, bearer_token, data_path, export_query, bind_tweets, verbose) {
+  
+  # Check file storage conditions
+  create_storage_dir(data_path = data_path, export_query = export_query, built_query = params[["query"]], start_tweets = params[["start_time"]], end_tweets = params[["end_time"]], verbose = verbose)
+  
+  # Start Data Collection Loop
+  next_token <- ""
+  df.all <- data.frame()
+  toknum <- 0
+  ntweets <- 0
+  while (!is.null(next_token)) {
+    df <- make_query(url = endpoint_url, params = params, bearer_token = bearer_token, verbose = verbose)
+    if (is.null(data_path)) {
+      # if data path is null, generate data.frame object within loop
+      df.all <- dplyr::bind_rows(df.all, df$data)
+    }
+    if (!is.null(data_path) & is.null(file) & !bind_tweets) {
+      df_to_json(df, data_path)
+    }
+    if (!is.null(data_path)) {
+      df_to_json(df, data_path)
+      df.all <- dplyr::bind_rows(df.all, df$data) #and combine new data with old within function
+    }
+    next_token <- df$meta$next_token #this is NULL if there are no pages left
+    if (!is.null(next_token)) {
+      params[[page_token_name]] <- next_token
+    }
+    toknum <- toknum + 1
+    if (is.null(df$data)) {
+      n_newtweets <- 0
+    } else {
+      n_newtweets <- nrow(df$data)
+    }
+    ntweets <- ntweets + n_newtweets
+    .vcat(verbose, "query: <", params[["query"]], ">: ", 
+          "(tweets captured this page: ", n_newtweets, "). Total pages queried: ", toknum, 
+          ". Total tweets ingested: ", ntweets, ". \n",
+          sep = ""
+    )
+    if (ntweets > n){ # Check n
+      df.all <- df.all[1:n,] # remove extra
+      .vcat(verbose, "Total tweets ingested now exceeds ", n, ": finishing collection.\n")
+      break
+    }
+    if (is.null(next_token)) {
+      .vcat(verbose, "This is the last page for", params[["query"]], ": finishing collection.\n")
+      break
+    }
   }
-  if (missing(end_time)) {
-    stop("end time must be specified.")
+  
+  if (is.null(data_path) & is.null(file)) {
+    return(df.all) # return to data.frame
   }
-  params <- list(
-    "query" = q,
-    "max_results" = page_n,
-    "start_time" = start_time,
-    "end_time" = end_time,
-    "tweet.fields" = "attachments,author_id,context_annotations,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld",
-    "user.fields" = "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld",
-    "expansions" = "author_id,entities.mentions.username,geo.place_id,in_reply_to_user_id,referenced_tweets.id,referenced_tweets.id.author_id",
-    "place.fields" = "contained_within,country,country_code,full_name,geo,id,name,place_type"
-  )
-  if (next_token != "") {
-    params[["next_token"]] <- next_token
+  if (!is.null(file)) {
+    saveRDS(df.all, file = file) # save as RDS
+    return(df.all) # return data.frame
   }
-  make_query(url = "https://api.twitter.com/2/tweets/search/all", params = params, bearer_token = bearer_token, verbose = verbose)
+  
+  if (!is.null(data_path) & bind_tweets) {
+    return(df.all) # return data.frame
+  }
+  
+  if (!is.null(data_path) &
+      is.null(file) & !bind_tweets) {
+    .vcat(verbose, "Data stored as JSONs: use bind_tweets function to bundle into data.frame")
+  }
 }
 
 
@@ -118,85 +163,85 @@ get_tweets <- function(q = "", page_n = 500, start_time, end_time, bearer_token,
 ##   dat
 ## }
 
-fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, end_tweets, bearer_token = get_bearer(), n, page_n, verbose){
-  nextoken <- ""
-  df.all <- data.frame()
-  toknum <- 0
-  ntweets <- 0
-  while (!is.null(nextoken)) {
-    df <-
-      get_tweets(
-        q = built_query,
-        page_n = page_n,
-        start_time = start_tweets,
-        end_time = end_tweets,
-        bearer_token = bearer_token,
-        next_token = nextoken
-      )
-    if (is.null(data_path)) {
-      # if data path is null, generate data.frame object within loop
-      df.all <- dplyr::bind_rows(df.all, df$data)
-    }
-
-    if (!is.null(data_path) & is.null(file) & bind_tweets == F) {
-      df_to_json(df, data_path)
-    }
-    if (!is.null(data_path)) {
-      df_to_json(df, data_path)
-      df.all <-
-        dplyr::bind_rows(df.all, df$data) #and combine new data with old within function
-    }
-    
-    nextoken <-
-      df$meta$next_token #this is NULL if there are no pages left
-    toknum <- toknum + 1
-    if (is.null(df$data)) {
-      n_newtweets <- 0
-    } else {
-      n_newtweets <- nrow(df$data)
-    }
-    ntweets <- ntweets + n_newtweets
-    .vcat(verbose, 
-        "query: <",
-        built_query,
-        ">: ",
-        "(tweets captured this page: ",
-        n_newtweets,
-        "). Total pages queried: ",
-        toknum,
-        ". Total tweets ingested: ",
-        ntweets, 
-        ". \n",
-        sep = ""
-        )
-    if (ntweets > n){ # Check n
-      df.all <- df.all[1:n,] # remove extra
-      .vcat(verbose, "Total tweets ingested now exceeds ", n, ": finishing collection.\n")
-      break
-    }
-    if (is.null(nextoken)) {
-      .vcat(verbose, "This is the last page for", built_query, ": finishing collection.\n")
-      break
-    }
-  }
-  
-  if (is.null(data_path) & is.null(file)) {
-    return(df.all) # return to data.frame
-  }
-  if (!is.null(file)) {
-    saveRDS(df.all, file = file) # save as RDS
-    return(df.all) # return data.frame
-  }
-  
-  if (!is.null(data_path) & bind_tweets) {
-    return(df.all) # return data.frame
-  }
-  
-  if (!is.null(data_path) &
-      is.null(file) & !bind_tweets) {
-    .vcat(verbose, "Data stored as JSONs: use bind_tweets function to bundle into data.frame")
-  }
-}
+# fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, end_tweets, bearer_token = get_bearer(), n, page_n, verbose){
+#   nextoken <- ""
+#   df.all <- data.frame()
+#   toknum <- 0
+#   ntweets <- 0
+#   while (!is.null(nextoken)) {
+#     df <-
+#       get_tweets(
+#         q = built_query,
+#         page_n = page_n,
+#         start_time = start_tweets,
+#         end_time = end_tweets,
+#         bearer_token = bearer_token,
+#         next_token = nextoken
+#       )
+#     if (is.null(data_path)) {
+#       # if data path is null, generate data.frame object within loop
+#       df.all <- dplyr::bind_rows(df.all, df$data)
+#     }
+# 
+#     if (!is.null(data_path) & is.null(file) & bind_tweets == F) {
+#       df_to_json(df, data_path)
+#     }
+#     if (!is.null(data_path)) {
+#       df_to_json(df, data_path)
+#       df.all <-
+#         dplyr::bind_rows(df.all, df$data) #and combine new data with old within function
+#     }
+#     
+#     nextoken <-
+#       df$meta$next_token #this is NULL if there are no pages left
+#     toknum <- toknum + 1
+#     if (is.null(df$data)) {
+#       n_newtweets <- 0
+#     } else {
+#       n_newtweets <- nrow(df$data)
+#     }
+#     ntweets <- ntweets + n_newtweets
+#     .vcat(verbose, 
+#         "query: <",
+#         built_query,
+#         ">: ",
+#         "(tweets captured this page: ",
+#         n_newtweets,
+#         "). Total pages queried: ",
+#         toknum,
+#         ". Total tweets ingested: ",
+#         ntweets, 
+#         ". \n",
+#         sep = ""
+#         )
+#     if (ntweets > n){ # Check n
+#       df.all <- df.all[1:n,] # remove extra
+#       .vcat(verbose, "Total tweets ingested now exceeds ", n, ": finishing collection.\n")
+#       break
+#     }
+#     if (is.null(nextoken)) {
+#       .vcat(verbose, "This is the last page for", built_query, ": finishing collection.\n")
+#       break
+#     }
+#   }
+#   
+#   if (is.null(data_path) & is.null(file)) {
+#     return(df.all) # return to data.frame
+#   }
+#   if (!is.null(file)) {
+#     saveRDS(df.all, file = file) # save as RDS
+#     return(df.all) # return data.frame
+#   }
+#   
+#   if (!is.null(data_path) & bind_tweets) {
+#     return(df.all) # return data.frame
+#   }
+#   
+#   if (!is.null(data_path) &
+#       is.null(file) & !bind_tweets) {
+#     .vcat(verbose, "Data stored as JSONs: use bind_tweets function to bundle into data.frame")
+#   }
+# }
 
 check_bearer <- function(bearer_token){
   if(missing(bearer_token)){

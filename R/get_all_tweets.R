@@ -68,14 +68,33 @@ get_all_tweets <-
            page_n = 500,
            verbose = TRUE,
            ...) {    
+    if (missing(start_tweets)) {
+      stop("Start time must be specified.")
+    }
+    if (missing(end_tweets)) {
+      stop("End time must be specified.")
+    }
+    
     # Check file storage conditions
     check_data_path(data_path = data_path, file = file, bind_tweets = bind_tweets, verbose = verbose)
 
     # Build query
     built_query <- build_query(query, ...)
-        
-    create_storage_dir(data_path = data_path, export_query = export_query, built_query = built_query, start_tweets = start_tweets, end_tweets = end_tweets, verbose = verbose)
     
-    # Fetch data
-    return(fetch_data(built_query = built_query, data_path = data_path, file = file, bind_tweets = bind_tweets, start_tweets = start_tweets, end_tweets = end_tweets, bearer_token = bearer_token, n = n , page_n = page_n, verbose = verbose))
-  }
+    # Building parameters for get_tweets()
+    params <- list(
+      "query" = built_query,
+      "max_results" = page_n,
+      "start_time" = start_tweets,
+      "end_time" = end_tweets,
+      "tweet.fields" = "attachments,author_id,context_annotations,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld",
+      "user.fields" = "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld",
+      "expansions" = "author_id,entities.mentions.username,geo.place_id,in_reply_to_user_id,referenced_tweets.id,referenced_tweets.id.author_id",
+      "place.fields" = "contained_within,country,country_code,full_name,geo,id,name,place_type"
+    )
+    endpoint_url <- "https://api.twitter.com/2/tweets/search/all"
+    
+    # Get tweets
+    get_tweets(params = params, endpoint_url = endpoint_url, n = n, file = file, bearer_token = bearer_token, 
+               export_query = export_query, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose)
+ }
