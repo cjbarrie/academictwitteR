@@ -1,11 +1,6 @@
-#' Get tweets from full archive search
+#' Get tweets composed by a single user
 #'
-#' This function collects tweets by query string or strings
-#' between specified date ranges.
-#' 
-#' The function can also collect tweets by users. These may be specified alongside
-#' a query string or without. When no query string is supplied, the function collects
-#' all tweets by that user.
+#' This function collects tweets by an user ID. The most recent 3,200 Tweets can be retrieved.
 #' 
 #' If a filename is supplied, the function will 
 #' save the result as a RDS file.
@@ -16,7 +11,7 @@
 #' 
 #' When bind_tweets is `TRUE`, the function returns a data frame.
 #'
-#' @param query string or character vector, search query or queries
+#' @param x string containing one user id or a vector of user ids
 #' @param start_tweets string, starting date
 #' @param end_tweets  string, ending date
 #' @param bearer_token string, bearer token
@@ -36,27 +31,14 @@
 #' \dontrun{
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 #' 
-#' get_all_tweets(query = "BLM", 
-#'                start_tweets = "2020-01-01T00:00:00Z", 
-#'                end_tweets = "2020-01-05T00:00:00Z", 
-#'                bearer_token = get_bearer(), 
-#'                data_path = "data",
-#'                n = 500)
-#'   
-#' get_all_tweets(users = c("cbarrie", "jack"),
-#'                start_tweets = "2021-01-01T00:00:00Z", 
-#'                end_tweets = "2021-06-01T00:00:00Z",
-#'                bearer_token = get_bearer(), 
-#'                n = 1000)
-#'                             
-#' get_all_tweets(start_tweets = "2021-01-01T00:00:00Z", 
-#'                end_tweets = "2021-06-01T00:00:00Z",
-#'                bearer_token = get_bearer(), 
-#'                n = 1500, 
-#'                conversation_id = "1392887366507970561")
+#' get_user_timeline("2244994945",
+#'                   start_tweets = "2020-01-01T00:00:00Z", 
+#'                   end_tweets = "2021-05-14T00:00:00Z",
+#'                   bearer_token = bearer_token,
+#'                   n = 200)
 #' }
-get_all_tweets <-
-  function(query = NULL,
+get_user_timeline <-
+  function(x,
            start_tweets,
            end_tweets,
            bearer_token = get_bearer(),
@@ -65,7 +47,7 @@ get_all_tweets <-
            data_path = NULL,
            export_query = TRUE,
            bind_tweets = TRUE,
-           page_n = 500,
+           page_n = 100,
            verbose = TRUE,
            ...) {    
     if (missing(start_tweets)) {
@@ -77,13 +59,9 @@ get_all_tweets <-
     
     # Check file storage conditions
     check_data_path(data_path = data_path, file = file, bind_tweets = bind_tweets, verbose = verbose)
-
-    # Build query
-    built_query <- build_query(query, ...)
     
     # Building parameters for get_tweets()
     params <- list(
-      "query" = built_query,
       "max_results" = page_n,
       "start_time" = start_tweets,
       "end_time" = end_tweets,
@@ -92,11 +70,18 @@ get_all_tweets <-
       "expansions" = "author_id,entities.mentions.username,geo.place_id,in_reply_to_user_id,referenced_tweets.id,referenced_tweets.id.author_id",
       "place.fields" = "contained_within,country,country_code,full_name,geo,id,name,place_type"
     )
-    endpoint_url <- "https://api.twitter.com/2/tweets/search/all"
     
-    .vcat(verbose, "query: ", params[["query"]], "\n")
-    
-    # Get tweets
-    get_tweets(params = params, endpoint_url = endpoint_url, n = n, file = file, bearer_token = bearer_token, 
-               export_query = export_query, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose)
- }
+    new_df <- data.frame()
+    for(user in x){
+      .vcat(verbose, "user: ", user, "\n")
+      
+      # Building url using user_id
+      endpoint_url <- paste0("https://api.twitter.com/2/users/", user, "/tweets")
+      
+      # Get tweets
+      new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, page_token_name = "pagination_token", n = n, file = file, bearer_token = bearer_token, 
+                             export_query = export_query, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose)
+      new_df <- dplyr::bind_rows(new_df, new_rows)
+    }
+    new_df
+  }
