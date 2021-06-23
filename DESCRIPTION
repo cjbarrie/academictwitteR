@@ -41,7 +41,8 @@ Imports:
     usethis,
     tibble,
     tidyr,
-    tidyselect
+    tidyselect,
+    purrr
 Suggests: 
     knitr,
     rmarkdown,

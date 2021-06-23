@@ -28,5 +28,7 @@ cran-comments.md
 ^tests/testthat/test-get_user_timeline\.R
 ^tests/testthat/test-make_query\.R
 ^tests/testthat/test-real\.R
+^tests/testthat/test-flat\.R
 ^tests/testdata/.+\.RDS
+^tests/testdata/hk
 ^codecov\.yml$

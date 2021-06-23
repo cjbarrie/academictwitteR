@@ -101,14 +101,15 @@ ls_files <- function(data_path, pattern) {
       dplyr::left_join(user_metrics, by = "author_id")
     if (!is.null(raw$tweet.referenced_tweets)) {
       ref <- raw$tweet.referenced_tweets
-      colnames(ref) <- c("tweet_id", "ref_type", "sourcetweet_id")
+      colnames(ref) <- c("tweet_id", "sourcetweet_type", "sourcetweet_id")
+      ref <- ref %>% dplyr::filter(sourcetweet_type != "replied_to")
       res <- dplyr::left_join(res, ref, by = "tweet_id")
       source_main <- dplyr::select(raw$sourcetweet.main, id, text, lang, author_id) %>%
         dplyr::distinct(id, .keep_all = TRUE)
       colnames(source_main) <- paste0("sourcetweet_", colnames(source_main))
       res <- res %>% dplyr::left_join(source_main, by = "sourcetweet_id")
     }
-    res <- dplyr::relocate(res, tweet_id, user_username, ref_type, text)
+    res <- dplyr::relocate(res, tweet_id, user_username, text)
     return(tibble::as_tibble(res))
   }
 }
@@ -164,7 +165,7 @@ ls_files <- function(data_path, pattern) {
 
 .simple_unnest <- function(x, pki) {
   if (class(x) == "list" & any(purrr::map_lgl(x, is.data.frame))) {
-    tibble::tibble(pki = pki, data = x) %>% dplyr::group_by(pki) %>% tidyr::unnest(cols = c(data)) %>% dplyr::select(-data) %>% dplyr::ungroup() -> res
+    tibble::tibble(pki = pki, data = x) %>% dplyr::filter(purrr::map_lgl(data, ~length(.) != 0)) %>% dplyr::group_by(pki) %>% tidyr::unnest(cols = c(data)) %>% dplyr::ungroup() -> res
   } else {
     res <- tibble::tibble(pki = pki, data = x)
   }
