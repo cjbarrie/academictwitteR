@@ -27,10 +27,10 @@ test_that("expected dimensionality", {
 test_that(".simple_unnest", {
   x <- readRDS("../testdata/hkx.RDS")
   pki <- readRDS("../testdata/hkx_pki.RDS")
-  expect_error(academictwitteR::.simple_unnest(x, pki), NA)
+  expect_error(academictwitteR:::.simple_unnest(x, pki), NA)
   x <- readRDS("../testdata/c1.RDS")
   pki <- readRDS("../testdata/c1_pki.RDS")
-  expect_error(academictwitteR::.simple_unnest(x, pki), NA)
+  expect_error(academictwitteR:::.simple_unnest(x, pki), NA)
 })
 
 test_that("corner cases", {
