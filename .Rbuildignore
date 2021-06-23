@@ -32,3 +32,5 @@ cran-comments.md
 ^tests/testdata/.+\.RDS
 ^tests/testdata/hk
 ^codecov\.yml$
+^doc$
+^Meta$

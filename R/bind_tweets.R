@@ -5,7 +5,8 @@
 #' @param data_path string, file path to directory of stored tweets data saved as data_*id*.json and users_*id*.json
 #' @param user If `FALSE`, this function binds JSON files into a data frame containing tweets; data frame containing user information otherwise. Ignore if `output_format` is not NA
 #' @param verbose If `FALSE`, messages are suppressed
-#' @param output_format string, if it is not NA, this function return an unprocessed data.frame containing either tweets or user information. Currently, this function supports the following format(s)
+#' @param output_format
+#' `r lifecycle::badge("experimental")` string, if it is not NA, this function return an unprocessed data.frame containing either tweets or user information. Currently, this function supports the following format(s)
 #' \itemize{
 #'    \item{"raw"}{List of data frames; Note: not all data frames are in Boyce-Codd 3rd Normal Form}
 #'    \item{"tidy"}{Tidy format; all essential columns are available}
@@ -19,6 +20,8 @@
 #' bind_tweets(data_path = "data/")
 #' # bind json files in the directory "data" into a data frame containing user information
 #' bind_tweets(data_path = "data/", user = TRUE)
+#' # bind json files in the directory "data" into a "tidy" data frame / tibble
+#' bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy")
 #' }
 bind_tweets <- function(data_path, user = FALSE, verbose = TRUE, output_format = NA) {
   if (!is.na(output_format)) {
