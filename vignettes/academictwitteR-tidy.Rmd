@@ -1,0 +1,79 @@
+---
+title: "Building a tidy data frame"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Building a tidy data frame}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+In academictwitteR v0.2, the functionalities to convert JSON files to various data frame formats. In order to use these features, we recommend the following work flow.
+
+First, you should build your query using the `build_query` function.
+
+```{r}
+require(academictwitteR)
+require(tibble)
+my_query <- build_query(c("#ichbinhanna", "#ichwarhanna"), place = "Berlin")
+my_query
+```
+
+Then, use the `get_all_tweets` to collect data. Make sure to specify `data_path` and set `bind_tweets` to FALSE.
+
+```{r, eval = F}
+get_all_tweets(
+  query = my_query,
+  start_tweets = "2021-06-01T00:00:00Z",
+  end_tweets = "2021-06-20T00:00:00Z",
+  n = Inf,
+  data_path = "tweetdata",
+  bind_tweets = FALSE
+)
+```
+
+The first format is the so-called "vanilla" format. This vanilla format is the direct output from `jsonlite::read_json`. It can display columns such as `text` just fine. But some columns such as `retweet_count` are nested in list-columns. Also, one needs to extract user information by setting `user = TRUE`. Please also note that the data frame is not a tibble. One needs to explicitly convert it to tibble.
+
+```{r, eval = FALSE}
+bind_tweets(data_path = "tweetdata") %>% as_tibble
+```
+
+```{r, echo = FALSE}
+bind_tweets(system.file("extdata", "tweetdata", package = "academictwitteR")) %>% as_tibble
+```
+
+The second format is the "raw" format. It is a list of data frames that all data are extracted. Please note that not all data frames are in Boyce-Codd 3rd Normal form, i.e. some columns are still list-column.
+
+```{r, eval = FALSE}
+bind_tweets(data_path = "tweetdata", output_format = "raw") %>% names
+```
+
+```{r, echo = FALSE}
+bind_tweets(system.file("extdata", "tweetdata", package = "academictwitteR"), output_format = "raw") %>% names
+```
+
+The third format is the "tidy" format. It is an opinionated format that is believed to contain all essential columns for social media research. By default, it is a tibble.
+
+```{r, eval = FALSE}
+bind_tweets(data_path = "tweetdata", output_format = "tidy")
+```
+
+```{r, echo = FALSE}
+bind_tweets(system.file("extdata", "tweetdata", package = "academictwitteR"), output_format = "tidy")
+```
+
+It has the following features / caveats:
+
+1. It has both the data about tweets, their authors, and "source tweets", a.k.a. referenced tweets. Columns are named according to these three sources. The primary keys of these three sources are named `tweet_id`, `author_id` and `sourcetweet_id` respectively.
+2. By default, the `text` field of a retweet is truncated. However, the full-text original tweet is located in `sourcetweet_text`.
+3. The replied tweets of a reply is not counted as `sourcetweet_text`. If you need that data, please follow the clue using the `conversation_id`.
+4. Many data extracted from `text` by Twitter are not available in the tidy format, e.g. list of hashtags, cashtags, urls, entities, context annotations etc. If you need those columns, please consider using the "raw" format above.

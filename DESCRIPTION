@@ -36,8 +36,14 @@ Imports:
     dplyr,
     httr,
     jsonlite,
+    magrittr,
     lubridate,
-    usethis
+    usethis,
+    tibble,
+    tidyr,
+    tidyselect,
+    purrr,
+    rlang
 Suggests: 
     knitr,
     rmarkdown,

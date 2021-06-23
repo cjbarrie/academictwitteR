@@ -25,4 +25,3 @@ test_that("real test", {
   user_ids <- unique(bind_tweets(ori_test, verbose = FALSE)$author_id)[c(6,7,9)]
   expect_error(get_user_profile(x = user_ids), NA)
 })
-

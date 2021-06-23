@@ -4,14 +4,20 @@
 \alias{bind_tweets}
 \title{Bind information stored as JSON files}
 \usage{
-bind_tweets(data_path, user = FALSE, verbose = TRUE)
+bind_tweets(data_path, user = FALSE, verbose = TRUE, output_format = NA)
 }
 \arguments{
 \item{data_path}{string, file path to directory of stored tweets data saved as data_\emph{id}.json and users_\emph{id}.json}
 
-\item{user}{If \code{FALSE}, this function binds JSON files into a data frame containing tweets; data frame containing user information otherwise}
+\item{user}{If \code{FALSE}, this function binds JSON files into a data frame containing tweets; data frame containing user information otherwise. Ignore if \code{output_format} is not NA}
 
 \item{verbose}{If \code{FALSE}, messages are suppressed}
+
+\item{output_format}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} string, if it is not NA, this function return an unprocessed data.frame containing either tweets or user information. Currently, this function supports the following format(s)
+\itemize{
+\item{"raw"}{List of data frames; Note: not all data frames are in Boyce-Codd 3rd Normal Form}
+\item{"tidy"}{Tidy format; all essential columns are available}
+}}
 }
 \value{
 a data.frame containing either tweets or user information
@@ -25,5 +31,7 @@ This function binds information stored as JSON files. By default, it binds into 
 bind_tweets(data_path = "data/")
 # bind json files in the directory "data" into a data frame containing user information
 bind_tweets(data_path = "data/", user = TRUE)
+# bind json files in the directory "data" into a "tidy" data frame / tibble
+bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy")
 }
 }
