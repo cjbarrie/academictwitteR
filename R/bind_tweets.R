@@ -65,6 +65,7 @@ ls_files <- function(data_path, pattern) {
   return(files)
 }
 
+#' @importFrom rlang .data
 .flat <- function(data_path, output_format = "tidy") {
   if (!output_format %in% c("tidy", "raw")) {
     stop("Unknown format.", call. = FALSE)
@@ -84,7 +85,7 @@ ls_files <- function(data_path, pattern) {
   }
   if (output_format == "tidy") {
     tweetmain <- raw[["tweet.main"]]
-    usermain <- dplyr::distinct(raw[["user.main"]], author_id, .keep_all = TRUE)  ## there are duplicates
+    usermain <- dplyr::distinct(raw[["user.main"]], .data$author_id, .keep_all = TRUE)  ## there are duplicates
     colnames(usermain) <- paste0("user_", colnames(usermain))
     tweet_metrics <- tibble::tibble(tweet_id = raw$tweet.public_metrics.retweet_count$tweet_id,
                                     retweet_count = raw$tweet.public_metrics.retweet_count$data,
@@ -95,21 +96,21 @@ ls_files <- function(data_path, pattern) {
                                    user_list_count = raw$user.public_metrics.listed_count$data,
                                    user_followers_count = raw$user.public_metrics.followers_count$data,
                                    user_following_count = raw$user.public_metrics.following_count$data) %>%
-      dplyr::distinct(author_id, .keep_all = TRUE)
+      dplyr::distinct(.data$author_id, .keep_all = TRUE)
     res <- tweetmain %>% dplyr::left_join(usermain, by = c("author_id" = "user_author_id")) %>%
       dplyr::left_join(tweet_metrics, by = "tweet_id") %>%
       dplyr::left_join(user_metrics, by = "author_id")
     if (!is.null(raw$tweet.referenced_tweets)) {
       ref <- raw$tweet.referenced_tweets
       colnames(ref) <- c("tweet_id", "sourcetweet_type", "sourcetweet_id")
-      ref <- ref %>% dplyr::filter(sourcetweet_type != "replied_to")
+      ref <- ref %>% dplyr::filter(.data$sourcetweet_type != "replied_to")
       res <- dplyr::left_join(res, ref, by = "tweet_id")
-      source_main <- dplyr::select(raw$sourcetweet.main, id, text, lang, author_id) %>%
-        dplyr::distinct(id, .keep_all = TRUE)
+      source_main <- dplyr::select(raw$sourcetweet.main, .data$id, .data$text, .data$lang, .data$author_id) %>%
+        dplyr::distinct(.data$id, .keep_all = TRUE)
       colnames(source_main) <- paste0("sourcetweet_", colnames(source_main))
       res <- res %>% dplyr::left_join(source_main, by = "sourcetweet_id")
     }
-    res <- dplyr::relocate(res, tweet_id, user_username, text)
+    res <- dplyr::relocate(res, .data$tweet_id, .data$user_username, .data$text)
     return(tibble::as_tibble(res))
   }
 }
@@ -128,7 +129,7 @@ ls_files <- function(data_path, pattern) {
   ## after first pass above, some columns are still not in 3NF (e.g. context_annotations)
   item_names <- names(all_list)
   all_list <- purrr::map2(all_list, item_names, .second_pass)
-  all_list$main <- dplyr::relocate(main, pki)
+  all_list$main <- dplyr::relocate(main, .data$pki)
   all_list <- purrr::map(all_list, .rename_pki, pki_name = pki_name)
   return(all_list)
 }
@@ -141,9 +142,9 @@ ls_files <- function(data_path, pattern) {
 .second_pass <- function(x, item_name) {
   ## turing test for "data.frame" columns,something like context_annotations
   if (ncol(dplyr::select_if(x, is.data.frame)) != 0) {
-    ca_df_col <- dplyr::select(x, -pki)
+    ca_df_col <- dplyr::select(x, -.data$pki)
     ca_mother_colnames <- colnames(ca_df_col)
-    return(dplyr::bind_cols(dplyr::select(x, pki), purrr::map2_dfc(ca_df_col, ca_mother_colnames, .dfcol_to_list)))
+    return(dplyr::bind_cols(dplyr::select(x, .data$pki), purrr::map2_dfc(ca_df_col, ca_mother_colnames, .dfcol_to_list)))
   }
   ## if (dplyr::summarise_all(x, ~any(purrr::map_lgl(., is.data.frame))) %>% dplyr::rowwise() %>% any()) {
   ##   ca_df_col <- dplyr::select(x, -pki)
@@ -165,7 +166,7 @@ ls_files <- function(data_path, pattern) {
 
 .simple_unnest <- function(x, pki) {
   if (class(x) == "list" & any(purrr::map_lgl(x, is.data.frame))) {
-    tibble::tibble(pki = pki, data = x) %>% dplyr::filter(purrr::map_lgl(data, ~length(.) != 0)) %>% dplyr::group_by(pki) %>% tidyr::unnest(cols = c(data)) %>% dplyr::ungroup() -> res
+    tibble::tibble(pki = pki, data = x) %>% dplyr::filter(purrr::map_lgl(.data$data, ~length(.) != 0)) %>% dplyr::group_by(.data$pki) %>% tidyr::unnest(cols = c(.data$data)) %>% dplyr::ungroup() -> res
   } else {
     res <- tibble::tibble(pki = pki, data = x)
   }

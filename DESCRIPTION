@@ -42,7 +42,8 @@ Imports:
     tibble,
     tidyr,
     tidyselect,
-    purrr
+    purrr,
+    rlang
 Suggests: 
     knitr,
     rmarkdown,
