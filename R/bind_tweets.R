@@ -66,6 +66,9 @@ ls_files <- function(data_path, pattern) {
 }
 
 .flat <- function(data_path, output_format = "tidy") {
+  if (!output_format %in% c("tidy", "raw")) {
+    stop("Unknown format.", call. = FALSE)
+  }
   aux_files <- ls_files(data_path, "^users_")
   data_files <- ls_files(data_path, "^data_")
   tweet_data <- .gen_raw(purrr::map_dfr(data_files, ~jsonlite::read_json(., simplifyVector = TRUE)))
@@ -73,43 +76,55 @@ ls_files <- function(data_path, pattern) {
   user_data <- .gen_raw(purrr::map_dfr(aux_files, ~jsonlite::read_json(., simplifyVector = TRUE)$users), pki_name = "author_id")
   names(user_data) <- paste0("user.", names(user_data))
   sourcetweet_data <- list(main = purrr::map_dfr(aux_files, ~jsonlite::read_json(., simplifyVector = TRUE)$tweets))
-names(sourcetweet_data) <- paste0("sourcetweet.", names(sourcetweet_data))
+  names(sourcetweet_data) <- paste0("sourcetweet.", names(sourcetweet_data))
   ## raw
   raw <- c(tweet_data, user_data, sourcetweet_data)
   if (output_format == "raw") {
     return(raw)
-  } else if (output_format == "tidy") {
+  }
+  if (output_format == "tidy") {
     tweetmain <- raw[["tweet.main"]]
     usermain <- dplyr::distinct(raw[["user.main"]], author_id, .keep_all = TRUE)  ## there are duplicates
-    ## raw[["tweet.referenced_tweets"]]
     colnames(usermain) <- paste0("user_", colnames(usermain))
-    tweet_metrics <- tibble::tibble(tweet_id = raw[["tweet.public_metrics.retweet_count"]]$tweet_id, retweet_count = raw[["tweet.public_metrics.retweet_count"]]$data, like_count = raw[["tweet.public_metrics.like_count"]]$data, quote_count = raw[["tweet.public_metrics.quote_count"]]$data)
-    user_metrics <- tibble::tibble(author_id = raw$user.public_metrics.tweet_count$author_id, user_tweet_count = raw$user.public_metrics.tweet_count$data, user_list_count = raw$user.public_metrics.listed_count$data, user_followers_count = raw$user.public_metrics.followers_count$data, user_following_count = raw$user.public_metrics.following_count$data) %>% dplyr::distinct(author_id, .keep_all = TRUE)
-    res <- tweetmain %>% dplyr::left_join(usermain, by = c("author_id" = "user_author_id")) %>% dplyr::left_join(tweet_metrics, by = "tweet_id") %>% dplyr::left_join(user_metrics, by = "author_id")
+    tweet_metrics <- tibble::tibble(tweet_id = raw$tweet.public_metrics.retweet_count$tweet_id,
+                                    retweet_count = raw$tweet.public_metrics.retweet_count$data,
+                                    like_count = raw$tweet.public_metrics.like_count$data,
+                                    quote_count = raw$tweet.public_metrics.quote_count$data)
+    user_metrics <- tibble::tibble(author_id = raw$user.public_metrics.tweet_count$author_id,
+                                   user_tweet_count = raw$user.public_metrics.tweet_count$data,
+                                   user_list_count = raw$user.public_metrics.listed_count$data,
+                                   user_followers_count = raw$user.public_metrics.followers_count$data,
+                                   user_following_count = raw$user.public_metrics.following_count$data) %>%
+      dplyr::distinct(author_id, .keep_all = TRUE)
+    res <- tweetmain %>% dplyr::left_join(usermain, by = c("author_id" = "user_author_id")) %>%
+      dplyr::left_join(tweet_metrics, by = "tweet_id") %>%
+      dplyr::left_join(user_metrics, by = "author_id")
     if (!is.null(raw$tweet.referenced_tweets)) {
       ref <- raw$tweet.referenced_tweets
       colnames(ref) <- c("tweet_id", "ref_type", "sourcetweet_id")
       res <- dplyr::left_join(res, ref, by = "tweet_id")
-      source_main <- dplyr::select(raw$sourcetweet.main, id, text, lang, author_id) %>% dplyr::distinct(id, .keep_all = TRUE)
+      source_main <- dplyr::select(raw$sourcetweet.main, id, text, lang, author_id) %>%
+        dplyr::distinct(id, .keep_all = TRUE)
       colnames(source_main) <- paste0("sourcetweet_", colnames(source_main))
       res <- res %>% dplyr::left_join(source_main, by = "sourcetweet_id")
     }
     res <- dplyr::relocate(res, tweet_id, user_username, ref_type, text)
     return(tibble::as_tibble(res))
-  } else {
-    stop("Unknown format.", call. = FALSE)
   }
 }
 
 .gen_raw <- function(df, pkicol = "id", pki_name = "tweet_id") {
   dplyr::select_if(df, is.list) -> df_complex_col
   dplyr::select_if(df, Negate(is.list)) %>% dplyr::rename(pki = tidyselect::all_of(pkicol)) -> main
+  ## df_df_col are data.frame with $ in the column, weird things,
+  ## need to be transformed into list-columns with .dfcol_to_list below
   df_complex_col %>% dplyr::select_if(is.data.frame) -> df_df_col
+  ## "Normal" list-column
   df_complex_col %>% dplyr::select_if(Negate(is.data.frame)) -> df_list_col
   mother_colnames <- colnames(df_df_col)
   df_df_col_list <- dplyr::bind_cols(purrr::map2_dfc(df_df_col, mother_colnames, .dfcol_to_list), df_list_col)
   all_list <- purrr::map(df_df_col_list, .simple_unnest, pki = main$pki)
-  ## very_experimental
+  ## after first pass above, some columns are still not in 3NF (e.g. context_annotations)
   item_names <- names(all_list)
   all_list <- purrr::map2(all_list, item_names, .second_pass)
   all_list$main <- dplyr::relocate(main, pki)
@@ -155,4 +170,3 @@ names(sourcetweet_data) <- paste0("sourcetweet.", names(sourcetweet_data))
   }
   return(res)
 }
-

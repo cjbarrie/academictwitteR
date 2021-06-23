@@ -21,8 +21,8 @@ test_that("real test", {
   emptydir <- academictwitteR:::.gen_random_dir()
   expect_error(w1 <- capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir)), NA)
   unlink(emptydir, recursive = TRUE)
-  ori_test <- "../testdata/commtwitter/"
-  user_ids <- unique(bind_tweets(ori_test, verbose = FALSE)$author_id)[c(6,7,9)]
-  expect_error(get_user_profile(x = user_ids), NA)
+  ## ori_test <- "../testdata/commtwitter/"
+  ## user_ids <- unique(bind_tweets(ori_test, verbose = FALSE)$author_id)[c(6,7,9)]
+  ## expect_error(get_user_profile(x = user_ids), NA)
 })
 
