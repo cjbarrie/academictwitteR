@@ -64,6 +64,10 @@ jobs:
           pak::local_system_requirements(execute = TRUE)
           pak::pkg_system_requirements("rcmdcheck", execute = TRUE)
         shell: Rscript {0}
+        
+      - name: Install libgit2 for Mac
+        if: runner.os == 'macOS'
+        run: brew install libgit2
 
       - name: Install dependencies
         run: |
