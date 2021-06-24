@@ -66,7 +66,7 @@ jobs:
         shell: Rscript {0}
         
       - name: Install libgit2 for Mac
-        if: runner.os == 'macOS'
+        if: runner.os == 'macOS-latest'
         run: brew install libgit2
 
       - name: Install dependencies
