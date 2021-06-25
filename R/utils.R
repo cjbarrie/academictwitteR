@@ -11,7 +11,7 @@ make_query <- function(url, params, bearer_token, max_error = 4, verbose = TRUE)
       stop(paste("something went wrong. Status code:", httr::status_code(r)))
     }
     if (httr::headers(r)$`x-rate-limit-remaining` == "1") {
-      .vwarn(verbose, paste("x-rate-limit-remaining=1. Resets at", as.POSIXct(as.numeric(httr::headers(r)$`x-rate-limit-reset`), origin = "1970-01-01")))
+      .vwarn(verbose, paste("x-rate-limit-remaining=1. Resets at", .check_reset(r)))
       count <- count + 1
     }
     if (status_code == 200) {
@@ -22,9 +22,8 @@ make_query <- function(url, params, bearer_token, max_error = 4, verbose = TRUE)
       Sys.sleep(count * 5)
     }
     if (status_code == 429) {
-      .vcat(verbose, "Rate limit reached, sleeping... \n")
+      .trigger_sleep(r, verbose = verbose)
       count <- count + 1
-      Sys.sleep(900)
     }
   }
   jsonlite::fromJSON(httr::content(r, "text"))
@@ -322,6 +321,31 @@ create_storage_dir <- function(data_path, export_query, built_query, start_tweet
   if (bool) {
     warning(..., call. = FALSE)
   }
+}
+
+.check_reset <- function(r, tzone = "") {
+  lubridate::with_tz(lubridate::as_datetime(as.numeric(httr::headers(r)$`x-rate-limit-reset`), tz = tzone), tzone)
+}
+
+.trigger_sleep <- function(r, verbose = TRUE, really_sleep = TRUE, ref_time = Sys.time(), tzone = "") {
+  reset_time <- .check_reset(r, tzone = tzone)
+  ## add 1s as buffer
+  sleep_period <- ceiling(as.numeric(reset_time - ref_time, units = "secs")) + 1
+  .vcat(verbose, "Rate limit reached. Rate limit will reset at", as.character(reset_time) ,"\nSleeping for", sleep_period ,"seconds. \n")
+  if (verbose) {
+    pb <- utils::txtProgressBar(min = 0, max = sleep_period, initial = 0)
+    for (i in seq_len(sleep_period)) {
+      utils::setTxtProgressBar(pb, i)
+      if (really_sleep) {
+        Sys.sleep(1)
+      }
+    }
+  } else {
+    if (really_sleep) {
+      Sys.sleep(sleep_period)
+    }
+  }
+  invisible(r)
 }
 
 .process_qparam <- function(param, param_str,query) {
