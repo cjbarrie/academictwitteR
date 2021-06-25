@@ -1,5 +1,5 @@
 ## reset at 2021-06-25 13:50:37
-Sys.setenv(TZ='CEST')
+Sys.setenv(TZ='"Europe/Berlin"')
 
 library(httr)
 
@@ -18,3 +18,5 @@ test_that("test .trigger_sleep", {
     academictwitteR:::.trigger_sleep(r, ref_time = as.POSIXlt("2021-06-25 13:50:36"), verbose = FALSE, really_sleep = TRUE)
   })
 })
+
+Sys.unsetenv("TZ")
