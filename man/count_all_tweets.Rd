@@ -28,7 +28,7 @@ count_all_tweets(
 
 \item{bearer_token}{string, bearer token}
 
-\item{n}{integer, upper limit of tweets to be fetched}
+\item{n}{integer, upper limit of tweet counts to be fetched (i.e., for 365 days n must be at least 365). Default is 100.}
 
 \item{file}{string, name of the resulting RDS file}
 
@@ -38,7 +38,7 @@ count_all_tweets(
 
 \item{bind_tweets}{If \code{TRUE}, tweets captured are bound into a data.frame for assignment}
 
-\item{granularity}{string, the granularity for the search counts results.}
+\item{granularity}{string, the granularity for the search counts results. Options are "day"; "hour"; "minute". Default is day.}
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 
@@ -48,16 +48,22 @@ count_all_tweets(
 a data.frame
 }
 \description{
-This function count tweets by query string or strings
+This function returns aggregate counts of tweets by query string or strings
 between specified date ranges.
 }
 \examples{
 \dontrun{
-bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
-get_count(query = "BLM", 
-          start_tweets = "2020-01-01T00:00:00Z", 
+count_all_tweets(query = "Hogmanay", 
+          start_tweets = "2019-12-2700:00:00Z", 
           end_tweets = "2020-01-05T00:00:00Z", 
           bearer_token = get_bearer())
+          
+count_all_tweets(query = "Hogmanay", 
+          start_tweets = "2019-12-27T00:00:00Z", 
+          end_tweets = "2020-01-05T00:00:00Z", 
+          bearer_token = get_bearer(),
+          granularity = "hour",
+          n = 500)
 }
 }

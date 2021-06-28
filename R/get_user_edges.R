@@ -1,6 +1,6 @@
 #' Get user followers
 #' 
-#' This function fetches a list of users who are followers of the specified user ID.
+#' This function fetches users who are followers of the specified user ID.
 #'
 #' @param x string containing one user id or a vector of user ids
 #' @param bearer_token string, bearer token
@@ -13,7 +13,7 @@
 #' \dontrun{
 #' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 #' users <- "2244994945"
-#' get_user_followers(users, bearer_token)
+#' get_user_followers(users, bearer_token = get_bearer())
 #' }
 get_user_followers <- function(x, bearer_token = get_bearer(), ...){
   get_user_edges(x = x, bearer_token = bearer_token, wt = "followers", ...)

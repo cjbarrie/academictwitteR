@@ -17,12 +17,11 @@ get_liked_tweets(x, bearer_token = get_bearer(), ...)
 a data frame
 }
 \description{
-This function fetches a list of tweets liked by a user or users.
+This function fetches returns tweets liked by a user or users.
 }
 \examples{
 \dontrun{
-bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-users <- "2244994945"
-get_liked_tweets(users, bearer_token)
+users <- c("2244994945", "95226101")
+get_liked_tweets(users, bearer_token = get_bearer())
 }
 }

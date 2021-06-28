@@ -19,6 +19,8 @@ knitr::opts_chunk$set(
 
 The table below gives an overview of the common errors you may encounter when using the Twitter Academic Research Product Track API. The meaning and solutions for these errors are taken from the Twitter API Response codes and errors help page [here](https://developer.twitter.com/en/support/twitter-api/error-troubleshooting).
 
+The most common error that is fixable is a 400 status code error. This means that the query has been misspecified. In these cases, return to the query and consult the documentation to ensure that it has been appropriately specified.
+
 
 | Error | Text                  | Meaning                                                                                                                                                                                                                          | Solution                                                                                                                                                                                                                                                                                                            |
 | ----- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

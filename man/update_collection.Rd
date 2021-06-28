@@ -27,12 +27,11 @@ update_collection(
 a data.frame
 }
 \description{
-This function continues previous collection session with a new end date.
+This function continues a previous collection session with a new end date.
 For this function to work, export_query must be set to "TRUE" during the original collection.
 }
 \examples{
 \dontrun{
-bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-update_collection(data_path = "data", "2020-01-03T00:00:00Z", bearer_token)
+update_collection(data_path = "data", "2020-01-03T00:00:00Z", bearer_token = get_bearer())
 }
 }

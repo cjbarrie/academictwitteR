@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-In academictwitteR v0.2, the functionalities to convert JSON files to various data frame formats. In order to use these features, we recommend the following work flow.
+In v0.2 of the package, we include functionality to convert JSON files to various data frame formats. In order to use these features, we recommend the following workflow.
 
 First, you should build your query using the `build_query` function.
 
@@ -41,7 +41,9 @@ get_all_tweets(
 )
 ```
 
-The first format is the so-called "vanilla" format. This vanilla format is the direct output from `jsonlite::read_json`. It can display columns such as `text` just fine. But some columns such as `retweet_count` are nested in list-columns. Also, one needs to extract user information by setting `user = TRUE`. Please also note that the data frame is not a tibble. One needs to explicitly convert it to tibble.
+The first format is the so-called "vanilla" format. This vanilla format is the direct output from `jsonlite::read_json`. It can display columns such as `text` just fine. But some columns such as `retweet_count` are nested in list-columns. 
+
+In order to extract user information, it is additionally necessary to set `user = TRUE`. Please also note that the data frame returned in this format is not a tibble. As such, we first need to convert it to a tibble.
 
 ```{r, eval = FALSE}
 bind_tweets(data_path = "tweetdata") %>% as_tibble
@@ -51,7 +53,7 @@ bind_tweets(data_path = "tweetdata") %>% as_tibble
 bind_tweets(system.file("extdata", "tweetdata", package = "academictwitteR")) %>% as_tibble
 ```
 
-The second format is the "raw" format. It is a list of data frames that all data are extracted. Please note that not all data frames are in Boyce-Codd 3rd Normal form, i.e. some columns are still list-column.
+The second format is the "raw" format. It is a list of data frames containing all of the data extracted in the API call. Please note that not all data frames are in Boyce-Codd 3rd Normal form, i.e. some columns are still list-column.
 
 ```{r, eval = FALSE}
 bind_tweets(data_path = "tweetdata", output_format = "raw") %>% names
@@ -61,7 +63,7 @@ bind_tweets(data_path = "tweetdata", output_format = "raw") %>% names
 bind_tweets(system.file("extdata", "tweetdata", package = "academictwitteR"), output_format = "raw") %>% names
 ```
 
-The third format is the "tidy" format. It is an opinionated format that is believed to contain all essential columns for social media research. By default, it is a tibble.
+The third format is the "tidy" format. It is an "opinionated" format, which we believe to contain all essential columns for social media research. By default, it is a tibble.
 
 ```{r, eval = FALSE}
 bind_tweets(data_path = "tweetdata", output_format = "tidy")

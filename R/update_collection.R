@@ -1,6 +1,6 @@
 #' Update previous collection session
 #'
-#' This function continues previous collection session with a new end date. 
+#' This function continues a previous collection session with a new end date. 
 #' For this function to work, export_query must be set to "TRUE" during the original collection.
 #'
 #' @param data_path string, name of an existing data_path
@@ -11,8 +11,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-#' update_collection(data_path = "data", "2020-01-03T00:00:00Z", bearer_token)
+#' update_collection(data_path = "data", "2020-01-03T00:00:00Z", bearer_token = get_bearer())
 #' }
 
 update_collection <- function(data_path, end_tweets, bearer_token = get_bearer(), verbose = TRUE, ...){
