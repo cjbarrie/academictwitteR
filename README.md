@@ -64,95 +64,114 @@ The <tt>academictwitteR</tt> package has been designed with the efficient storag
 
 Tweets are returned as a data.frame object and, when a `file` argument has been included, will also be saved as a .rds file.
 
-## Demo
+When collecting large amounts of data, we recommend the workflow described below, which allows the user : 1) to efficiently store authorization credentials; 2) to efficiently store returned data; 3) bind the data into a data.frame object or tibble ;4) resume collection in case of interruption; and 5) update collection in case of need.
 
-Getting tweets of specified users via `get_user_tweets()`. This function captures tweets for a particular user or set of users and collects tweets between specified date ranges, avoiding rate limits by sleeping between calls. A call may look like:
+## Authorization
 
-```{r}
+**The following demo refers to the development version of the package**.
 
-bearer_token <- "" # Insert bearer token
+The first task is set authorization credentials with the `set_bearer()` function, which allows the user to store their bearer token in the .Renviron file.
 
-users <- c("TwitterDev", "jack")
-tweets <-
-  get_user_tweets(users,
-                  "2010-01-01T00:00:00Z",
-                  "2020-01-01T00:00:00Z",
-                  bearer_token)
+To do so, use:
 
+```r
+set_bearer()
 ```
 
-Getting tweets of specified string or series of strings via `get_all_tweets()`. This function captures tweets containing a particular string or set of strings between specified date ranges, avoiding rate limits by sleeping between calls. 
+and enter authorization credentials as below:
 
-This function can also capture tweets for a particular hashtag or set of hashtags when specified with the # operator.
+![](vignettes/files/TWITTER_BEARER.gif){width=100%}
 
-For a particular set of strings a call may look like:
+This will mean that the bearer token is automatically called during API calls. It also avoids the inadvisable practice of hard-coding authorization credentials into scripts. 
 
-```{r}
+See the vignette documentation `vignette("academictwitteR-auth")` for further information on obtaining a bearer token.
 
-bearer_token <- "" # Insert bearer token
+## Collection
 
-tweets <-
-  get_all_tweets("apples OR oranges",
-                 "2020-01-01T00:00:00Z",
-                 "2020-01-05T00:00:00Z",
-                 bearer_token)
+The workhorse function is `get_all_tweets()`, which is able to collect tweets matching a specific search query or all tweets by a specific set of users.
 
-```
-
-For a particular set of hashtags a call may look like:
-
-```{r}
-
-bearer_token <- "" # Insert bearer token
+```r
 
 tweets <-
   get_all_tweets(
-    "#BLM OR #BlackLivesMatter",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token
+    query = "#BlackLivesMatter",
+    start_tweets = "2020-01-01T00:00:00Z",
+    end_tweets = "2020-01-05T00:00:00Z",
+    file = "blmtweets",
+    data_path = "data/",
+    n = 1000000,
   )
-
+  
 ```
 
-Alternatively, we can specify a character vector comprising several elements. For example, we if we wanted to search multiple hashtags, we could specify a query as follows:
+Here, we are collecting tweets containing a hashtag related to the Black Lives Matter movement over the period January 1, 2020 to January 5, 2020. 
 
-```{r}
+We have also set an upper limit of one million tweets. When collecting large amounts of Twitter data we recommend including a `data_path` and setting `bind_tweets = FALSE` such that data is stored as JSON files and can be bound at a later stage upon completion of the API query.
 
-bearer_token <- "" # Insert bearer token
-
-htagquery <- c("#BLM", "#BlackLivesMatter", "#GeorgeFloyd")
+```r
 
 tweets <-
   get_all_tweets(
-    htagquery,
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token
+    users = c("jack", "cbarrie"),
+    start_tweets = "2020-01-01T00:00:00Z",
+    end_tweets = "2020-01-05T00:00:00Z",
+    file = "blmtweets",
+    n = 1000
   )
+  
+```
+
+Whereas here we are not specifying a search query and instead are requesting all tweets by users @jack and @cbarrie over the period January 1, 2020 to January 5, 2020. Here, we set an upper limit of 1000 tweets.
+
+The search query and user query arguments can be combined in a single API call as so:
+
+```r
+
+get_all_tweets(
+  query = "twitter",
+  users = c("cbarrie", "jack"),
+  start_tweets = "2020-01-01T00:00:00Z",
+  end_tweets = "2020-05-01T00:00:00Z",
+  n = 1000
+)
 
 ```
 
-, which will achieve the same thing as typing out `OR` between our strings.  
+Where here we would be collecting tweets by users @jack and @cbarrie over the period January 1, 2020 to January 5, 2020 containing the word "twitter."
 
+```r
+
+get_all_tweets(
+  query = c("twitter", "social"),
+  users = c("cbarrie", "jack"),
+  start_tweets = "2020-01-01T00:00:00Z",
+  end_tweets = "2020-05-01T00:00:00Z",
+  n = 1000
+)
+
+```
+
+While here we are collecting tweets by users @jack and @cbarrie over the period January 1, 2020 to January 5, 2020 containing the words "twitter" or "social."
 
 Note that the "AND" operator is implicit when specifying more than one character string in the query. See [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query) for information on building queries for search tweets. Thus, when searching for all elements of a character string, a call may look like:
 
-```{r}
+```r
 
-bearer_token <- "" # Insert bearer token
-
-tweets <-
-  get_all_tweets("apples oranges",
-                 "2020-01-01T00:00:00Z",
-                 "2020-01-05T00:00:00Z",
-                 bearer_token)
+get_all_tweets(
+  query = c("twitter social"),
+  users = c("cbarrie", "jack"),
+  start_tweets = "2020-01-01T00:00:00Z",
+  end_tweets = "2020-05-01T00:00:00Z",
+  n = 1000
+)
 
 ```
 
-, which will capture tweets containing *both* the words "apples" and "oranges." The same logic applies for hashtag queries.
+, which will capture tweets containing *both* the words "twitter" and "social." The same logics apply for hashtag queries.
 
-## Note on data storage
+See the vignette documentation `vignette("academictwitteR-build")` for further information on building more complex API calls.
+
+## Data storage
 
 Files are stores as JSON files in specified directory when a `data_path` is specified. Tweet-level data is stored in files beginning "data_"; user-level data is stored in files beginning "users_".
 
@@ -160,80 +179,24 @@ If a filename is supplied, the functions will save the resulting tweet-level inf
 
 Functions always return a data.frame object unless a `data_path` is specified and `bind_tweets` is set to `FALSE`. When collecting large amounts of data, we recommend using the `data_path` option with `bind_tweets = FALSE`. This mitigates potential data loss in case the query is interrupted. 
 
-An example of such a query would be:
+See the vignette documentation `vignette("academictwitteR-intro")` for further information on data storage conventions.
 
-```{r}
+## Reformatting
 
-bearer_token <- "" # Insert bearer token
+Users can then use the `bind_tweets` convenience function to bundle the JSONs into a data.frame object for analysis in R as such:
 
-tweets <-
-  get_all_tweets(
-    "#BLM OR #BlackLivesMatter",
-    "2014-01-01T00:00:00Z",
-    "2020-01-01T00:00:00Z",
-    bearer_token,
-    data_path = "data/",
-    bind_tweets = FALSE
-  )
-
-```
-
-, which would collect all tweets containing the hashtags "#BLM" or "BlackLivesMatter" over a six-year period. 
-
-Users can then use the `bind_tweets` convenience function to bundle the jsons into a data.frame object for analysis in R as such:
-
-```{r}
+```r
 tweets <- bind_tweets(data_path = "data/")
 users <- bind_tweets(data_path = "data/", user = TRUE)
 ```
 
-## Arguments
+To bind JSONs into tidy format, users can also specify a tidy output format. 
 
-`get_all_tweets()` accepts a range of arguments, which can be combined to generate a more precise query.
-
-| Arguments   |     Description      |
-|----------|:-------------:|
-|query | Search query or queries e.g. "cat"
-|exclude | Tweets containing the keyword(s) will be excluded "grumpy" e.g.
-|is_retweet | If `TRUE`, only retweets will be returned; if `FALSE`, retweets will not be returned, only tweets will be returned; if `NULL`, both retweets and tweets will be returned.
-|is_reply | If `TRUE`, only reply tweets will be returned
-|is_quote | If `TRUE`, only quote tweets will be returned
-|is_verified |If `TRUE`, only tweets whose authors are verified by Twitter will be returned
-|place | Name of place e.g. "London"
-|country | Name of country as ISO alpha-2 code e.g. "GB"
-|point_radius | A vector of two point coordinates latitude, longitude, and point radius distance (in miles)
-|bbox | A vector of four bounding box coordinates from west longitude to north latitude
-|geo_query | If `TRUE` user will be prompted to enter relevant information for bounding box or point radius geo buffers
-|remove_promoted | If `TRUE`, tweets created for promotion only on ads.twitter.com are removed
-|has_hashtags | If `TRUE`, only tweets containing hashtags will be returned
-|has_cashtags | If `TRUE`, only tweets containing cashtags will be returned
-|has_links | If `TRUE`, only tweets containing links and media will be returned
-|has_mentions |If `TRUE`, only tweets containing mentions will be returned
-|has_media |If `TRUE`, only tweets containing a recognized media object, such as a photo, GIF, or video, as determined by Twitter will be returned
-|has_images |If `TRUE`, only tweets containing a recognized URL to an image will be returned
-|has_videos |If `TRUE`, only tweets containing contain native Twitter videos, uploaded directly to Twitter will be returned
-|has_geo |If `TRUE`, only tweets containing Tweet-specific geolocation data provided by the Twitter user will be returned
-|lang | A single BCP 47 language identifier e.g. "fr"
-
-An example would be:
-
-```{r}
-bearer_token <- "" # Insert bearer token
-
-tweets <-
-  get_all_tweets(
-    query = "cat",
-    exclude = "grumpy",
-    "2020-01-01T00:00:00Z",
-    "2020-01-02T00:00:00Z",
-    bearer_token,
-    has_images = TRUE,
-    has_hashtags = TRUE,
-    country = "GB",
-    lang = "en"
-  )
+```r
+bind_tweets(data_path = "tweetdata", output_format = "tidy")
 ```
-The above query will fetch all tweets that contain the word "cat" but not "grumpy", posted on 1 January 2020 in the UK, have an image attachment, include at least one hashtag, and are written in English.
+
+See the vignette documentation `vignette("academictwitteR-tidy")` for further information on alternative output formats.
 
 ## Interruption and Continuation
 
@@ -253,25 +216,32 @@ update_collection(data_path = "data", "2020-05-10T00:00:00Z", bearer_token)
 
 For more information on the parameters and fields available from the v2 Twitter API endpoint see: [https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-all](https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-all).
 
-## Note on User Information
+## Arguments
 
-The API call returns both the tweet data and the user information separately, but currently only the former is parsed. It is possible to obtain other user information such as user handle and display name. These can then be merged with the dataset using the author_id field.
+`get_all_tweets()` accepts a range of arguments, which can be combined to generate a more precise query.
 
-```
-
-bearer_token <- "" # Insert bearer token
-
-users <- c("TwitterDev", "jack")
-tweets_df <-
-  get_user_tweets(users,
-                  "2020-01-01T00:00:00Z",
-                  "2020-01-05T00:00:00Z",
-                  bearer_token)
-
-users_df <-
-  get_user_profile(unique(tweets_df$author_id), bearer_token)
-  
-```
+| Arguments   |     Description      |
+|----------|:-------------:|
+|query | Search query or queries e.g. "cat"
+|exclude | Tweets containing the keyword(s) will be excluded "grumpy" e.g.
+|is_retweet | If `TRUE`, only retweets will be returned; if `FALSE`, retweets will not be returned, only tweets will be returned; if `NULL`, both retweets and tweets will be returned.
+|is_reply | If `TRUE`, only reply tweets will be returned
+|is_quote | If `TRUE`, only quote tweets will be returned
+|is_verified |If `TRUE`, only tweets whose authors are verified by Twitter will be returned
+|place | Name of place e.g. "London"
+|country | Name of country as ISO alpha-2 code e.g. "GB"
+|point_radius | A vector of two point coordinates latitude, longitude, and point radius distance (in miles)
+|bbox | A vector of four bounding box coordinates from west longitude to north latitude
+|remove_promoted | If `TRUE`, tweets created for promotion only on ads.twitter.com are removed
+|has_hashtags | If `TRUE`, only tweets containing hashtags will be returned
+|has_cashtags | If `TRUE`, only tweets containing cashtags will be returned
+|has_links | If `TRUE`, only tweets containing links and media will be returned
+|has_mentions |If `TRUE`, only tweets containing mentions will be returned
+|has_media |If `TRUE`, only tweets containing a recognized media object, such as a photo, GIF, or video, as determined by Twitter will be returned
+|has_images |If `TRUE`, only tweets containing a recognized URL to an image will be returned
+|has_videos |If `TRUE`, only tweets containing contain native Twitter videos, uploaded directly to Twitter will be returned
+|has_geo |If `TRUE`, only tweets containing Tweet-specific geolocation data provided by the Twitter user will be returned
+|lang | A single BCP 47 language identifier e.g. "fr"
 
 
 ## Acknowledgements
