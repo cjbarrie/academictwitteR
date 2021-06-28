@@ -39,7 +39,7 @@ build_query(
 
 \item{reply_to}{string or character vector, user handles to collect replies to the specified users}
 
-\item{retweets_of}{string or character vector, user handles to collects retweets of tweets the specified users}
+\item{retweets_of}{string or character vector, user handles to collects retweets of tweets by the specified users}
 
 \item{exclude}{string or character vector, tweets containing the keyword(s) will be excluded}
 
@@ -87,18 +87,29 @@ build_query(
 a query string
 }
 \description{
-Build tweet query according to targeted parameters. This function is already called within the main
-\code{\link{get_all_tweets}} function.
+Build tweet query according to targeted parameters.
 }
 \details{
+This function is already called within the main
+\code{\link{get_all_tweets}} function.
+
 It may also be called separately and the output saved as
 a character object query string to be input as query parameter to \code{\link{get_all_tweets}}.
 }
 \examples{
 \dontrun{
-query <- build_query("happy", is_retweet = FALSE,
-                     place = "new york",
-                     country = "US")
+query <- build_query(query = "happy", is_retweet = FALSE,
+                     country = "US",
+                     place = "seattle",
+                     point_radius = c(-122.33795253639994, 47.60900846404393, 25),
+                     lang = "en")
+                     
+query <- build_query(query = "twitter",
+                     point_radius = c(-122.33795253639994, 47.60900846404393, 25),
+                     lang = "en")
+                     
+query <- build_query("الحراك", is_retweet = FALSE,
+                     country = "DZ")
 }
 
 }

@@ -8,9 +8,14 @@ set_bearer()
 }
 \description{
 This function lets the user add their bearer token to the \code{.Renviron} file.
+}
+\details{
 It is in general not safe to 1) hard code your bearer token in your R script or
-2) have your bearer token in your command history. \code{set_bearer} opens the .Renviron file
+2) have your bearer token in your command history.
+
+\code{set_bearer} opens the .Renviron file
 for the user and provides instructions on how to add the bearer token, which requires the
 addition of just one line in the \code{.Renviron} file, following the format TWITTER_BEARER=YOURTOKENHERE.
+
 Replace YOURTOKENHERE with your own token.
 }

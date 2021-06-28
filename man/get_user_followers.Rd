@@ -17,12 +17,12 @@ get_user_followers(x, bearer_token = get_bearer(), ...)
 a data frame
 }
 \description{
-This function fetches a list of users who are followers of the specified user ID.
+This function fetches users who are followers of the specified user ID.
 }
 \examples{
 \dontrun{
 bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 users <- "2244994945"
-get_user_followers(users, bearer_token)
+get_user_followers(users, bearer_token = get_bearer())
 }
 }

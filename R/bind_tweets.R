@@ -1,6 +1,10 @@
 #' Bind information stored as JSON files
 #'
-#' This function binds information stored as JSON files. By default, it binds into a data frame containing tweets (from data_*id*.json files). If users is TRUE, it binds into a data frame containing user information (from users_*id*.json). 
+#' This function binds information stored as JSON files. 
+#' 
+#' By default, it binds into a data frame containing tweets (from data_*id*.json files). 
+#' 
+#' If users is TRUE, it binds into a data frame containing user information (from users_*id*.json). 
 #'
 #' @param data_path string, file path to directory of stored tweets data saved as data_*id*.json and users_*id*.json
 #' @param user If `FALSE`, this function binds JSON files into a data frame containing tweets; data frame containing user information otherwise. Ignore if `output_format` is not NA
@@ -18,8 +22,10 @@
 #' \dontrun{
 #' # bind json files in the directory "data" into a data frame containing tweets
 #' bind_tweets(data_path = "data/")
+#' 
 #' # bind json files in the directory "data" into a data frame containing user information
 #' bind_tweets(data_path = "data/", user = TRUE)
+#' 
 #' # bind json files in the directory "data" into a "tidy" data frame / tibble
 #' bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy")
 #' }

@@ -1,6 +1,8 @@
-#' Get tweets composed by a single user
+#' Get tweets by a single user
 #'
-#' This function collects tweets by an user ID. The most recent 3,200 Tweets can be retrieved.
+#' This function collects tweets by an user ID from the users endpoint. 
+#' 
+#' Only the most recent 3,200 Tweets can be retrieved.
 #' 
 #' If a filename is supplied, the function will 
 #' save the result as a RDS file.
@@ -29,12 +31,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 #' 
 #' get_user_timeline("2244994945",
 #'                   start_tweets = "2020-01-01T00:00:00Z", 
 #'                   end_tweets = "2021-05-14T00:00:00Z",
-#'                   bearer_token = bearer_token,
+#'                   bearer_token = get_bearer(),
 #'                   n = 200)
 #' }
 get_user_timeline <-

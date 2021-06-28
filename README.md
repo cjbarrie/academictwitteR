@@ -15,7 +15,6 @@
 
 Repo containing code to for R package <tt>academictwitteR</tt> to collect tweets from v2 API endpoint for the Academic Research Product Track.
 
-
 To cite package ‘academictwitteR’ in publications use:
 
   - Barrie, Christopher and Ho, Justin Chun-ting. (2021). academictwitteR: an R package to access the Twitter Academic Research Product Track v2 API endpoint. *Journal of Open Source Software*, 6(62), 3272, https://doi.org/10.21105/joss.03272
@@ -51,8 +50,15 @@ Alternatively, you can install the development version with:
 devtools::install_github("cjbarrie/academictwitteR", build_vignettes = TRUE)
 ```
 
-
 Get started by reading `vignette("academictwitteR-intro")`.
+
+To use the package, it first needs to be loaded with:
+
+```r
+
+library(academictwitteR)
+
+```
 
 The <tt>academictwitteR</tt> package has been designed with the efficient storage of data in mind. Queries to the API include arguments to specify whether tweets be stored as a .rds file using the `file` argument or as separate JSON files for tweet- and user-level information separately with argument `data_path`.
 
@@ -210,6 +216,7 @@ users <- bind_tweets(data_path = "data/", user = TRUE)
 |lang | A single BCP 47 language identifier e.g. "fr"
 
 An example would be:
+
 ```{r}
 bearer_token <- "" # Insert bearer token
 
@@ -269,7 +276,7 @@ users_df <-
 
 ## Acknowledgements
 
-Function originally taken from [Gist](https://gist.github.com/schochastics/1ff42c0211916d73fc98ba8ad0dcb261#file-get_tweets-r-L14) by [https://github.com/schochastics](https://github.com/schochastics).
+Function originally inspired by [Gist](https://gist.github.com/schochastics/1ff42c0211916d73fc98ba8ad0dcb261#file-get_tweets-r-L14) from [https://github.com/schochastics](https://github.com/schochastics).
 
 
 ## Code of Conduct

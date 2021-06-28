@@ -1,9 +1,13 @@
-#' Manage your bearer token
+#' Manage bearer token
 #'
 #' This function attempts to retrieve your bearer token from the environmental variable "TWITTER_BEARER". 
 #' The easiest way to setup this environmental variable is to use \code{set_bearer()} 
 #' and insert your bearer token to \code{.Renviron} file following the format: TWITTER_BEARER=YOURTOKENHERE. 
 #' Replace YOURTOKENHERE with your own token.
+#' 
+#' Note: for \code{get_bearer()} to retrieve your bearer token you will need to restart the 
+#' R session after storing in \code{.Renviron}.
+#' 
 #' @return string represents your bearer token, if it the environmental variable "TWITTER_BEARER" has been preset.
 #' @export
 get_bearer <- function() {

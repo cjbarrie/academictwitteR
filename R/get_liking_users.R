@@ -1,6 +1,6 @@
 #' Get liking users
 #' 
-#' This function fetches a list of users who liked a tweet or tweets.
+#' This function fetches users who liked a tweet or tweets.
 #'
 #' @param x string containing one tweet id or a vector of tweet ids
 #' @param bearer_token string, bearer token
@@ -11,9 +11,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' bearer_token <- "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 #' tweet <- "1387744422729748486"
-#' get_liking_users(tweet, bearer_token)
+#' get_liking_users(tweet, bearer_token = get_bearer())
 #' }
 get_liking_users <- function(x, bearer_token = get_bearer(), verbose = TRUE){
   bearer_token <- check_bearer(bearer_token)

@@ -1,6 +1,8 @@
 #' Build tweet query
 #'
-#' Build tweet query according to targeted parameters. This function is already called within the main
+#' Build tweet query according to targeted parameters. 
+#' 
+#' This function is already called within the main
 #' \code{\link{get_all_tweets}} function. 
 #' 
 #' It may also be called separately and the output saved as
@@ -9,7 +11,7 @@
 #' @param query string or character vector, search query or queries
 #' @param users string or character vector, user handles to collect tweets from the specified users
 #' @param reply_to string or character vector, user handles to collect replies to the specified users
-#' @param retweets_of string or character vector, user handles to collects retweets of tweets the specified users
+#' @param retweets_of string or character vector, user handles to collects retweets of tweets by the specified users
 #' @param exclude string or character vector, tweets containing the keyword(s) will be excluded
 #' 
 #' @param is_retweet If `TRUE`, only retweets will be returned; if `FALSE`, retweets will be excluded; if `NULL`, both retweets and other tweet types will be returned.
@@ -41,9 +43,18 @@
 #'
 #' @examples
 #' \dontrun{
-#' query <- build_query("happy", is_retweet = FALSE,
-#'                      place = "new york",
-#'                      country = "US")
+#' query <- build_query(query = "happy", is_retweet = FALSE,
+#'                      country = "US",
+#'                      place = "seattle",
+#'                      point_radius = c(-122.33795253639994, 47.60900846404393, 25),
+#'                      lang = "en")
+#'                      
+#' query <- build_query(query = "twitter",
+#'                      point_radius = c(-122.33795253639994, 47.60900846404393, 25),
+#'                      lang = "en")
+#'                      
+#' query <- build_query("الحراك", is_retweet = FALSE,
+#'                      country = "DZ")
 #' }
 #'
 #' @importFrom utils menu

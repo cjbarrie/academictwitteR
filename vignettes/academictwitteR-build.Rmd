@@ -34,6 +34,18 @@ library(devtools)
 load_all()
 ```
 
+We then make sure we have set our bearer token appropriately by calling:
+
+```{r, eval =FALSE}
+get_bearer()
+```
+
+```{r, echo =FALSE}
+bearer_example <- "AAAAAAAAAAAAAAAAAAAAAPw%2BJQEAAAAAq5Ot8BBYyYlAqT9nLMuVuR1jI5fA%3DqG9HTHISISNOTAREALTOKEN"
+bearer_example
+```
+
+If your bearer token is not set appropriately, consult the guide in [the authorization vignette](academictwitteR-auth.html).
 
 Let's say we were interested in what people were talking about on New Year's Eve. We might do something like this:
 
@@ -43,15 +55,23 @@ tweets <-
   get_all_tweets(
     query = "happy",
     start_tweets = "2019-12-31T10:00:00Z",
-    end_tweets = "2020-01-01T10:00:00Z"
+    end_tweets = "2020-01-01T10:00:00Z",
+    n = 10000
   )
 
 ```
 
-But what if we were only interested in a particular region?
+Note here that we have also specified an upper limit of 10,000 tweets. The default is 100. For most applications, the user will need to specify a higher n than the default. 
+
+The default upper limit is set to 100 in order to prevent unnecessary ingests of data when e.g. trialling an API call.
+
+As an alternative to this, the user might also wish to use the `count_all_tweets()` function in order to get an idea of how many tweets match the specified API query.
+
+## Additional parameters
+
+In the above we search for all tweets between two dates that contain the string "happy." But what if we were only interested in a particular region or written in a particular language?
 
 Let's say we were only interested in tweets written in English and originating from the US. We would add several operators to our query to filter by these characteristics:
-
 
 ```{r, eval = F}
 
@@ -66,7 +86,7 @@ tweets <-
 
 ```
 
-In fact, the `get_all_tweets` function can be combined with multiple additional filtering parameters. The example below includes numerous additional filters, keeping only tweets with images, hashtags, and mentions:
+In fact, the `get_all_tweets()` function can be combined with multiple additional filtering parameters. The example below includes numerous additional filters, keeping only tweets with images, hashtags, and mentions:
 
 ```{r, eval = F}
 
@@ -110,7 +130,7 @@ Twitter also allows us to query tweets originating from within a particular geog
 
 Many such websites exist that allow you to find the bounding box coordinates of a place of interest, including [https://www.openstreetmap.org](https://www.openstreetmap.org) and [https://boundingbox.klokantech.com/](https://boundingbox.klokantech.com/).
 
-We can then input this information with the "bounding_box" operator as below:
+We can then input this information with the Twitter "bounding_box" operator using the `bbox` argument as below:
 
 
 ```{r, eval=F}
@@ -132,7 +152,7 @@ tweets <-
   
 ```
 
-The `point_radius` argument requires three pieces of information: the longitude and latitude of a target coordinate, and the buffer size around that coordinate.
+The alternative `point_radius` argument requires three pieces of information: the longitude and latitude of a target coordinate, and the buffer size around that coordinate.
 
 ```{r, eval=F}
 
@@ -147,11 +167,9 @@ tweets <-
     point_radius = c(-122.33795253639994, 47.60900846404393, 25)
   )
   
-  
 ```
 
 Note that the maximum radius for the buffer is 25 miles. Similarly, the maximum height and width of any bounding box is 25 miles. Inputting coordinate information that exceeds these bounds will result in a 400 status code error.
-
 
 ## Multiple query strings
 
@@ -185,15 +203,33 @@ tweets <-
 
 This is the equivalent of the OR operator logics detailed by Twitter [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query).
 
+When building your query you can also check the query you are building separately with the `build_query()`, which is called inside the `get_all_tweets()` function. 
+
+So, the above query focusing on Seattle is querying the following, which we can build separately as so:
+
+```{r}
+
+build_query(
+  query = "happy",
+  country = "US",
+  place = "seattle",
+  lang = "en",
+  point_radius = c(-122.33795253639994, 47.60900846404393, 25)
+)
+
+```
+
+Here we can see and check the format of the query sent to the Twitter API. 
+
 Note that the "AND" operator is implicit when specifying more than one character string in the query. See [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query) for information on building queries for search tweets. 
 
-As such, if we wanted to search for tweets containing all the words "dog" and "cat" and "balls" then we would do the following:
+As such, if we wanted to search for tweets containing all the words "dog" and "cat" then we would do the following:
 
 ```{r, eval = F}
 
 tweets <-
   get_all_tweets(
-    query = c("dog cats balls"),
+    query = c("dog cat"),
     start_tweets = "2019-12-31T10:00:00Z",
     end_tweets = "2020-01-01T10:00:00Z"
   )
@@ -219,12 +255,12 @@ tweets <-
 
 Notice that here we are not specifying any string query. Instead, we are getting all the tweets by users @cbarrie and @jack over a given time period, collecting up to a limit of 1000 tweets.
 
-However, we could also search user tweets and filter by what they're saying at the same time. Here, we would be getting tweets by users @cbarrie and @jack when they were particularly excited, for example:
+However, we could also search user tweets and filter by what they're saying at the same time. Here, we would be getting tweets by users @cbarrie and @jack when they were talking about a shared love, "twitter":
 
 ```{r, eval = F}
 
 get_all_tweets(
-  query = "excited",
+  query = "twitter",
   users = c("cbarrie", "jack"),
   start_tweets = "2021-01-01T00:00:00Z",
   end_tweets = "2021-06-01T00:00:00Z",

@@ -23,14 +23,21 @@ bind_tweets(data_path, user = FALSE, verbose = TRUE, output_format = NA)
 a data.frame containing either tweets or user information
 }
 \description{
-This function binds information stored as JSON files. By default, it binds into a data frame containing tweets (from data_\emph{id}.json files). If users is TRUE, it binds into a data frame containing user information (from users_\emph{id}.json).
+This function binds information stored as JSON files.
+}
+\details{
+By default, it binds into a data frame containing tweets (from data_\emph{id}.json files).
+
+If users is TRUE, it binds into a data frame containing user information (from users_\emph{id}.json).
 }
 \examples{
 \dontrun{
 # bind json files in the directory "data" into a data frame containing tweets
 bind_tweets(data_path = "data/")
+
 # bind json files in the directory "data" into a data frame containing user information
 bind_tweets(data_path = "data/", user = TRUE)
+
 # bind json files in the directory "data" into a "tidy" data frame / tibble
 bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy")
 }
