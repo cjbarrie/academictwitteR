@@ -29,7 +29,7 @@ A BibTeX entry for LaTeX users is:
   publisher = {The Open Journal},
   volume = {6},
   number = {62},
-  pages = {1-2},
+  pages = {3272},
   author = {Christopher Barrie and Justin Chun-ting Ho},
   title = {academictwitteR: an R package to access the Twitter Academic Research Product Track v2 API endpoint},
   journal = {Journal of Open Source Software}
