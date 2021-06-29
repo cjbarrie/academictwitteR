@@ -201,15 +201,15 @@ See the vignette documentation `vignette("academictwitteR-tidy")` for further in
 ## Interruption and Continuation
 
 The package offers two functions to deal with interruption and continue previous data collection session. If you have set a data_path and export_query was set to "TRUE" during the original collection, you can use `resume_collection()` to resume a previous interrupted collection session. An example would be:
-```{r}
-bearer_token <- ""
-resume_collection(data_path = "data", bearer_token)
+
+```r
+resume_collection(data_path = "data")
 ```
 
 If a previous data collection session is completed, you can use `update_collection()` to continue data collection with a new end date. This function is particularly useful for getting data for ongoing events. An example would be:
-```{r}
-bearer_token <- ""
-update_collection(data_path = "data", "2020-05-10T00:00:00Z", bearer_token)
+
+```r
+update_collection(data_path = "data", end_tweets = "2020-05-10T00:00:00Z")
 ```
 
 ## Note on v2 Twitter API
