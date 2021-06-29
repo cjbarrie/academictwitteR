@@ -80,7 +80,7 @@ set_bearer()
 
 and enter authorization credentials as below:
 
-![](vignettes/files/TWITTER_BEARER.gif){width=100%}
+![](vignettes/files/TWITTER_BEARER.gif)
 
 This will mean that the bearer token is automatically called during API calls. It also avoids the inadvisable practice of hard-coding authorization credentials into scripts. 
 

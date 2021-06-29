@@ -53,8 +53,6 @@
 #'                      point_radius = c(-122.33795253639994, 47.60900846404393, 25),
 #'                      lang = "en")
 #'                      
-#' query <- build_query("الحراك", is_retweet = FALSE,
-#'                      country = "DZ")
 #' }
 #'
 #' @importFrom utils menu
