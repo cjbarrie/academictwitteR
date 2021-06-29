@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 This vignette provides an introduction to the R package `academictwitteR`. The package is useful solely for querying the Twitter Academic Research Product Track v2. API endpoint. 
 
-This version of the Twitter API allows researchers to access larger volumes of Twitter data. For more information on the the Twitter API, including how to apply for access to the Academic Research Product Track, see [here](https://developer.twitter.com/en/solutions/academic-research/products-for-researchers).
+This version of the Twitter API allows researchers to access larger volumes of Twitter data. For more information on the the Twitter API, including how to apply for access to the Academic Research Product Track, see the Twitter Developer platform.
 
 The following vignette will guide you through how to use the package.
 
@@ -27,11 +27,11 @@ We will begin by describing the thinking behind the development of this package 
 
 ## The Twitter Academic Research Product Track
 
-The Academic Research Product Track permits the user to access larger volumes of data, over a far longer time range, than was previously possible. From the Twitter [documentation](https://developer.twitter.com/en/solutions/academic-research/application-info):
+The Academic Research Product Track permits the user to access larger volumes of data, over a far longer time range, than was previously possible. From the Twitter release for the new track:
 
 > "The Academic Research product track includes full-archive search, as well as increased access and other v2 endpoints and functionality designed to get more precise and complete data for analyzing the public conversation, at no cost for qualifying researchers. Since the Academic Research track includes specialized, greater levels of access, it is reserved solely for non-commercial use".
 
-The new "v2 endpoints" refer to the v2 API, introduced around the same time as the new Academic Research Product Track. Full details of the v2 endpoints are available [here](https://developer.twitter.com/en/docs/twitter-api/early-access).
+The new "v2 endpoints" refer to the v2 API, introduced around the same time as the new Academic Research Product Track. Full details of the v2 endpoints are available on the Twitter Developer platform.
 
 In summary the Academic Research product track allows the authorized user:
 
