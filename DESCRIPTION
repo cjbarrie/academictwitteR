@@ -33,7 +33,7 @@ RoxygenNote: 7.1.1.9001
 Depends:
     R (>= 3.4)
 Imports: 
-    dplyr,
+    dplyr (>= 1.0.0),
     httr,
     jsonlite,
     magrittr,
