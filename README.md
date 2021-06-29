@@ -209,7 +209,7 @@ resume_collection(data_path = "data")
 If a previous data collection session is completed, you can use `update_collection()` to continue data collection with a new end date. This function is particularly useful for getting data for ongoing events. An example would be:
 
 ```r
-update_collection(data_path = "data", "2020-05-10T00:00:00Z")
+update_collection(data_path = "data", end_tweets = "2020-05-10T00:00:00Z")
 ```
 
 ## Note on v2 Twitter API
