@@ -1,3 +1,6 @@
+# academictwitteR 0.2.1
+* Fixed error 400 when fetching tweets with the context annotation field
+
 # academictwitteR 0.2.0
 
 * Support Likes lookup, followers, following, liked tweets, and liking user endpoints
