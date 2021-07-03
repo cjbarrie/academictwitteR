@@ -15,6 +15,7 @@ get_all_tweets(
   export_query = TRUE,
   bind_tweets = TRUE,
   page_n = 500,
+  context_annotations = FALSE,
   verbose = TRUE,
   ...
 )
@@ -39,6 +40,8 @@ get_all_tweets(
 \item{bind_tweets}{If \code{TRUE}, tweets captured are bound into a data.frame for assignment}
 
 \item{page_n}{integer, amount of tweets to be returned by per page}
+
+\item{context_annotations}{If \code{TRUE}, context_annotations will be fetched. Note it will limit the page_n to 100 due restrictions of Twitter API.}
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 
