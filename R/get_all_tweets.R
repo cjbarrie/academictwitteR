@@ -26,6 +26,7 @@
 #' @param export_query If `TRUE`, queries are exported to data_path
 #' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
 #' @param page_n integer, amount of tweets to be returned by per page
+#' @param context_annotations If `TRUE`, context_annotations will be fetched. Note it will limit the page_n to 100 due restrictions of Twitter API. 
 #' @param verbose If `FALSE`, query progress messages are suppressed
 #' @param ... arguments will be passed to `build_query()` function. See `?build_query()` for further information.
 #' 
@@ -66,6 +67,7 @@ get_all_tweets <-
            export_query = TRUE,
            bind_tweets = TRUE,
            page_n = 500,
+           context_annotations = FALSE,
            verbose = TRUE,
            ...) {    
     if (missing(start_tweets)) {
@@ -87,12 +89,16 @@ get_all_tweets <-
       "max_results" = page_n,
       "start_time" = start_tweets,
       "end_time" = end_tweets,
-      "tweet.fields" = "attachments,author_id,context_annotations,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld",
+      "tweet.fields" = "attachments,author_id,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld",
       "user.fields" = "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld",
       "expansions" = "author_id,entities.mentions.username,geo.place_id,in_reply_to_user_id,referenced_tweets.id,referenced_tweets.id.author_id",
       "place.fields" = "contained_within,country,country_code,full_name,geo,id,name,place_type"
     )
     endpoint_url <- "https://api.twitter.com/2/tweets/search/all"
+    
+    if (context_annotations){
+      params <- add_context_annotations(params, verbose) 
+    }
     
     .vcat(verbose, "query: ", params[["query"]], "\n")
     

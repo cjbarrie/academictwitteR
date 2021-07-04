@@ -10,11 +10,17 @@ test_that("defensive programming", {
 })
 
 
+## require(httptest)
+## start_capturing(simplify = FALSE)
+## get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", data_path = "../testdata/commtwitter")
+## stop_capturing()
+
+
 with_mock_api({
   test_that("params: default", {
     emptydir <- academictwitteR:::.gen_random_dir()
     ## "Normal" usage; at least the default
-    expect_error(w0 <- capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", )), NA)
+    expect_error(w0 <- capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z")), NA)
     unlink(emptydir, recursive = TRUE)
   })
   test_that("params: data_path", {

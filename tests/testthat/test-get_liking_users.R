@@ -18,5 +18,3 @@ with_mock_api({
     expect_lt(nrow(res2), 300) ## no page flipping
   })
 })
-
-

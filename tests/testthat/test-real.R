@@ -5,7 +5,7 @@ test_that("real test", {
       "max_results" = 500,
       "start_time" = "2020-06-20T00:00:00Z",
       "end_time" = "2020-06-21T00:00:00Z",
-      "tweet.fields" = "attachments,author_id,context_annotations,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld",
+      "tweet.fields" = "attachments,author_id,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld",
       "user.fields" = "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld",
       "expansions" = "author_id,entities.mentions.username,geo.place_id,in_reply_to_user_id,referenced_tweets.id,referenced_tweets.id.author_id",
       "place.fields" = "contained_within,country,country_code,full_name,geo,id,name,place_type"
@@ -21,7 +21,7 @@ test_that("real test", {
   emptydir <- academictwitteR:::.gen_random_dir()
   expect_error(w1 <- capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir)), NA)
   unlink(emptydir, recursive = TRUE)
-  ori_test <- "../testdata/commtwitter/"
-  user_ids <- unique(bind_tweets(ori_test, verbose = FALSE)$author_id)[c(6,7,9)]
-  expect_error(get_user_profile(x = user_ids), NA)
+  ## ori_test <- "../testdata/commtwitter/"
+  ## user_ids <- unique(bind_tweets(ori_test, verbose = FALSE)$author_id)[c(6,7,9)]
+  ## expect_error(get_user_profile(x = user_ids), NA)
 })
