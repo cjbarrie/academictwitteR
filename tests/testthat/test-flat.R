@@ -15,7 +15,8 @@ test_that("expected dimensionality", {
   x <- bind_tweets("../testdata/commtwitter", output_format = NA, verbose = FALSE)
   y <- bind_tweets("../testdata/commtwitter", output_format = "tidy")
   expect_equal(nrow(x), nrow(y))
-  expect_equal(colnames(y), c("tweet_id", "user_username", "text", "source", "lang", "possibly_sensitive", "created_at", "conversation_id", "author_id", "user_location", "user_verified", "user_url", "user_pinned_tweet_id", "user_name", "user_description", "user_protected", "user_profile_image_url", "user_created_at", "retweet_count", "like_count", "quote_count", "user_tweet_count", "user_list_count", "user_followers_count", "user_following_count", "sourcetweet_type", "sourcetweet_id", "sourcetweet_text", "sourcetweet_lang", "sourcetweet_author_id"))
+  expect_equal(colnames(y), c("tweet_id", "user_username", "text", "source", "conversation_id", "author_id", "created_at", "possibly_sensitive", "lang", "user_profile_image_url", "user_location", "user_url", "user_name", "user_pinned_tweet_id", "user_protected", "user_created_at", "user_verified", "user_description", "retweet_count", "like_count", "quote_count", "user_tweet_count", "user_list_count", "user_followers_count", "user_following_count", "sourcetweet_type", "sourcetweet_id", "sourcetweet_text", "sourcetweet_lang", 
+"sourcetweet_author_id"))
 })
 
 ## x <- get_all_tweets(build_query("#standwithhongkong", is_retweet = FALSE, is_quote = FALSE, is_reply = FALSE), n = 3000, start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-22T23:59:59Z", data_path = "../testdata/hk")
@@ -47,4 +48,3 @@ test_that("corner cases", {
   ori <- bind_tweets("../testdata/hk3", verbose = FALSE)
   expect_equal(nrow(res), nrow(ori))  
 })
-

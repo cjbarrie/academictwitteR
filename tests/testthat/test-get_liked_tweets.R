@@ -14,5 +14,3 @@ with_mock_api({
     expect_equal(nrow(readRDS("../testdata/liked_tweets.RDS")), nrow(res))
   })
 })
-
-

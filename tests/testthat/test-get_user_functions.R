@@ -3,7 +3,7 @@
 ## require(httptest)
 ## start_capturing(simplify = FALSE)
 ## ori_test <- "../testdata/commtwitter/"
-## user_ids <- unique(bind_tweets(ori_test, verbose = FALSE)$author_id)[c(6,7,9)]
+## user_ids <- unique(bind_tweets(ori_test, verbose = FALSE)$author_id)[c(1,2,3)]
 ## res <- get_user_profile(x = user_ids)
 ## saveRDS(res, "../testdata/user_profiles.RDS")
 ## stop_capturing()
@@ -22,7 +22,7 @@
 with_mock_api({
   test_that("get_user_profile: expected behaviour", {
     ori_test <- "../testdata/commtwitter/"
-    user_ids <- unique(bind_tweets(ori_test, verbose = FALSE)$author_id)[c(6,7,9)]
+    user_ids <- unique(bind_tweets(ori_test, verbose = FALSE)$author_id)[c(1,2,3)]
     res <- get_user_profile(x = user_ids)
     expect_equal(readRDS("../testdata/user_profiles.RDS"), res)
   })
@@ -31,7 +31,7 @@ with_mock_api({
 with_mock_api({
   test_that("get_user_following: expected behaviour", {
     ori_test <- "../testdata/commtwitter/"
-    user_ids <- unique(bind_tweets(ori_test, verbose = FALSE)$author_id)[c(6,7,9)]
+    user_ids <- unique(bind_tweets(ori_test, verbose = FALSE)$author_id)[c(1,2,3)]
     res <- get_user_following(x = user_ids)
     expect_equal(nrow(readRDS("../testdata/user_following.RDS")), nrow(res))
   })
@@ -40,7 +40,7 @@ with_mock_api({
 with_mock_api({
   test_that("get_user_following: expected behaviour", {
     ori_test <- "../testdata/commtwitter/"
-    user_ids <- unique(bind_tweets(ori_test, verbose = FALSE)$author_id)[c(6,7,9)]
+    user_ids <- unique(bind_tweets(ori_test, verbose = FALSE)$author_id)[c(1,2,3)]
     res <- get_user_followers(x = user_ids)
     expect_equal(nrow(readRDS("../testdata/user_followers.RDS")), nrow(res))
   })
