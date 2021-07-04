@@ -29,7 +29,7 @@
 #' # bind json files in the directory "data" into a "tidy" data frame / tibble
 #' bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy")
 #' }
-bind_tweets <- function(data_path, user = FALSE, user_part = "users", verbose = TRUE, output_format = NA) {
+bind_tweets <- function(data_path, user = FALSE, verbose = TRUE, output_format = NA) {
   if (!is.na(output_format)) {
     return(.flat(data_path, output_format = output_format))
   }
@@ -46,7 +46,7 @@ bind_tweets <- function(data_path, user = FALSE, user_part = "users", verbose = 
     filename <- files[[i]]
     json.df <- jsonlite::read_json(filename, simplifyVector = TRUE)
     if (user) {
-      json.df <- json.df[[user_part]]
+      json.df <- json.df$users
     }
     json.df.all <- dplyr::bind_rows(json.df.all, json.df)
     if (verbose) {
