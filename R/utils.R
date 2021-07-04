@@ -369,7 +369,7 @@ add_query_prefix <- function(x, prefix){
 add_context_annotations <- function(params, verbose){
   if(params[["max_results"]] > 100){
     params[["max_results"]] <- 100
-    .vcat(verbose, "page_n is limited to 100 due to the restriction imposed by Twitter API")
+    .vcat(verbose, "page_n is limited to 100 due to the restriction imposed by Twitter API\n")
   }
   params[["tweet.fields"]] <- "attachments,author_id,context_annotations,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld"
   params
