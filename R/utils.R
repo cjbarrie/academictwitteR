@@ -10,8 +10,7 @@ make_query <- function(url, params, bearer_token, max_error = 4, verbose = TRUE)
     if (!status_code %in% c(200, 429, 503)) {
       stop(paste("something went wrong. Status code:", httr::status_code(r)))
     }
-    if (httr::headers(r)$`x-rate-limit-remaining` == "1") {
-      .vwarn(verbose, paste("x-rate-limit-remaining=1. Resets at", .check_reset(r)))
+    if (.check_header_rate_limit(r, verbose = verbose)) {
       count <- count + 1
     }
     if (status_code == 200) {
@@ -94,151 +93,6 @@ get_tweets <- function(params, endpoint_url, page_token_name = "next_token", n, 
     .vcat(verbose, "Data stored as JSONs: use bind_tweets function to bundle into data.frame")
   }
 }
-
-
-## get_tweets <- function(q="",page_n=500,start_time,end_time,token,next_token="", verbose = TRUE){
-##   # if(n>500){
-##   #   warning("n too big. Using 500 instead")
-##   #   n <- 500
-##   # }
-##   # if(n<5){
-##   #   warning("n too small Using 10 instead")
-##   #   n <- 500
-##   # }
-##   if(missing(start_time)){
-##     stop("start time must be specified.")
-##   }
-##   if(missing(end_time)){
-##     stop("end time must be specified.")
-##   }
-##   if(missing(token)){
-##     stop("bearer token must be specified.")  
-##   }
-##   if(substr(token,1,7)=="Bearer "){
-##     bearer <- token
-##   } else{
-##     bearer <- paste0("Bearer ",token)
-##   }
-##   #endpoint
-##   url <- "https://api.twitter.com/2/tweets/search/all"
-##   #parameters
-##   params <- list(
-##     "query" = q,
-##     "max_results" = page_n,
-##     "start_time" = start_time,
-##     "end_time" = end_time, 		
-##     "tweet.fields" = "attachments,author_id,context_annotations,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld",
-##     "user.fields" = "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld",
-##     "expansions" = "author_id,entities.mentions.username,geo.place_id,in_reply_to_user_id,referenced_tweets.id,referenced_tweets.id.author_id",
-##     "place.fields" = "contained_within,country,country_code,full_name,geo,id,name,place_type"
-##   )
-##   if(next_token!=""){
-##     params[["next_token"]] <- next_token
-##   }
-##   r <- httr::GET(url,httr::add_headers(Authorization = bearer),query=params)
-  
-##   #fix random 503 errors
-##   count <- 0
-##   while(httr::status_code(r)==503 & count<4){
-##     r <- httr::GET(url,httr::add_headers(Authorization = bearer),query=params)
-##     count <- count+1
-##     Sys.sleep(count*5)
-##   }
-##   if(httr::status_code(r)==429){
-##     .vcat(verbose, "Rate limit reached, sleeping... \n")
-##     Sys.sleep(900)
-##     r <- httr::GET(url,httr::add_headers(Authorization = bearer),query=params)
-##   }
-  
-##   if(httr::status_code(r)!=200){
-##     stop(paste("something went wrong. Status code:", httr::status_code(r)))
-##   }
-##   if(httr::headers(r)$`x-rate-limit-remaining`=="1"){
-##     .vwarn(verbose, paste("x-rate-limit-remaining=1. Resets at",as.POSIXct(as.numeric(httr::headers(r)$`x-rate-limit-reset`), origin="1970-01-01")))
-##   }
-##   dat <- jsonlite::fromJSON(httr::content(r, "text"))
-##   dat
-## }
-
-# fetch_data <- function(built_query, data_path, file, bind_tweets, start_tweets, end_tweets, bearer_token = get_bearer(), n, page_n, verbose){
-#   nextoken <- ""
-#   df.all <- data.frame()
-#   toknum <- 0
-#   ntweets <- 0
-#   while (!is.null(nextoken)) {
-#     df <-
-#       get_tweets(
-#         q = built_query,
-#         page_n = page_n,
-#         start_time = start_tweets,
-#         end_time = end_tweets,
-#         bearer_token = bearer_token,
-#         next_token = nextoken
-#       )
-#     if (is.null(data_path)) {
-#       # if data path is null, generate data.frame object within loop
-#       df.all <- dplyr::bind_rows(df.all, df$data)
-#     }
-# 
-#     if (!is.null(data_path) & is.null(file) & bind_tweets == F) {
-#       df_to_json(df, data_path)
-#     }
-#     if (!is.null(data_path)) {
-#       df_to_json(df, data_path)
-#       df.all <-
-#         dplyr::bind_rows(df.all, df$data) #and combine new data with old within function
-#     }
-#     
-#     nextoken <-
-#       df$meta$next_token #this is NULL if there are no pages left
-#     toknum <- toknum + 1
-#     if (is.null(df$data)) {
-#       n_newtweets <- 0
-#     } else {
-#       n_newtweets <- nrow(df$data)
-#     }
-#     ntweets <- ntweets + n_newtweets
-#     .vcat(verbose, 
-#         "query: <",
-#         built_query,
-#         ">: ",
-#         "(tweets captured this page: ",
-#         n_newtweets,
-#         "). Total pages queried: ",
-#         toknum,
-#         ". Total tweets ingested: ",
-#         ntweets, 
-#         ". \n",
-#         sep = ""
-#         )
-#     if (ntweets > n){ # Check n
-#       df.all <- df.all[1:n,] # remove extra
-#       .vcat(verbose, "Total tweets ingested now exceeds ", n, ": finishing collection.\n")
-#       break
-#     }
-#     if (is.null(nextoken)) {
-#       .vcat(verbose, "This is the last page for", built_query, ": finishing collection.\n")
-#       break
-#     }
-#   }
-#   
-#   if (is.null(data_path) & is.null(file)) {
-#     return(df.all) # return to data.frame
-#   }
-#   if (!is.null(file)) {
-#     saveRDS(df.all, file = file) # save as RDS
-#     return(df.all) # return data.frame
-#   }
-#   
-#   if (!is.null(data_path) & bind_tweets) {
-#     return(df.all) # return data.frame
-#   }
-#   
-#   if (!is.null(data_path) &
-#       is.null(file) & !bind_tweets) {
-#     .vcat(verbose, "Data stored as JSONs: use bind_tweets function to bundle into data.frame")
-#   }
-# }
 
 check_bearer <- function(bearer_token){
   if(missing(bearer_token)){
@@ -373,4 +227,18 @@ add_context_annotations <- function(params, verbose){
   }
   params[["tweet.fields"]] <- "attachments,author_id,context_annotations,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld"
   params
+}
+
+
+## prophylatic solution to #192
+.check_header_rate_limit <- function(r, verbose) {
+  if (is.null(httr::headers(r)$`x-rate-limit-remaining`)) {
+    return(FALSE)
+  }
+  if (httr::headers(r)$`x-rate-limit-remaining` == "1") {
+    .vwarn(verbose, paste("x-rate-limit-remaining=1. Resets at", .check_reset(r)))
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
 }
