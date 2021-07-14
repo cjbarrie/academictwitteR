@@ -68,8 +68,6 @@ When collecting large amounts of data, we recommend the workflow described below
 
 ## Authorization
 
-**The following demo refers to the development version of the package**.
-
 The first task is set authorization credentials with the `set_bearer()` function, which allows the user to store their bearer token in the .Renviron file.
 
 To do so, use:
