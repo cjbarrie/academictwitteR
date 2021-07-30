@@ -2,9 +2,12 @@
 % Please edit documentation in R/bind_tweets.R
 \name{bind_tweets}
 \alias{bind_tweets}
+\alias{convert_json}
 \title{Bind information stored as JSON files}
 \usage{
 bind_tweets(data_path, user = FALSE, verbose = TRUE, output_format = NA)
+
+convert_json(data_file, output_format = "tidy")
 }
 \arguments{
 \item{data_path}{string, file path to directory of stored tweets data saved as data_\emph{id}.json and users_\emph{id}.json}
@@ -18,15 +21,17 @@ bind_tweets(data_path, user = FALSE, verbose = TRUE, output_format = NA)
 \item{"raw"}{List of data frames; Note: not all data frames are in Boyce-Codd 3rd Normal Form}
 \item{"tidy"}{Tidy format; all essential columns are available}
 }}
+
+\item{data_file}{string, a single file path to a JSON file; or a vector of file paths to JSON files of stored tweets data saved as data_\emph{id}.json}
 }
 \value{
 a data.frame containing either tweets or user information
 }
 \description{
-This function binds information stored as JSON files.
+This function binds information stored as JSON files. The experimental function \code{convert_json} converts individual JSON files into either "raw" or "tidy" format.
 }
 \details{
-By default, it binds into a data frame containing tweets (from data_\emph{id}.json files).
+By default, \code{bind_tweets} binds into a data frame containing tweets (from data_\emph{id}.json files).
 
 If users is TRUE, it binds into a data frame containing user information (from users_\emph{id}.json).
 }
