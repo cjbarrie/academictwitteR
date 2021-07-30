@@ -28,7 +28,7 @@ convert_json(data_file, output_format = "tidy")
 a data.frame containing either tweets or user information
 }
 \description{
-This function binds information stored as JSON files. The experimental function \code{convert_json} converts individual JSON files to either "raw" or "tidy" format.
+This function binds information stored as JSON files. The experimental function \code{convert_json} converts individual JSON files into either "raw" or "tidy" format.
 }
 \details{
 By default, \code{bind_tweets} binds into a data frame containing tweets (from data_\emph{id}.json files).

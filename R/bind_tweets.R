@@ -1,6 +1,6 @@
 #' Bind information stored as JSON files
 #'
-#' This function binds information stored as JSON files. The experimental function `convert_json` converts individual JSON files to either "raw" or "tidy" format. 
+#' This function binds information stored as JSON files. The experimental function `convert_json` converts individual JSON files into either "raw" or "tidy" format. 
 #' 
 #' By default, `bind_tweets` binds into a data frame containing tweets (from data_*id*.json files). 
 #' 
