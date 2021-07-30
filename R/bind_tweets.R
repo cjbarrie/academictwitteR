@@ -1,8 +1,8 @@
 #' Bind information stored as JSON files
 #'
-#' This function binds information stored as JSON files. 
+#' This function binds information stored as JSON files. The experimental function `convert_json` converts individual JSON files to either "raw" or "tidy" format. 
 #' 
-#' By default, it binds into a data frame containing tweets (from data_*id*.json files). 
+#' By default, `bind_tweets` binds into a data frame containing tweets (from data_*id*.json files). 
 #' 
 #' If users is TRUE, it binds into a data frame containing user information (from users_*id*.json). 
 #'
@@ -74,18 +74,20 @@ ls_files <- function(data_path, pattern) {
   return(files)
 }
 
+#' @param data_file string, a single file path to a JSON file; or a vector of file paths to JSON files of stored tweets data saved as data_*id*.json
+#' @export
+#' @rdname bind_tweets
 #' @importFrom rlang .data
-.flat <- function(data_path, output_format = "tidy") {
+convert_json <- function(data_file, output_format = "tidy") {
   if (!output_format %in% c("tidy", "raw")) {
     stop("Unknown format.", call. = FALSE)
   }
-  aux_files <- ls_files(data_path, "^users_")
-  data_files <- ls_files(data_path, "^data_")
-  tweet_data <- .gen_raw(purrr::map_dfr(data_files, ~jsonlite::read_json(., simplifyVector = TRUE)))
+  tweet_data <- tweet_data <- .gen_raw(purrr::map_dfr(data_file, ~jsonlite::read_json(., simplifyVector = TRUE)))
   names(tweet_data) <- paste0("tweet.", names(tweet_data))
-  user_data <- .gen_raw(purrr::map_dfr(aux_files, ~jsonlite::read_json(., simplifyVector = TRUE)$users), pki_name = "author_id")
+  aux_file <- .gen_aux_filename(data_file)
+  user_data <- .gen_raw(purrr::map_dfr(aux_file, ~jsonlite::read_json(., simplifyVector = TRUE)$users), pki_name = "author_id")
   names(user_data) <- paste0("user.", names(user_data))
-  sourcetweet_data <- list(main = purrr::map_dfr(aux_files, ~jsonlite::read_json(., simplifyVector = TRUE)$tweets))
+  sourcetweet_data <- list(main = purrr::map_dfr(aux_file, ~jsonlite::read_json(., simplifyVector = TRUE)$tweets))
   names(sourcetweet_data) <- paste0("sourcetweet.", names(sourcetweet_data))
   ## raw
   raw <- c(tweet_data, user_data, sourcetweet_data)
@@ -122,6 +124,22 @@ ls_files <- function(data_path, pattern) {
     res <- dplyr::relocate(res, .data$tweet_id, .data$user_username, .data$text)
     return(tibble::as_tibble(res))
   }
+}
+
+.gen_aux_filename <- function(data_filename) {
+  ids <- gsub("[^0-9]+", "" , basename(data_filename))
+  return(file.path(dirname(data_filename), paste0("users_", ids, ".json")))
+}
+
+.flat <- function(data_path, output_format = "tidy") {
+  if (!output_format %in% c("tidy", "raw")) {
+    stop("Unknown format.", call. = FALSE)
+  }
+  data_files <- ls_files(data_path, "^data_")
+  if (output_format == "raw") {
+    return(convert_json(data_files, output_format = "raw"))
+  }
+  return(purrr::map_dfr(data_files, convert_json, output_format = output_format))
 }
 
 .gen_raw <- function(df, pkicol = "id", pki_name = "tweet_id") {
