@@ -82,7 +82,7 @@ convert_json <- function(data_file, output_format = "tidy") {
   if (!output_format %in% c("tidy", "raw")) {
     stop("Unknown format.", call. = FALSE)
   }
-  tweet_data <- tweet_data <- .gen_raw(purrr::map_dfr(data_file, ~jsonlite::read_json(., simplifyVector = TRUE)))
+  tweet_data <- .gen_raw(purrr::map_dfr(data_file, ~jsonlite::read_json(., simplifyVector = TRUE)))
   names(tweet_data) <- paste0("tweet.", names(tweet_data))
   aux_file <- .gen_aux_filename(data_file)
   user_data <- .gen_raw(purrr::map_dfr(aux_file, ~jsonlite::read_json(., simplifyVector = TRUE)$users), pki_name = "author_id")
