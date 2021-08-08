@@ -41,9 +41,11 @@ get_retweeted_by <-
 
       # Get tweets
       new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, n = Inf, file = file, bearer_token = bearer_token, 
-                 export_query = FALSE, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose)
-      new_rows$from_tweet_id <- x[i]
-      new_df <- dplyr::bind_rows(new_df, new_rows) # add new rows
+                             export_query = FALSE, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose)
+      if (nrow(new_rows) > 0) {
+        new_rows$from_tweet_id <- x[i]
+        new_df <- dplyr::bind_rows(new_df, new_rows) # add new rows
+      }
     }
     new_df # return the df
   }
