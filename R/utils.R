@@ -185,7 +185,13 @@ create_storage_dir <- function(data_path, export_query, built_query, start_tweet
   reset_time <- .check_reset(r, tzone = tzone)
   ## add 1s as buffer
   sleep_period <- ceiling(as.numeric(reset_time - ref_time, units = "secs")) + 1
-  .vcat(verbose, "Rate limit reached. Rate limit will reset at", as.character(reset_time) ,"\nSleeping for", sleep_period ,"seconds. \n")
+  if (sleep_period < 0) {
+    ## issue #213
+    .vcat(verbose, "Rate limit reached. Cannot estimate adaptive sleep time. Sleeping for 900 seconds. \n")
+    sleep_period <- 900
+  } else {
+    .vcat(verbose, "Rate limit reached. Rate limit will reset at", as.character(reset_time) ,"\nSleeping for", sleep_period ,"seconds. \n")
+  }
   if (verbose) {
     pb <- utils::txtProgressBar(min = 0, max = sleep_period, initial = 0)
     for (i in seq_len(sleep_period)) {

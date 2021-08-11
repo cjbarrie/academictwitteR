@@ -17,3 +17,13 @@ test_that("test .trigger_sleep", {
     academictwitteR:::.trigger_sleep(r, ref_time = as.POSIXlt("2021-06-25 11:50:36", tz = "UTC"), verbose = FALSE, really_sleep = TRUE, tzone = "UTC")
   })
 })
+
+test_that("disable adaptive sleeping if ref_time is later than reset_time in r, #213", {
+  r <- readRDS("../testdata/rate_limit_res.RDS")
+  expect_snapshot({
+    academictwitteR:::.trigger_sleep(r, ref_time = as.POSIXlt("2021-06-25 11:50:40", tz = "UTC"), verbose = TRUE, really_sleep = FALSE, tzone = "UTC")
+  })
+  expect_snapshot({
+    academictwitteR:::.trigger_sleep(r, ref_time = as.POSIXlt("2021-06-25 11:50:40", tz = "UTC"), verbose = FALSE, really_sleep = FALSE, tzone = "UTC")
+  })
+})
