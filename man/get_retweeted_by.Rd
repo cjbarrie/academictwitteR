@@ -7,10 +7,7 @@
 get_retweeted_by(
   x,
   bearer_token = get_bearer(),
-  file = NULL,
   data_path = NULL,
-  export_query = TRUE,
-  bind_tweets = TRUE,
   verbose = TRUE
 )
 }
@@ -19,13 +16,7 @@ get_retweeted_by(
 
 \item{bearer_token}{string, bearer token}
 
-\item{file}{string, name of the resulting RDS file}
-
 \item{data_path}{string, if supplied, fetched data can be saved to the designated path as jsons}
-
-\item{export_query}{If \code{TRUE}, queries are exported to data_path}
-
-\item{bind_tweets}{If \code{TRUE}, tweets captured are bound into a data.frame for assignment}
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 }
