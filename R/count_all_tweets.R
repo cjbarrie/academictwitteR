@@ -69,5 +69,5 @@ count_all_tweets <-
     
     # Get tweets
     get_tweets(params = params, endpoint_url = endpoint_url, n = n, file = file, bearer_token = bearer_token, 
-               export_query = export_query, data_path = data_path, bind_tweets = TRUE, verbose = verbose)
+               export_query = export_query, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose)
   }
