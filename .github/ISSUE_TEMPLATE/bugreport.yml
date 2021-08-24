@@ -36,7 +36,6 @@ body:
     description: Please use `reprex::reprex()` to create [an reproducible example](https://reprex.tidyverse.org/), if possible.
     placeholder: |
       paste the output from `reprex::reprex()` here
-    render: markdown
   validations:
     required: true
 - type: textarea
@@ -45,7 +44,6 @@ body:
     description: Please run `sessionInfo()` and copy the result here.
     placeholder: |
       paste the output from `sessionInfo()` here
-    render: markdown
   validations:
     required: true
 - type: textarea
