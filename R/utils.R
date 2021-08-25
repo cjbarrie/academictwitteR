@@ -5,7 +5,12 @@ make_query <- function(url, params, bearer_token, max_error = 4, verbose = TRUE)
     if (count >= max_error) {
       stop("Too many errors.")
     }
+    pre_time <- Sys.time()
     r <- httr::GET(url, httr::add_headers(Authorization = bearer_token), query = params)
+    time_diff <- as.numeric(Sys.time() - pre_time)
+    if (time_diff < 1) { ## To prevent #231
+      Sys.sleep(1)
+    }
     status_code <- httr::status_code(r)
     if (!status_code %in% c(200, 429, 503)) {
       stop(paste("something went wrong. Status code:", httr::status_code(r)))
