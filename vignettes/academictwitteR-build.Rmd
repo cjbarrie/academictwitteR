@@ -203,6 +203,39 @@ tweets <-
 
 This is the equivalent of the OR operator logics detailed by Twitter [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query).
 
+Note that the "AND" operator is implicit when specifying more than one character string in the query. Thus, when searching for all elements of a character string, a call may look like:
+
+```{r, eval=F}
+
+tweets <- get_all_tweets(
+  query = c("twitter social"),
+  users = c("cbarrie", "jack"),
+  start_tweets = "2020-01-01T00:00:00Z",
+  end_tweets = "2020-05-01T00:00:00Z",
+  n = 1000
+)
+
+```
+
+, which will capture tweets containing *both* the words "twitter" and "social." The same logics apply for hashtag queries.
+
+Finally, we can search for *exact* phrases by using an additional optional parameter `exact_phrase`. So, if we wanted to search tweets containing, for example, the exact phrase "Black Lives Matter," we could do the following:
+
+```{r, eval = F}
+
+tweets <-
+  get_all_tweets(
+    query = "Black Lives Matter",
+    exact_phrase = T,
+    start_tweets = "2021-01-04T00:00:00Z",
+    end_tweets = "2021-01-04T00:45:00Z",
+    n = Inf
+  )
+
+```
+
+## Checking your query
+
 When building your query you can also check the query you are building separately with the `build_query()`, which is called inside the `get_all_tweets()` function. 
 
 So, the above query focusing on Seattle is querying the following, which we can build separately as so:
@@ -220,22 +253,6 @@ build_query(
 ```
 
 Here we can see and check the format of the query sent to the Twitter API. 
-
-Note that the "AND" operator is implicit when specifying more than one character string in the query. See [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query) for information on building queries for search tweets. 
-
-As such, if we wanted to search for tweets containing all the words "dog" and "cat" then we would do the following:
-
-```{r, eval = F}
-
-tweets <-
-  get_all_tweets(
-    query = c("dog cat"),
-    start_tweets = "2019-12-31T10:00:00Z",
-    end_tweets = "2020-01-01T10:00:00Z"
-  )
-
-```
-
 
 ## Getting user tweets
 

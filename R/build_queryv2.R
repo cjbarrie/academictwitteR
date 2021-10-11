@@ -9,10 +9,10 @@
 #' a character object query string to be input as query parameter to \code{\link{get_all_tweets}}.
 #'
 #' @param query string or character vector, search query or queries
-#' @param exact_phrase If `TRUE`, only tweets will be returned matching the exact phrase
 #' @param users string or character vector, user handles to collect tweets from the specified users
 #' @param reply_to string or character vector, user handles to collect replies to the specified users
 #' @param retweets_of string or character vector, user handles to collects retweets of tweets by the specified users
+#' @param exact_phrase If `TRUE`, only tweets will be returned matching the exact phrase
 #' @param exclude string or character vector, tweets containing the keyword(s) will be excluded
 #' 
 #' @param is_retweet If `TRUE`, only retweets will be returned; if `FALSE`, retweets will be excluded; if `NULL`, both retweets and other tweet types will be returned.
