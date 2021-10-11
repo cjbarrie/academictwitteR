@@ -24,7 +24,7 @@ get_retweeted_by(
 a data frame
 }
 \description{
-This function fetches users who has retweeted a tweet
+This function fetches users who retweeted a tweet
 }
 \examples{
 \dontrun{

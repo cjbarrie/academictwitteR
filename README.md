@@ -167,6 +167,36 @@ get_all_tweets(
 
 , which will capture tweets containing *both* the words "twitter" and "social." The same logics apply for hashtag queries.
 
+Whereas if we specify our query as separate elements of a character vector like this:
+
+```r
+
+get_all_tweets(
+  query = c("twitter", "social"),
+  users = c("cbarrie", "jack"),
+  start_tweets = "2020-01-01T00:00:00Z",
+  end_tweets = "2020-05-01T00:00:00Z",
+  n = 1000
+)
+
+```
+, this will be capturing tweets by users @cbarrie or @jack containing the words "twitter" *or* social. 
+
+Finally, we may wish to query an exact phrase. To do so, we can either input the phrase in escape quotes, e.g., `query ="\"Black Lives Matter\""` or we can use the optional parameter `exact_phrase = T` (in devt. version) to search for tweets containing the exact phrase string:
+
+```r
+
+tweets <-
+  get_all_tweets(
+    query = "Black Lives Matter",
+    exact_phrase = T,
+    start_tweets = "2021-01-04T00:00:00Z",
+    end_tweets = "2021-01-04T00:45:00Z",
+    n = Inf
+  )
+
+```
+
 See the vignette documentation `vignette("academictwitteR-build")` for further information on building more complex API calls.
 
 ## Data storage

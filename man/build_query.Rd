@@ -9,6 +9,7 @@ build_query(
   users = NULL,
   reply_to = NULL,
   retweets_of = NULL,
+  exact_phrase = NULL,
   exclude = NULL,
   is_retweet = NULL,
   is_reply = NULL,
@@ -40,6 +41,8 @@ build_query(
 \item{reply_to}{string or character vector, user handles to collect replies to the specified users}
 
 \item{retweets_of}{string or character vector, user handles to collects retweets of tweets by the specified users}
+
+\item{exact_phrase}{If \code{TRUE}, only tweets will be returned matching the exact phrase}
 
 \item{exclude}{string or character vector, tweets containing the keyword(s) will be excluded}
 

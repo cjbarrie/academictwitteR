@@ -1,6 +1,6 @@
 #' Get users who has retweeted a tweet
 #' 
-#' This function fetches users who has retweeted a tweet
+#' This function fetches users who retweeted a tweet
 #'
 #' @param x string containing one tweet id or a vector of tweet ids
 #' @param bearer_token string, bearer token
