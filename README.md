@@ -251,15 +251,15 @@ For more information on the parameters and fields available from the v2 Twitter 
 | Arguments   |     Description      |
 |----------|:-------------:|
 |query | Search query or queries e.g. "cat"
-|exclude | Tweets containing the keyword(s) will be excluded "grumpy" e.g.
+|exact_phrase | If `TRUE`, only tweets will be returned matching the exact phrase
+|users | string or character vector, user handles to collect tweets from the specified users
+|reply_to | string or character vector, user handles to collect replies to the specified users
+|retweets_of| string or character vector, user handles to collects retweets of tweets by the specified users
+|exclude | string or character vector, tweets containing the keyword(s) will be excluded
 |is_retweet | If `TRUE`, only retweets will be returned; if `FALSE`, retweets will not be returned, only tweets will be returned; if `NULL`, both retweets and tweets will be returned.
 |is_reply | If `TRUE`, only reply tweets will be returned
 |is_quote | If `TRUE`, only quote tweets will be returned
 |is_verified |If `TRUE`, only tweets whose authors are verified by Twitter will be returned
-|place | Name of place e.g. "London"
-|country | Name of country as ISO alpha-2 code e.g. "GB"
-|point_radius | A vector of two point coordinates latitude, longitude, and point radius distance (in miles)
-|bbox | A vector of four bounding box coordinates from west longitude to north latitude
 |remove_promoted | If `TRUE`, tweets created for promotion only on ads.twitter.com are removed
 |has_hashtags | If `TRUE`, only tweets containing hashtags will be returned
 |has_cashtags | If `TRUE`, only tweets containing cashtags will be returned
@@ -269,7 +269,13 @@ For more information on the parameters and fields available from the v2 Twitter 
 |has_images |If `TRUE`, only tweets containing a recognized URL to an image will be returned
 |has_videos |If `TRUE`, only tweets containing contain native Twitter videos, uploaded directly to Twitter will be returned
 |has_geo |If `TRUE`, only tweets containing Tweet-specific geolocation data provided by the Twitter user will be returned
+|place | Name of place e.g. "London"
+|country | Name of country as ISO alpha-2 code e.g. "GB"
+|point_radius | A vector of two point coordinates latitude, longitude, and point radius distance (in miles)
+|bbox | A vector of four bounding box coordinates from west longitude to north latitude
 |lang | A single BCP 47 language identifier e.g. "fr"
+|url | string, return tweets containing specified url
+|conversation_id| string, return tweets that share the specified conversation ID
 
 
 ## Acknowledgements
