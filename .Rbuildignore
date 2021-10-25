@@ -35,6 +35,7 @@ cran-comments.md
 ^tests/testthat/test-context_annotations\.R
 ^tests/testthat/test-missing_header\.R
 ^tests/testthat/test-issue213\.R
+^tests/testthat/test-exact\.R
 ^tests/testthat/_snap
 ^tests/testdata/.+\.RDS
 ^tests/testdata/hk
