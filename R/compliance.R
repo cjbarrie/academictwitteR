@@ -30,6 +30,15 @@ create_compliance_job <- function(file,
   }
 }
 
+#' List Compliance Jobs
+#' @return output
+#' @export
+list_compliance_job <-function(type = "tweets", bearer_token = get_bearer()){
+  make_query("https://api.twitter.com/2/compliance/jobs",
+             params = list("type" = type), 
+             bearer_token = bearer_token)
+}
+
 #' Get Compliance Result
 #' @return output
 #' @export
