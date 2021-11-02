@@ -7,11 +7,11 @@
 get_user_id(usernames, bearer_token = get_bearer(), all = FALSE)
 }
 \arguments{
+\item{usernames}{string containing the screen name of the user}
+
 \item{bearer_token}{string, bearer token}
 
 \item{all}{logic, default FALSE. Set TRUE for getting also the screen name}
-
-\item{username}{string containing the screen name of the user}
 }
 \value{
 default a string vector with the id of each of the users.

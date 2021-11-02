@@ -2,7 +2,7 @@
 #' 
 #' This function get the user ID given a user name.
 #'
-#' @param username string containing the screen name of the user
+#' @param usernames string containing the screen name of the user
 #' @param bearer_token string, bearer token
 #' @param all logic, default FALSE. Set TRUE for getting also the screen name
 #'
@@ -31,11 +31,10 @@ get_user_id <- function(usernames, bearer_token = get_bearer(), all = FALSE){
 
   dat <- dat[[1]] # results are returned in a list
   
-  if(all) return(dat)
-  else {
-    ids <- dat$id
-    names(ids) <- usernames
-    return(ids)
+  if (all) {
+    return(dat)
   }
-  
+  ids <- dat$id
+  names(ids) <- usernames
+  return(ids)
 }
