@@ -4,21 +4,27 @@
 \alias{get_user_id}
 \title{Get user id}
 \usage{
-get_user_id(usernames, bearer_token = get_bearer(), all = FALSE)
+get_user_id(
+  usernames,
+  bearer_token = get_bearer(),
+  all = FALSE,
+  keep_na = TRUE
+)
 }
 \arguments{
-\item{usernames}{string containing the screen name of the user}
+\item{usernames}{character vector containing screen names to be queried}
 
 \item{bearer_token}{string, bearer token}
 
-\item{all}{logic, default FALSE. Set TRUE for getting also the screen name}
+\item{all}{logical, default FALSE to get a character vector of user IDs. Set it to TRUE to get a data frame, see below}
+
+\item{keep_na}{logical, default TRUE to keep usernames that cannot be queried. Set it to TRUE to exclude those usernames. Only useful when all is FALSE}
 }
 \value{
-default a string vector with the id of each of the users.
-If all = TRUE a data.frame with the id, name (showed on the screen) and username
+a string vector with the id of each of the users unless all = TRUE. If all = TRUE, a data.frame with ids, names (showed on the screen) and usernames is returned.
 }
 \description{
-This function get the user ID given a user name.
+This function get the user IDs (e.g. 1349149096909668363) of given usernames, e.g. "potus".
 }
 \examples{
 \dontrun{
