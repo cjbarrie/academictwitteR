@@ -36,6 +36,7 @@ cran-comments.md
 ^tests/testthat/test-missing_header\.R
 ^tests/testthat/test-issue213\.R
 ^tests/testthat/test-exact\.R
+^tests/testthat/test-get_user_id\.R
 ^tests/testthat/_snap
 ^tests/testdata/.+\.RDS
 ^tests/testdata/hk
