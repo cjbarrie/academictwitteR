@@ -1,3 +1,6 @@
+# academictwitteR 0.3.0
+* Added support for batch compliance
+
 # academictwitteR 0.2.1
 * Fixed error 400 when fetching tweets with the context annotation field
 
