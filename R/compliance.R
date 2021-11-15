@@ -9,18 +9,28 @@ post_query <- function(url, params, bearer_token = get_bearer(), verbose = TRUE)
 }
 
 #' Create Compliance Job
+#'
+#' This function creates a new compliance job and upload the Tweet IDs or user IDs.
+#' 
+#' @param file a text file, each line contains a Tweet ID or user ID.
+#' @param type the type of the job, whether "tweets" or "users".
+#' @param bearer_token string, bearer token
+#' 
 #' @return 
 #' @export
+#' 
+#' @examples
+#' \dontrun{
+#' create_compliance_job("tweetids.txt", "tweets")
+#' }
 create_compliance_job <- function(file,
                                   type,
-                                  bearer_token = get_bearer(),
-                                  verbose = TRUE){
+                                  bearer_token = get_bearer()){
   r <- post_query(url = "https://api.twitter.com/2/compliance/jobs",
                   bearer_token,
                   params = list("type" = type))
-  rcontent <- jsonlite::fromJSON(httr::content(r, "text"))$data$upload_url
-  print(rcontent)
-  cat("Job ID: ", rcontent$data$id)
+  rcontent <- jsonlite::fromJSON(httr::content(r, "text"))
+  cat("Job ID: ", rcontent$data$id, "\n")
   r <- httr::PUT(rcontent$data$upload_url,
                  body = httr::upload_file(file))
   if(r$status_code == 200){
@@ -31,18 +41,41 @@ create_compliance_job <- function(file,
 }
 
 #' List Compliance Jobs
-#' @return output
+#' 
+#' This function lists all compliance jobs.
+#' @param type the type of the job, whether "tweets" or "users".
+#' @param bearer_token string, bearer token
+#' 
+#' @return a data frame 
 #' @export
-list_compliance_job <-function(type = "tweets", bearer_token = get_bearer()){
+#' 
+#' @examples
+#' \dontrun{
+#' list_compliance_job()
+#' }
+list_compliance_job <-function(type = "tweets", 
+                               bearer_token = get_bearer()){
   make_query("https://api.twitter.com/2/compliance/jobs",
              params = list("type" = type), 
              bearer_token = bearer_token)
 }
 
 #' Get Compliance Result
-#' @return output
+#' 
+#' This function retrieves the information for a single compliance job.
+#' 
+#' @param id string, the id of the compliance job
+#' @param bearer_token string, bearer token
+#' 
+#' @return a data frame 
 #' @export
-get_compliance_result <- function(id, bearer_token = get_bearer()){
+#' 
+#' @examples
+#' \dontrun{
+#' get_compliance_result("1460077048991555585")
+#' }
+get_compliance_result <- function(id, 
+                                  bearer_token = get_bearer()){
   r <- make_query(paste0("https://api.twitter.com/2/compliance/jobs/",id),
                   params = list(), 
                   bearer_token = bearer_token)
@@ -53,7 +86,9 @@ get_compliance_result <- function(id, bearer_token = get_bearer()){
     # Download if ready
     cat("Downloading...\n")
     dl <- httr::GET(r$data$download_url)
-    return(dl)
+    filename <- paste0(id,".json")
+    writeLines(httr::content(dl, "text", encoding = "UTF-8"), filename)
+    jsonlite::stream_in(file(filename), verbose = FALSE)
   } else if (status == "expired"){
     cat("Upload expired, please retry.\n")
   } else {
