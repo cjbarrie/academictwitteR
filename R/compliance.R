@@ -52,13 +52,14 @@ create_compliance_job <- function(file,
 #' 
 #' @examples
 #' \dontrun{
-#' list_compliance_job()
+#' list_compliance_jobs()
 #' }
-list_compliance_job <-function(type = "tweets", 
+list_compliance_jobs <-function(type = "tweets", 
                                bearer_token = get_bearer()){
-  make_query("https://api.twitter.com/2/compliance/jobs",
-             params = list("type" = type), 
-             bearer_token = bearer_token)
+  res <- make_query("https://api.twitter.com/2/compliance/jobs",
+                    params = list("type" = type), 
+                    bearer_token = bearer_token)
+  return(res$data)
 }
 
 #' Get Compliance Result
