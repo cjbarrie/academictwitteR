@@ -16,7 +16,7 @@ post_query <- function(url, params, bearer_token = get_bearer(), verbose = TRUE)
 #' @param type the type of the job, whether "tweets" or "users".
 #' @param bearer_token string, bearer token
 #' 
-#' @return 
+#' @return the input `file` (invisibly)
 #' @export
 #' 
 #' @examples
@@ -38,6 +38,7 @@ create_compliance_job <- function(file,
   } else {
     cat("Status Code: ", r$status_code)
   }
+  invisible(file)
 }
 
 #' List Compliance Jobs

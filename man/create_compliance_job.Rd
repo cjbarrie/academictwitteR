@@ -14,7 +14,7 @@ create_compliance_job(file, type, bearer_token = get_bearer())
 \item{bearer_token}{string, bearer token}
 }
 \value{
-
+the input \code{file} (invisibly)
 }
 \description{
 This function creates a new compliance job and upload the Tweet IDs or user IDs.
