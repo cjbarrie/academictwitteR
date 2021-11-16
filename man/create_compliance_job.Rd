@@ -4,7 +4,12 @@
 \alias{create_compliance_job}
 \title{Create Compliance Job}
 \usage{
-create_compliance_job(file, type, bearer_token = get_bearer())
+create_compliance_job(
+  file,
+  type = "tweets",
+  bearer_token = get_bearer(),
+  verbose = TRUE
+)
 }
 \arguments{
 \item{file}{a text file, each line contains a Tweet ID or user ID.}
@@ -12,6 +17,8 @@ create_compliance_job(file, type, bearer_token = get_bearer())
 \item{type}{the type of the job, whether "tweets" or "users".}
 
 \item{bearer_token}{string, bearer token}
+
+\item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 }
 \value{
 the job ID (invisibly)

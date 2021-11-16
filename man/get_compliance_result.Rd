@@ -4,12 +4,12 @@
 \alias{get_compliance_result}
 \title{Get Compliance Result}
 \usage{
-get_compliance_result(id, bearer_token = get_bearer())
+get_compliance_result(id, bearer_token = get_bearer(), verbose = TRUE)
 }
 \arguments{
-\item{id}{string, the id of the compliance job}
-
 \item{bearer_token}{string, bearer token}
+
+\item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 }
 \value{
 a data frame
