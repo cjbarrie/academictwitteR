@@ -16,6 +16,7 @@ cran-comments.md
 ^CODE_OF_CONDUCT\.md$
 ^\.github$
 ^tests/testthat/api\.twitter\.com/
+^tests/testthat/storage\.googleapis\.com/
 ^tests/testthat/test-deprecate\.R
 ^tests/testthat/test-emptyreturn\.R
 ^tests/testthat/test-get_all_tweets\.R

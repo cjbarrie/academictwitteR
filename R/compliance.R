@@ -1,11 +1,11 @@
 post_query <- function(url, params, bearer_token = get_bearer()) {
   bearer_token <- check_bearer(bearer_token)
-    r <- httr::POST(url, httr::add_headers(Authorization = bearer_token), body = params, encode = "json")
-    status_code <- httr::status_code(r)
-    if (!status_code %in% c(200)) {
-      stop(paste("Something went wrong. Status code:", httr::status_code(r)))
-    }
-    r
+  r <- httr::POST(url, httr::add_headers(Authorization = bearer_token), body = params, encode = "json")
+  status_code <- httr::status_code(r)
+  if (!status_code %in% c(200)) {
+    stop(paste("Something went wrong. Status code:", httr::status_code(r)))
+  }
+  r
 }
 
 #' Create Compliance Job
@@ -27,6 +27,9 @@ create_compliance_job <- function(file,
                                   type = "tweets",
                                   bearer_token = get_bearer(),
                                   verbose = TRUE){
+  if (!type %in% c("tweets", "users")) {
+    stop("Unknown `type` parameter: ", type, ". It must be \"tweet\" or \"users\".")
+  }
   r <- post_query(url = "https://api.twitter.com/2/compliance/jobs",
                   bearer_token,
                   params = list("type" = type))
@@ -55,7 +58,10 @@ create_compliance_job <- function(file,
 #' list_compliance_jobs()
 #' }
 list_compliance_jobs <-function(type = "tweets", 
-                               bearer_token = get_bearer()){
+                                bearer_token = get_bearer()){
+  if (!type %in% c("tweets", "users")) {
+    stop("Unknown `type` parameter: ", type, ". It must be \"tweet\" or \"users\".")
+  }
   res <- make_query("https://api.twitter.com/2/compliance/jobs",
                     params = list("type" = type), 
                     bearer_token = bearer_token)
@@ -88,7 +94,7 @@ get_compliance_result <- function(id,
     # Download if ready
     .vcat(verbose, "Downloading...\n")
     dl <- httr::GET(r$data$download_url)
-    filename <- tempfile(paste0(id,".json"))
+    filename <- tempfile(pattern = id, fileext = "json")
     writeLines(httr::content(dl, "text", encoding = "UTF-8"), filename)
     res <- jsonlite::stream_in(file(filename), verbose = FALSE)
     unlink(res)
