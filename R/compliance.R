@@ -66,6 +66,7 @@ list_compliance_jobs <-function(type = "tweets",
 #' 
 #' This function retrieves the information for a single compliance job.
 #' 
+#' @param id string, the job id
 #' @inheritParams create_compliance_job
 #' 
 #' @return a data frame 

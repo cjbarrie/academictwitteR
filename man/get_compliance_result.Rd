@@ -7,6 +7,8 @@
 get_compliance_result(id, bearer_token = get_bearer(), verbose = TRUE)
 }
 \arguments{
+\item{id}{string, the job id}
+
 \item{bearer_token}{string, bearer token}
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
