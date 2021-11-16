@@ -88,9 +88,11 @@ get_compliance_result <- function(id,
     # Download if ready
     .vcat(verbose, "Downloading...\n")
     dl <- httr::GET(r$data$download_url)
-    filename <- paste0(id,".json")
+    filename <- tempfile(paste0(id,".json"))
     writeLines(httr::content(dl, "text", encoding = "UTF-8"), filename)
-    return(jsonlite::stream_in(file(filename), verbose = FALSE))
+    res <- jsonlite::stream_in(file(filename), verbose = FALSE)
+    unlink(res)
+    return(res)
   } else if (status == "expired"){
     stop("Upload expired, please retry.\n")
   } else {
