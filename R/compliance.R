@@ -8,12 +8,26 @@ post_query <- function(url, params, bearer_token = get_bearer()) {
   r
 }
 
+.gen_tweet_ids_file <- function(x, force_ids) {
+  if (length(x) == 1 & !force_ids) {
+    if (!file.exists(x)) {
+      stop("File ", x, "does not exist.", call. = FALSE)
+    }
+    file <- x
+  } else {
+    file <- tempfile(fileext = ".txt")
+    writeLines(as.character(x), file)
+  }
+  return(file)
+}
+
 #' Create Compliance Job
 #'
-#' This function creates a new compliance job and upload the Tweet IDs or user IDs.
+#' This function creates a new compliance job and upload the Tweet IDs or user IDs. By default, the parameter `x` with the length of one is assumed to be a text file containing either Tweet IDs or iser IDs. This default behavior can be bypassed using `force_ids` For example, if you want to check for just a single Tweet ID. 
 #' 
-#' @param file a text file, each line contains a Tweet ID or user ID.
+#' @param x either a character vector of Tweet IDs or user IDs; or a plain text file that each line contains a Tweet ID or user ID.
 #' @param type the type of the job, whether "tweets" or "users".
+#' @param force_ids logical, make sure `x` is treated as a character vector of Tweet IDs or user IDs.
 #' @inheritParams get_all_tweets
 #' 
 #' @return the job ID (invisibly)
@@ -21,15 +35,17 @@ post_query <- function(url, params, bearer_token = get_bearer()) {
 #' 
 #' @examples
 #' \dontrun{
-#' create_compliance_job("tweetids.txt", "tweets")
+#' create_compliance_job(x = "tweetids.txt", type = "tweets")
 #' }
-create_compliance_job <- function(file,
+create_compliance_job <- function(x,
                                   type = "tweets",
                                   bearer_token = get_bearer(),
-                                  verbose = TRUE){
+                                  force_ids = FALSE,
+                                  verbose = TRUE) {
   if (!type %in% c("tweets", "users")) {
     stop("Unknown `type` parameter: ", type, ". It must be \"tweet\" or \"users\".")
   }
+  file <- .gen_tweet_ids_file(x = x, force_ids = force_ids)
   r <- post_query(url = "https://api.twitter.com/2/compliance/jobs",
                   bearer_token,
                   params = list("type" = type))
@@ -94,7 +110,7 @@ get_compliance_result <- function(id,
     # Download if ready
     .vcat(verbose, "Downloading...\n")
     dl <- httr::GET(r$data$download_url)
-    filename <- tempfile(pattern = id, fileext = "json")
+    filename <- tempfile(pattern = id, fileext = ".json")
     writeLines(httr::content(dl, "text", encoding = "UTF-8"), filename)
     res <- jsonlite::stream_in(file(filename), verbose = FALSE)
     unlink(res)

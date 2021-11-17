@@ -5,18 +5,21 @@
 \title{Create Compliance Job}
 \usage{
 create_compliance_job(
-  file,
+  x,
   type = "tweets",
   bearer_token = get_bearer(),
+  force_ids = FALSE,
   verbose = TRUE
 )
 }
 \arguments{
-\item{file}{a text file, each line contains a Tweet ID or user ID.}
+\item{x}{either a character vector of Tweet IDs or user IDs; or a plain text file that each line contains a Tweet ID or user ID.}
 
 \item{type}{the type of the job, whether "tweets" or "users".}
 
 \item{bearer_token}{string, bearer token}
+
+\item{force_ids}{logical, make sure \code{x} is treated as a character vector of Tweet IDs or user IDs.}
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 }
@@ -24,10 +27,10 @@ create_compliance_job(
 the job ID (invisibly)
 }
 \description{
-This function creates a new compliance job and upload the Tweet IDs or user IDs.
+This function creates a new compliance job and upload the Tweet IDs or user IDs. By default, the parameter \code{x} with the length of one is assumed to be a text file containing either Tweet IDs or iser IDs. This default behavior can be bypassed using \code{force_ids} For example, if you want to check for just a single Tweet ID.
 }
 \examples{
 \dontrun{
-create_compliance_job("tweetids.txt", "tweets")
+create_compliance_job(x = "tweetids.txt", type = "tweets")
 }
 }
