@@ -277,6 +277,9 @@ For more information on the parameters and fields available from the v2 Twitter 
 |url | string, return tweets containing specified url
 |conversation_id| string, return tweets that share the specified conversation ID
 
+## Batch Compliance
+
+There are three functions to work with Twitter's Batch Compliance endpoints: `create_compliance_job()` creates a new compliance job and upload the dataset; `list_compliance_jobs` lists all created jobs and their job status; `get_compliance_result()` downloads the result.
 
 ## Acknowledgements
 
