@@ -3,7 +3,7 @@ title: "Batch Compliance"
 author: Christopher Barrie, Justin Ho, Chung-hong Chan
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Intro. to academictwitteR}
+  %\VignetteIndexEntry{Batch Compliance}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
