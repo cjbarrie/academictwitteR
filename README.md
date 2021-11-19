@@ -6,7 +6,7 @@
 [![](https://www.r-pkg.org/badges/version/academictwitteR)](https://cran.r-project.org/package=academictwitteR)
 ![Downloads](https://cranlogs.r-pkg.org/badges/academictwitteR)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/academictwitteR)](https://cran.r-project.org/package=academictwitteR)
-[![Codecov test coverage](https://codecov.io/gh/cjbarrie/academictwitteR/branch/master/graph/badge.svg)](https://codecov.io/gh/cjbarrie/academictwitteR?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/cjbarrie/academictwitteR/branch/master/graph/badge.svg)]( https://app.codecov.io/gh/cjbarrie/academictwitteR?branch=master)
 <!-- badges: end -->
 
 
