@@ -63,9 +63,9 @@ ls_files <- function(data_path, pattern) {
     list.files(
       path = file.path(data_path),
       pattern = pattern,
-      recursive = T,
-      include.dirs = T,
-      full.names = T
+      recursive = TRUE,
+      include.dirs = TRUE,
+      full.names = TRUE
     )
   
   if (length(files) < 1) {
