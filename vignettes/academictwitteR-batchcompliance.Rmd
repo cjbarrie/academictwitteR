@@ -1,0 +1,76 @@
+---
+title: "Batch Compliance"
+author: Christopher Barrie, Justin Ho, Chung-hong Chan
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Batch Compliance}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+It is crucial for Twitter data holders (e.g. users of academictwitteR) to ensure that the data reflects user intent and the current state of content on Twitter. Specifically, if a tweet is deleted or modified on Twitter, data holders must delete or modify any content stored offline accordingly. The batch compliance endpoints and corresponding functions offer researchers an easy way to help maintain Twitter data in compliance with the [Twitter Developer Agreement and Policy](https://developer.twitter.com/en/developer-terms/policy).
+
+## Upload Dataset
+
+To create a compliance job and upload a dataset, you can use the `create_compliance_job()` function:
+
+There are two ways to use `create_compliance_jobs`. You can supply a vector of tweet/user ids.
+
+```r
+jobid <- create_compliance_job(x = c("1233905174730682369", "1233905174659256320",
+                                     "1233905174650986497"),
+                               type = "tweets")
+jobid
+```
+
+Another way is to provide a text file, in which each line contains a Tweet ID or user ID. The content of a text file looks like this:
+
+```
+1233905174730682369
+1233905174659256320
+1233905174650986497
+1233905174655139841
+1233905174663458816
+1233905174835449856
+1233905174789443584
+1233905174533545987
+1233905174936080384
+```
+
+A sample can be found [here](https://raw.githubusercontent.com/echen102/COVID-19-TweetIDs/master/2020-03/coronavirus-tweet-id-2020-03-01-00.txt). And then run `create_compliance_job` with the file name (e.g. "tweet_ids.txt").
+
+```{r, eval = FALSE}
+jobid <- create_compliance_job(x = "tweet_ids.txt",
+                               type = "tweets")
+jobid
+```
+
+The function will return a Job ID, which will be used to download the results.
+
+## Check Job Status
+
+Optionally, you can check your job status by running:
+
+```{r, eval = FALSE}
+list_compliance_jobs()
+```
+
+## Download Results
+When a job is completed, you can download the compliance results using:
+
+```{r, eval = FALSE}
+get_compliance_result(id = "1460077048991555585")
+```
+
+The function will automatically check if the job has been completed.
+
+If you forgot your job id, you can retrieve it using `list_compliance_jobs()`.
