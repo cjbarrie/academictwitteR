@@ -1,5 +1,7 @@
 # academictwitteR 0.3.0
 * Added support for batch compliance
+* Added functions `get_user_id`, `get_retweeted_by`, and `convert_json`.
+* Added parameter `exact_phrase` for `build_query` (also for the downstream function `get_all_tweets`).
 
 # academictwitteR 0.2.1
 * Fixed error 400 when fetching tweets with the context annotation field
