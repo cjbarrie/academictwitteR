@@ -43,4 +43,7 @@ tweets_lookup <-
       }
     }
     new_df # return the df
+        if (errors) {
+      .vcat(verbose, "Total of", nrow(dplyr::filter(new_df, is.na(error))), "out of", length(ids), "tweets retrieved.\n")
+    }
   }
