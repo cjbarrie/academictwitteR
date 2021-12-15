@@ -33,8 +33,8 @@ make_query <- function(url, params, bearer_token, max_error = 4, verbose = TRUE)
   jsonlite::fromJSON(httr::content(r, "text"))
 }
 
-get_tweets <- function(params, endpoint_url, page_token_name = "next_token", n, file, bearer_token, data_path, export_query, bind_tweets, verbose, errors) {
-  # New: the errors parameter allows to optionally retrieve tweets that throw an error, with the according error description. Currently, only the id-level errors are added to the bound data.frame. All errors are contained in the error_ json files when path is used, however
+get_tweets <- function(params, endpoint_url, page_token_name = "next_token", n, file, bearer_token, data_path, export_query, bind_tweets, verbose, errors = FALSE) {
+  # the errors parameter allows to optionally retrieve tweets that throw an error, with the according error description. Currently, only the id-level errors are added to the bound data.frame. All errors are contained in the error_ json files when path is used, however
   
   # Check file storage conditions
   create_storage_dir(data_path = data_path, export_query = export_query, built_query = params[["query"]], start_tweets = params[["start_time"]], end_tweets = params[["end_time"]], verbose = verbose)
@@ -160,9 +160,10 @@ df_to_json <- function(df, data_path, errors){
                        file.path(data_path, paste0("data_", df$data$id[nrow(df$data)], ".json")))
   jsonlite::write_json(df$includes,
                        file.path(data_path, paste0("users_", df$data$id[nrow(df$data)], ".json")))
-    if (errors) { # error catcher
+  if (errors) { # error catcher
     jsonlite::write_json(df$errors,
                          file.path(data_path, paste0("errors_", df$data$id[nrow(df$data)], ".json")))
+  }
 }
 
 create_storage_dir <- function(data_path, export_query, built_query, start_tweets, end_tweets, verbose){
