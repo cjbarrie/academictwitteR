@@ -16,16 +16,19 @@ test_that("Corner cases", {
 
 with_mock_api({
   test_that("normal case: fff de", {
+    skip_if(!dir.exists("api.twitter.com"))
     fff <- readRDS("../testdata/fff_de.RDS")
     expect_error(res <- hydrate_tweets(fff, verbose = FALSE), NA)
     expect_equal(nrow(res), length(fff))
   })
   test_that("normal case: verbose", {
+    skip_if(!dir.exists("api.twitter.com"))
     fff <- readRDS("../testdata/fff_de.RDS")
     expect_silent(res <- hydrate_tweets(fff, verbose = FALSE))
     expect_output(capture_warnings(res <- hydrate_tweets(fff, verbose = TRUE)))
   })
   test_that("normal case: bind_tweets", {
+    skip_if(!dir.exists("api.twitter.com"))
     fff <- readRDS("../testdata/fff_de.RDS")
     emptydir <- academictwitteR:::.gen_random_dir()  
     expect_silent(res <- hydrate_tweets(fff, verbose = FALSE, data_path = emptydir))
@@ -49,6 +52,7 @@ with_mock_api({
 
 with_mock_api({
   test_that("normal case: context_anntations", {
+    skip_if(!dir.exists("api.twitter.com"))
     fff <- readRDS("../testdata/fff_de.RDS")
     ca1 <- hydrate_tweets(fff, verbose = FALSE, context_annotations = TRUE)
     expect_true("context_annotations" %in% colnames(ca1))
@@ -70,6 +74,7 @@ with_mock_api({
 
 with_mock_api({
   test_that("normal case: different sizes", {
+    skip_if(!dir.exists("api.twitter.com"))
     fff <- readRDS("../testdata/fff_de.RDS")
     manyf <- c(fff, fff, fff)
     for (i in c(1, 99, 100, 199, 200, 250)) {

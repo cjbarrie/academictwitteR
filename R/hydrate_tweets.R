@@ -42,7 +42,7 @@ hydrate_tweets <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
     params[["ids"]] <- paste0(batch, collapse = ",")
     
     ## Get tweets
-    .vcat(verbose, "Batch", i, "out of", ceiling(length(ids) / 100),": ids", head(batch, n = 1), "to", tail(batch, n = 1), "\n")
+    .vcat(verbose, "Batch", i, "out of", ceiling(length(ids) / 100),": ids", utils::head(batch, n = 1), "to", utils::tail(batch, n = 1), "\n")
     ## new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, n = Inf, file = NULL, bearer_token = bearer_token, 
     ##                        export_query = FALSE, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, errors = errors)
     new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, n = Inf, file = NULL, bearer_token = bearer_token, 
