@@ -1,9 +1,23 @@
-tweets_lookup <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
-                          context_annotations = FALSE,
-                          bind_tweets = TRUE,
-                          verbose = TRUE) {
-                          ## verbose = TRUE,
-                          ## errors = FALSE) {
+#' Hydrate Tweets Based On Tweet IDs
+#'
+#' This function is helpful for hydrating Tweet IDs (i.e. getting the full content of tweets from a list of Tweet IDs).
+#' @inheritParams get_all_tweets
+#' @param ids a character vector of Tweet IDs
+#' @return When bind_tweets is `TRUE`, the function returns a data frame. The `data_path` if `bind_tweets` is `FALSE`
+#' @examples
+#' \dontrun{
+#' hydrate_tweets(c("1266876474440761346", "1266868259925737474", "1266867327079002121",
+#' "1266866660713127936", "1266864490446012418", "1266860737244336129",
+#' "1266859737615826944", "1266859455586676736", "1266858090143588352",
+#' "1266857669157097473"))
+#' }
+#' @export
+hydrate_tweets <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
+                           context_annotations = FALSE,
+                           bind_tweets = TRUE,
+                           verbose = TRUE) {
+  ## verbose = TRUE,
+  ## errors = FALSE) {
   ## Building parameters for get_tweets()
   params <- list(
     tweet.fields = "attachments,author_id,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld", 
@@ -32,7 +46,7 @@ tweets_lookup <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
     ## } else {
     .vcat(verbose, "Retrieved", nrow(new_rows), "out of", length(batch), "\n")
     ## }
-    if (nrow(new_rows) > 0) {
+    if (nrow(new_rows) > 0 & bind_tweets) {
       ##  new_rows$from_tweet_id <- batch[batch %in% new_rows$id]
       new_df <- dplyr::bind_rows(new_df, new_rows) # add new rows
     }
@@ -46,5 +60,8 @@ tweets_lookup <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
     ##   .vcat(verbose, "Total of", nrow(dplyr::filter(new_df, is.na(error))), "out of", length(ids), "tweets retrieved.\n")
     ## }
   }
-  return(new_df)
+  if (bind_tweets) {
+    return(new_df)
+  }
+  return(invisible(data_path))
 }
