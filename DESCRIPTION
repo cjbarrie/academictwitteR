@@ -21,7 +21,11 @@ Authors@R:
 	   family = "Rico",
 	   role = c("ctb"),
 	   email = "noeliarico@uniovi.es",
-	   comment = c(ORCID = "0000-0002-6169-4523")))
+	   comment = c(ORCID = "0000-0002-6169-4523")),
+	   person(given = "Tim",
+	   family = "König",
+	   role = c("ctb"),
+	   comment = c(ORCID = "0000-0002-2852-2690")))
 Description: Package to query the Twitter Academic Research Product Track,
     providing access to full-archive search and other v2 API endpoints. Functions
     are written with academic research in mind. They provide flexibility in how 
