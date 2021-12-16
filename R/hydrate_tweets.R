@@ -19,6 +19,7 @@ hydrate_tweets <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
   ## verbose = TRUE,
   ## errors = FALSE) {
   ## Building parameters for get_tweets()
+  check_data_path(data_path = data_path, file = file, bind_tweets = bind_tweets, verbose = verbose)
   params <- list(
     tweet.fields = "attachments,author_id,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld", 
     user.fields = "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld", 
@@ -30,9 +31,15 @@ hydrate_tweets <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
   }
   ## loop through x in batches of 100 IDs
   new_df <- data.frame()
-  for (i in 1:ceiling(length(ids) / 100)) {
+  if (length(ids) >= 1) {
+    n_batches <- ceiling(length(ids) / 100)
+  } else {
+    n_batches <- 0
+  }
+  endpoint_url <- "https://api.twitter.com/2/tweets"
+  for (i in seq_len(n_batches)) {
     batch <- ids[((i-1)*100+1):min(length(ids),(i*100))]
-    endpoint_url <- sprintf('https://api.twitter.com/2/tweets?ids=%s', paste0(batch, collapse = ","))
+    params[["ids"]] <- paste0(batch, collapse = ",")
     
     ## Get tweets
     .vcat(verbose, "Batch", i, "out of", ceiling(length(ids) / 100),": ids", head(batch, n = 1), "to", tail(batch, n = 1), "\n")
@@ -46,9 +53,11 @@ hydrate_tweets <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
     ## } else {
     .vcat(verbose, "Retrieved", nrow(new_rows), "out of", length(batch), "\n")
     ## }
-    if (nrow(new_rows) > 0 & bind_tweets) {
+    if (bind_tweets) {
       ##  new_rows$from_tweet_id <- batch[batch %in% new_rows$id]
-      new_df <- dplyr::bind_rows(new_df, new_rows) # add new rows
+      if (nrow(new_rows) > 0) { 
+        new_df <- dplyr::bind_rows(new_df, new_rows) # add new rows
+      }
     }
     ## if (errors) {
     ##   .vcat(verbose, "Total Tweets:", nrow(dplyr::filter(new_df, is.na(error))), "\n")
