@@ -20,7 +20,7 @@ hydrate_tweets(
 
 \item{data_path}{string, if supplied, fetched data can be saved to the designated path as jsons}
 
-\item{context_annotations}{If \code{TRUE}, context_annotations will be fetched. Note it will limit the page_n to 100 due restrictions of Twitter API.}
+\item{context_annotations}{If \code{TRUE}, context_annotations will be fetched.}
 
 \item{bind_tweets}{If \code{TRUE}, tweets captured are bound into a data.frame for assignment}
 

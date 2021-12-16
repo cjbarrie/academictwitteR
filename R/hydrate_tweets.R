@@ -3,6 +3,7 @@
 #' This function is helpful for hydrating Tweet IDs (i.e. getting the full content of tweets from a list of Tweet IDs).
 #' @inheritParams get_all_tweets
 #' @param ids a character vector of Tweet IDs
+#' @param context_annotations If `TRUE`, context_annotations will be fetched.
 #' @return When bind_tweets is `TRUE`, the function returns a data frame. The `data_path` if `bind_tweets` is `FALSE`
 #' @examples
 #' \dontrun{
