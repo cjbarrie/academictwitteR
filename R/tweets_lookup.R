@@ -1,8 +1,9 @@
 tweets_lookup <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
                           context_annotations = FALSE,
                           bind_tweets = TRUE,
-                          verbose = TRUE,
-                          errors = FALSE) {
+                          verbose = TRUE) {
+                          ## verbose = TRUE,
+                          ## errors = FALSE) {
   ## Building parameters for get_tweets()
   params <- list(
     tweet.fields = "attachments,author_id,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld", 
@@ -15,31 +16,35 @@ tweets_lookup <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
   }
   ## loop through x in batches of 100 IDs
   new_df <- data.frame()
-  for (i in 1:ceiling(length(ids) / 100)){
+  for (i in 1:ceiling(length(ids) / 100)) {
     batch <- ids[((i-1)*100+1):min(length(ids),(i*100))]
     endpoint_url <- sprintf('https://api.twitter.com/2/tweets?ids=%s', paste0(batch, collapse = ","))
     
     ## Get tweets
     .vcat(verbose, "Batch", i, "out of", ceiling(length(ids) / 100),": ids", head(batch, n = 1), "to", tail(batch, n = 1), "\n")
+    ## new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, n = Inf, file = NULL, bearer_token = bearer_token, 
+    ##                        export_query = FALSE, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, errors = errors)
     new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, n = Inf, file = NULL, bearer_token = bearer_token, 
-                           export_query = FALSE, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, errors = errors)
-    if (errors){
-      .vcat(verbose, "Retrieved", nrow(dplyr::filter(new_rows, is.na(error))), "out of", length(batch), "\n" , 
-            "Errors:", nrow(dplyr::filter(new_rows, !is.na(error))), "\n" )
-    } else {
-      .vcat(verbose, "Retrieved", nrow(new_rows), "out of", length(batch), "\n")}
+                           export_query = FALSE, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose)
+    ## if (errors){
+    ##   .vcat(verbose, "Retrieved", nrow(dplyr::filter(new_rows, is.na(error))), "out of", length(batch), "\n" , 
+    ##         "Errors:", nrow(dplyr::filter(new_rows, !is.na(error))), "\n" )
+    ## } else {
+    .vcat(verbose, "Retrieved", nrow(new_rows), "out of", length(batch), "\n")
+    ## }
     if (nrow(new_rows) > 0) {
       ##  new_rows$from_tweet_id <- batch[batch %in% new_rows$id]
       new_df <- dplyr::bind_rows(new_df, new_rows) # add new rows
     }
-    if (errors) {
-      .vcat(verbose, "Total Tweets:", nrow(dplyr::filter(new_df, is.na(error))), "\n")
-    } else {
-      .vcat(verbose, "Total Tweets:", nrow(new_df), "\n")
-    }
-  }
-  if (errors) {
-    .vcat(verbose, "Total of", nrow(dplyr::filter(new_df, is.na(error))), "out of", length(ids), "tweets retrieved.\n")
+    ## if (errors) {
+    ##   .vcat(verbose, "Total Tweets:", nrow(dplyr::filter(new_df, is.na(error))), "\n")
+    ## } else {
+    .vcat(verbose, "Total Tweets:", nrow(new_df), "\n")
+    ##   }
+    ## }
+    ## if (errors) {
+    ##   .vcat(verbose, "Total of", nrow(dplyr::filter(new_df, is.na(error))), "out of", length(ids), "tweets retrieved.\n")
+    ## }
   }
   return(new_df)
 }
