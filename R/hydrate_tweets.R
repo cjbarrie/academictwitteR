@@ -48,18 +48,20 @@ hydrate_tweets <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
     ##                        export_query = FALSE, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, errors = errors)
     new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, n = Inf, file = NULL, bearer_token = bearer_token, 
                            export_query = FALSE, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose)
+    
+    if (bind_tweets) {
     ## if (errors){
     ##   .vcat(verbose, "Retrieved", nrow(dplyr::filter(new_rows, is.na(error))), "out of", length(batch), "\n" , 
     ##         "Errors:", nrow(dplyr::filter(new_rows, !is.na(error))), "\n" )
     ## } else {
     .vcat(verbose, "Retrieved", nrow(new_rows), "out of", length(batch), "\n")
     ## }
-    if (bind_tweets) {
+
       ##  new_rows$from_tweet_id <- batch[batch %in% new_rows$id]
       if (nrow(new_rows) > 0) { 
         new_df <- dplyr::bind_rows(new_df, new_rows) # add new rows
       }
-    }
+    
     ## if (errors) {
     ##   .vcat(verbose, "Total Tweets:", nrow(dplyr::filter(new_df, is.na(error))), "\n")
     ## } else {
@@ -69,6 +71,7 @@ hydrate_tweets <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
     ## if (errors) {
     ##   .vcat(verbose, "Total of", nrow(dplyr::filter(new_df, is.na(error))), "out of", length(ids), "tweets retrieved.\n")
     ## }
+    }
   }
   if (bind_tweets) {
     return(new_df)
