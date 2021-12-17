@@ -20,7 +20,9 @@ hydrate_tweets <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
   ## verbose = TRUE,
   ## errors = FALSE) {
   ## Building parameters for get_tweets()
-  check_data_path(data_path = data_path, file = file, bind_tweets = bind_tweets, verbose = verbose)
+  if (is.null(data_path) & !bind_tweets) {
+    stop("Argument (bind_tweets = FALSE) only valid when a data_path is specified.")
+  }
   params <- list(
     tweet.fields = "attachments,author_id,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld", 
     user.fields = "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld", 
@@ -47,7 +49,7 @@ hydrate_tweets <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
     ## new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, n = Inf, file = NULL, bearer_token = bearer_token, 
     ##                        export_query = FALSE, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, errors = errors)
     new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, n = Inf, file = NULL, bearer_token = bearer_token, 
-                           export_query = FALSE, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose)
+                           export_query = FALSE, data_path = data_path, bind_tweets = bind_tweets, verbose = FALSE)
     
     if (bind_tweets) {
     ## if (errors){
