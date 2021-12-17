@@ -52,7 +52,8 @@ Imports:
     tidyr,
     tidyselect,
     purrr,
-    rlang
+    rlang,
+    utils
 Suggests: 
     knitr,
     rmarkdown,
