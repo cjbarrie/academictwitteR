@@ -49,8 +49,8 @@ get_tweets <- function(params, endpoint_url, page_token_name = "next_token", n, 
     if (is.null(data_path)) {
       # if data path is null, generate data.frame object within loop
       df.all <- dplyr::bind_rows(df.all, df$data)
-      if (errors) { # error catcher
-        df.errors <- df$errors %>% dplyr::filter(parameter == "ids") %>% dplyr::select(resource_id, title) %>% rename(id = resource_id, error = title)
+      if (errors & "error" %in% names(df)) { # error catcher
+        df.errors <- df$errors %>% dplyr::filter(.data$parameter == "ids") %>% dplyr::select(.data$resource_id, .data$title) %>% dplyr::rename(id = .data$resource_id, error = .data$title)
         df.all <- dplyr::bind_rows(df.all, df.errors)
       }
     }
@@ -60,8 +60,8 @@ get_tweets <- function(params, endpoint_url, page_token_name = "next_token", n, 
     if (!is.null(data_path)) {
       df_to_json(df, data_path, errors) # piping error options to df_to_json
       df.all <- dplyr::bind_rows(df.all, df$data) #and combine new data with old within function
-      if (errors) { # error catcher
-        df.errors <- df$errors %>% dplyr::filter(parameter == "ids") %>% dplyr::select(resource_id, title) %>% rename(id = resource_id, error = title)
+      if (errors & "error" %in% names(df)) { # error catcher
+        df.errors <- df$errors %>% dplyr::filter(.data$parameter == "ids") %>% dplyr::select(.data$resource_id, .data$title) %>% dplyr::rename(id = .data$resource_id, error = .data$title)
         df.all <- dplyr::bind_rows(df.all, df.errors)
       }
     }
@@ -80,7 +80,7 @@ get_tweets <- function(params, endpoint_url, page_token_name = "next_token", n, 
           sep = ""
     )
     if (ntweets >= n){ # Check n
-      df.all <- df.all[1:n,] # remove extra
+      df.all <- df.all[seq_len(n),] # remove extra
       .vcat(verbose, "Total tweets captured now reach", n, ": finishing collection.\n")
       break
     }
@@ -153,7 +153,7 @@ create_data_dir <- function(data_path, verbose = TRUE){
   invisible(data_path)  
 }
 
-df_to_json <- function(df, data_path, errors){
+df_to_json <- function(df, data_path, errors = FALSE){
   # check input
   # if data path is supplied and file name given, generate data.frame object within loop and JSONs
   jsonlite::write_json(df$data,
@@ -169,7 +169,7 @@ df_to_json <- function(df, data_path, errors){
 create_storage_dir <- function(data_path, export_query, built_query, start_tweets, end_tweets, verbose){
   if (!is.null(data_path)){
     create_data_dir(data_path, verbose)
-    if (isTRUE(export_query)){ # Note export_query is called only if data path is supplied
+    if (isTRUE(export_query) & !is.null(built_query)){ # Note export_query is called only if data path is supplied
       # Writing query to file (for resuming)
       filecon <- file(file.path(data_path, "query"))
       writeLines(c(built_query,start_tweets,end_tweets), filecon)
