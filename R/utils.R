@@ -49,8 +49,12 @@ get_tweets <- function(params, endpoint_url, page_token_name = "next_token", n, 
     if (is.null(data_path)) {
       # if data path is null, generate data.frame object within loop
       df.all <- dplyr::bind_rows(df.all, df$data)
-      if (errors & "error" %in% names(df)) { # error catcher
-        df.errors <- df$errors %>% dplyr::filter(.data$parameter == "ids") %>% dplyr::select(.data$resource_id, .data$title) %>% dplyr::rename(id = .data$resource_id, error = .data$title)
+      if (errors) {  # error catcher
+        if ("error" %in% names(df)) {
+          df.errors <- df$errors %>% dplyr::filter(.data$parameter == "ids") %>% dplyr::select(.data$resource_id, .data$title) %>% dplyr::rename(id = .data$resource_id, error = .data$title)
+        } else {
+          df.errors <- data.frame(id = character(), error = character()) ## empty
+        }
         df.all <- dplyr::bind_rows(df.all, df.errors)
       }
     }
@@ -60,8 +64,12 @@ get_tweets <- function(params, endpoint_url, page_token_name = "next_token", n, 
     if (!is.null(data_path)) {
       df_to_json(df, data_path, errors) # piping error options to df_to_json
       df.all <- dplyr::bind_rows(df.all, df$data) #and combine new data with old within function
-      if (errors & "errors" %in% names(df)) { # error catcher
-        df.errors <- df$errors %>% dplyr::filter(.data$parameter == "ids") %>% dplyr::select(.data$resource_id, .data$title) %>% dplyr::rename(id = .data$resource_id, error = .data$title)
+      if (errors) {
+        if ("errors" %in% names(df)) { # error catcher
+          df.errors <- df$errors %>% dplyr::filter(.data$parameter == "ids") %>% dplyr::select(.data$resource_id, .data$title) %>% dplyr::rename(id = .data$resource_id, error = .data$title)
+        } else {
+          df.errors <- data.frame(id = character(), error = character())
+        }
         df.all <- dplyr::bind_rows(df.all, df.errors)
       }
     }
