@@ -139,6 +139,7 @@ with_mock_api({
 
 with_mock_api({
   test_that("polluted case: fff de, errors = TRUE, bind_tweets = TRUE", {
+    skip_if(!dir.exists("api.twitter.com"))
     fff <- readRDS("../testdata/fff_de.RDS")
     ### pollute
     polluted_fff <- c("1", "2", "3", fff, "4")
@@ -159,6 +160,7 @@ with_mock_api({
 
 with_mock_api({
   test_that("polluted case: fff de, errors = TRUE, bind_tweets = FALSE", {
+    skip_if(!dir.exists("api.twitter.com"))
     fff <- readRDS("../testdata/fff_de.RDS")
     ### pollute
     polluted_fff <- c("1", "2", "3", fff, "4")
@@ -177,6 +179,7 @@ with_mock_api({
 
 with_mock_api({
   test_that("polluted case: fff de, errors = FALSE, bind_tweets = TRUE", {
+    skip_if(!dir.exists("api.twitter.com"))
     fff <- readRDS("../testdata/fff_de.RDS")
     ### pollute
     polluted_fff <- c("1", "2", "3", fff, "4")
@@ -194,6 +197,7 @@ with_mock_api({
 
 with_mock_api({
   test_that("polluted case: fff de, errors = FALSE, bind_tweets = FALSE", {
+    skip_if(!dir.exists("api.twitter.com"))
     fff <- readRDS("../testdata/fff_de.RDS")
     ### pollute
     polluted_fff <- c("1", "2", "3", fff, "4")
@@ -210,6 +214,7 @@ with_mock_api({
 
 with_mock_api({
   test_that("polluted case: fff de, errors = TRUE, bind_tweets = TRUE, verbosity", {
+    skip_if(!dir.exists("api.twitter.com"))
     fff <- readRDS("../testdata/fff_de.RDS")
     ### pollute
     polluted_fff <- c("1", "2", "3", fff, "4")
