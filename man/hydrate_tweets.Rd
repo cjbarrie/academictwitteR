@@ -10,7 +10,8 @@ hydrate_tweets(
   data_path = NULL,
   context_annotations = FALSE,
   bind_tweets = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  errors = FALSE
 )
 }
 \arguments{
@@ -25,12 +26,17 @@ hydrate_tweets(
 \item{bind_tweets}{If \code{TRUE}, tweets captured are bound into a data.frame for assignment}
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
+
+\item{errors}{logical, if \code{TRUE}, the error capturing mechanism is enabled. See details below.}
 }
 \value{
-When bind_tweets is \code{TRUE}, the function returns a data frame. The \code{data_path} if \code{bind_tweets} is \code{FALSE}
+When bind_tweets is \code{TRUE}, the function returns a data frame. The \code{data_path} (invisibly) if \code{bind_tweets} is \code{FALSE}
 }
 \description{
 This function is helpful for hydrating Tweet IDs (i.e. getting the full content of tweets from a list of Tweet IDs).
+}
+\details{
+When the error capturing mechanism is enabled, Tweets IDs that cannot be queried (e.g. with error) are stored as \code{errors_*.json} files. If \code{bind_tweets} is TRUE, those error Tweets IDs are retained in the returned data.frame with the column \code{error} indicating the error.
 }
 \examples{
 \dontrun{
