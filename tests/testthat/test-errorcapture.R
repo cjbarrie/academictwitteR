@@ -50,7 +50,7 @@ with_mock_api({
       params[["ids"]] <- paste0(x, collapse = ",")
       expect_error(new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, n = Inf, file = NULL, bearer_token = get_bearer(), export_query = FALSE, data_path = emptydir, bind_tweets = TRUE, verbose = FALSE, errors = TRUE), NA)
       expect_true("error" %in% colnames(new_rows))
-      Sys.sleep(0.5)
+      ## Sys.sleep(0.5)
       expect_equal(length(list.files(emptydir)), i * 3)
       expect_equal(length(list.files(emptydir, "^errors")), i)
       df <- bind_tweets(emptydir, verbose = FALSE)
@@ -79,7 +79,7 @@ with_mock_api({
       x <- fff[index:index_end]
       params[["ids"]] <- paste0(x, collapse = ",")
       expect_error(new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, n = Inf, file = NULL, bearer_token = get_bearer(), export_query = FALSE, data_path = emptydir, bind_tweets = FALSE, verbose = FALSE, errors = TRUE), NA)
-      Sys.sleep(0.5)
+      ## Sys.sleep(0.5)
       expect_equal(length(list.files(emptydir)), i * 3)
       expect_equal(length(list.files(emptydir, "^errors")), i)
       df <- bind_tweets(emptydir, verbose = FALSE)
@@ -108,7 +108,7 @@ with_mock_api({
       x <- fff[index:index_end]
       params[["ids"]] <- paste0(x, collapse = ",")
       expect_error(new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, n = Inf, file = NULL, bearer_token = get_bearer(), export_query = FALSE, data_path = emptydir, bind_tweets = TRUE, verbose = FALSE, errors = FALSE), NA)
-      Sys.sleep(0.5)
+      ## Sys.sleep(0.5)
       expect_false("error" %in% colnames(new_rows))
       expect_equal(length(list.files(emptydir)), i * 2)
       expect_equal(length(list.files(emptydir, "^errors")), 0)
@@ -138,7 +138,7 @@ with_mock_api({
       x <- fff[index:index_end]
       params[["ids"]] <- paste0(x, collapse = ",")
       expect_error(new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, n = Inf, file = NULL, bearer_token = get_bearer(), export_query = FALSE, data_path = emptydir, bind_tweets = FALSE, verbose = FALSE, errors = FALSE), NA)
-      Sys.sleep(0.5)
+      ## Sys.sleep(0.5)
       expect_equal(length(list.files(emptydir)), i * 2)
       expect_equal(length(list.files(emptydir, "^errors")), 0)
       df <- bind_tweets(emptydir, verbose = FALSE)

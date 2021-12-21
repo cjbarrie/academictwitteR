@@ -22,7 +22,7 @@ hydrate_tweets <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
                            errors = FALSE) {
   ## Building parameters for get_tweets()
   if (is.null(data_path) & !bind_tweets) {
-    stop("Argument (bind_tweets = FALSE) only valid when a data_path is specified.")
+    stop("Argument (bind_tweets = FALSE) is valid only when data_path is specified.")
   }
   params <- list(
     tweet.fields = "attachments,author_id,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld", 
@@ -51,14 +51,16 @@ hydrate_tweets <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
                            export_query = FALSE, data_path = data_path, bind_tweets = bind_tweets, verbose = FALSE, errors = errors)
     
     if (bind_tweets) {
-      .vcat(verbose, "Retrieved", nrow(new_rows), "out of", length(batch), "\n")
       if (nrow(new_rows) > 0) { 
         new_df <- dplyr::bind_rows(new_df, new_rows) # add new rows
       }
-      .vcat(verbose, "Total Tweets:", nrow(new_df), "\n")
       if (errors) {
-        .vcat(verbose, "Total of", nrow(dplyr::filter(new_df, is.na(.data$error))), "out of", length(ids), "tweets retrieved.\n")
+        n_tweets <- nrow(dplyr::filter(new_df, is.na(.data$error)))
+        .vcat(verbose, "Total ", nrow(dplyr::filter(new_df, !is.na(.data$error))), " tweet(s) can't be retrieved.\n")
+      } else {
+        n_tweets <- nrow(new_df)
       }
+      .vcat(verbose, "Total of ", n_tweets, " out of ", length(ids), " tweet(s) retrieved.\n")
     }
   }
   if (bind_tweets) {
