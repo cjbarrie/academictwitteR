@@ -16,6 +16,13 @@ test_that("convert_json", {
   expect_equal(class(y), "list")
 })
 
+test_that("issue #273", {
+  ## There are some weird case there is no source tweets; because there are only replies
+  expect_error(convert_json("../testdata/reuters/data_1219780709600124929.json", output_format = "raw"), NA)
+  expect_error(convert_json("../testdata/reuters/data_1219780709600124929.json", output_format = "tidy"), NA)
+  expect_error(bind_tweets("../testdata/reuters", verbose = FALSE, output_format = "tidy"), NA)
+})
+
 test_that("expected format", {
   x <- bind_tweets("../testdata/commtwitter", output_format = "raw")
   expect_equal(class(x), "list")
@@ -60,3 +67,4 @@ test_that("corner cases", {
   ori <- bind_tweets("../testdata/hk3", verbose = FALSE)
   expect_equal(nrow(res), nrow(ori))  
 })
+

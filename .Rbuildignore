@@ -41,6 +41,7 @@ cran-comments.md
 ^tests/testthat/_snap
 ^tests/testdata/.+\.RDS
 ^tests/testdata/hk
+^tests/testdata/reuter
 ^codecov\.yml$
 ^doc$
 ^Meta$
