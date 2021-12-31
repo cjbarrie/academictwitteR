@@ -140,7 +140,7 @@ create_data_dir <- function(data_path, verbose = TRUE){
     .vwarn(verbose, "Directory already exists. Existing JSON files may be parsed and returned, choose a new path if this is not intended.")
     invisible(data_path)
   }
-  dir.create(file.path(data_path), showWarnings = FALSE)
+  dir.create(file.path(data_path), showWarnings = FALSE, recursive = TRUE)
   invisible(data_path)  
 }
 
