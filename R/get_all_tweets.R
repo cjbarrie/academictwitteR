@@ -13,8 +13,6 @@
 #' If a data path is supplied, the function will also return 
 #' tweet-level data in a data/ path as a series of JSONs beginning "data_"; 
 #' while user-level data will be returned as a series of JSONs beginning "users_".
-#' 
-#' When bind_tweets is `TRUE`, the function returns a data frame.
 #'
 #' @param query string or character vector, search query or queries
 #' @param start_tweets string, starting date
@@ -28,9 +26,9 @@
 #' @param page_n integer, amount of tweets to be returned by per page
 #' @param context_annotations If `TRUE`, context_annotations will be fetched. Note it will limit the page_n to 100 due restrictions of Twitter API. 
 #' @param verbose If `FALSE`, query progress messages are suppressed
-#' @param ... arguments will be passed to `build_query()` function. See `?build_query()` for further information.
+#' @param ... arguments will be passed to [build_query()] function. See `?build_query()` for further information.
 #' 
-#' @return a data.frame
+#' @return When bind_tweets is `TRUE` (default), the function returns a data frame. Nothing otherwise.
 #' @export
 #'
 #' @examples
