@@ -45,10 +45,10 @@ get_all_tweets(
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 
-\item{...}{arguments will be passed to \code{build_query()} function. See \code{?build_query()} for further information.}
+\item{...}{arguments will be passed to \code{\link[=build_query]{build_query()}} function. See \code{?build_query()} for further information.}
 }
 \value{
-a data.frame
+When bind_tweets is \code{TRUE} (default), the function returns a data frame. Nothing otherwise.
 }
 \description{
 This function collects tweets by query string or strings
@@ -65,8 +65,6 @@ save the result as a RDS file.
 If a data path is supplied, the function will also return
 tweet-level data in a data/ path as a series of JSONs beginning "data_";
 while user-level data will be returned as a series of JSONs beginning "users_".
-
-When bind_tweets is \code{TRUE}, the function returns a data frame.
 }
 \examples{
 \dontrun{
