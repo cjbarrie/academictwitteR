@@ -21,6 +21,7 @@
 
 with_mock_api({
   test_that("get_user_profile: expected behaviour", {
+    skip_if(!dir.exists("api.twitter.com"))
     ori_test <- "../testdata/commtwitter/"
     user_ids <- unique(bind_tweets(ori_test, verbose = FALSE)$author_id)[c(1,2,3)]
     res <- get_user_profile(x = user_ids)
@@ -30,6 +31,7 @@ with_mock_api({
 
 with_mock_api({
   test_that("get_user_following: expected behaviour", {
+    skip_if(!dir.exists("api.twitter.com"))
     ori_test <- "../testdata/commtwitter/"
     user_ids <- unique(bind_tweets(ori_test, verbose = FALSE)$author_id)[c(1,2,3)]
     res <- get_user_following(x = user_ids)
@@ -39,6 +41,7 @@ with_mock_api({
 
 with_mock_api({
   test_that("get_user_following: expected behaviour", {
+    skip_if(!dir.exists("api.twitter.com"))
     ori_test <- "../testdata/commtwitter/"
     user_ids <- unique(bind_tweets(ori_test, verbose = FALSE)$author_id)[c(1,2,3)]
     res <- get_user_followers(x = user_ids)
