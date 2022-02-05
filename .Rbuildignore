@@ -17,7 +17,6 @@ cran-comments.md
 ^\.github$
 ^tests/testthat/api\.twitter\.com/
 ^tests/testthat/storage\.googleapis\.com/
-^tests/testthat/test-make_query\.R
 ^tests/testthat/test-real\.R
 ^tests/testthat/test-flat\.R
 ^tests/testthat/test-sleep\.R
