@@ -1,5 +1,7 @@
 test_that("real test", {
   skip_on_ci()
+  skip_on_cran() ## some cran machines will still run this test despite this directive
+  skip_if(Sys.getenv("TWITTER_BEARER") == "")
   params <- list(
       "query" = "#standwithhongkong",
       "max_results" = 500,

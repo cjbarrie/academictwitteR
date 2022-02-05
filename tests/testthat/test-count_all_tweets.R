@@ -8,6 +8,7 @@
 
 with_mock_api({
   test_that("expected behavior, #153", {
+    skip_if(!dir.exists("api.twitter.com"))
     ori_test <- "../testdata/commtwitter/"
     res <- count_all_tweets(query = "#commtwitter", start_tweets = "2021-03-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z")
     prev_res <- readRDS("../testdata/count_all_tweets.RDS")

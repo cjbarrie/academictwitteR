@@ -5,6 +5,9 @@
 test_that("running two make_query in rapid succession will not trigger HTTP 429", {
   skip_on_cran()
   skip_on_ci()
+  skip_if(Sys.getenv("TWITTER_BEARER") == "")
+  skip_if(!dir.exists("_snaps"))
+
   params <- 
 list(query = "from:Peter_Tolochko -is:retweet", max_results = 15, 
      start_time = "2020-02-03T00:00:00Z", end_time = "2020-11-03T00:00:00Z", 

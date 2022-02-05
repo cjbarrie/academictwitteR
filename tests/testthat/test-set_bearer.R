@@ -1,4 +1,5 @@
 test_that("get_bearer", {
+  skip_on_cran()
   ORI_BEARER <- Sys.getenv("TWITTER_BEARER")
   Sys.setenv("TWITTER_BEARER" = "")
   expect_error(get_bearer())
@@ -10,6 +11,7 @@ test_that("get_bearer", {
 
 with_mock_api({
   test_that("integration with get_all_tweets", {
+    skip_if(!dir.exists("api.twitter.com"))
     emptydir <- academictwitteR:::.gen_random_dir()
     ORI_BEARER <- Sys.getenv("TWITTER_BEARER")
     Sys.setenv("TWITTER_BEARER" = "")
