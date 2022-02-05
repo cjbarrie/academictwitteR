@@ -39,6 +39,7 @@ test_that("add_context_annotations works", {
 
 with_mock_api({
   test_that("expected output", {
+    skip_if(!dir.exists("api.twitter.com"))
     capture_warnings(x <- get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", context_annotations = FALSE))
     expect_false("context_annotations" %in% colnames(x))
     capture_warnings(y <- get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", context_annotations = TRUE))
@@ -50,6 +51,8 @@ with_mock_api({
 
 with_mock_api({
   test_that("visual output", {
+    skip_if(!dir.exists("api.twitter.com"))
+    skip_if(!dir.exists("_snaps"))
     expect_snapshot({
     capture_warnings(x <- get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", context_annotations = FALSE, verbose = TRUE))
     capture_warnings(y <- get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", context_annotations = TRUE, verbose = TRUE))

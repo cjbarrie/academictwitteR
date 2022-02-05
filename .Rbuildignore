@@ -17,8 +17,6 @@ cran-comments.md
 ^\.github$
 ^tests/testthat/api\.twitter\.com/
 ^tests/testthat/storage\.googleapis\.com/
-^tests/testthat/test-context_annotations\.R
-^tests/testthat/test-missing_header\.R
 ^tests/testthat/test-issue213\.R
 ^tests/testthat/test-exact\.R
 ^tests/testthat/test-get_user_id\.R
