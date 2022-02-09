@@ -26,8 +26,8 @@ get_retweeted_by <- function(x, bearer_token = get_bearer(), data_path = NULL, v
   ## loop through x
   new_df <- data.frame()
   for(i in seq_along(x)){
-    .vcat(verbose, paste0("Processing ",x[i],"\n"))
-    requrl <- paste0(url,x[i],endpoint)
+    .vcat(verbose, paste0("Processing ", x[i], "\n"))
+    requrl <- paste0(url, x[i], endpoint)
     next_token <- ""
     while(!is.null(next_token)) {
       if(next_token != ""){
@@ -44,6 +44,7 @@ get_retweeted_by <- function(x, bearer_token = get_bearer(), data_path = NULL, v
       Sys.sleep(1)
       if (is.null(next_token)) {
         .vcat(verbose, "This is the last page for ",  x[i], ": finishing collection. \n")
+        params[["pagination_token"]] <- NULL
         break
       }
     }
