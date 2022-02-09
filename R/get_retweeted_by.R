@@ -26,7 +26,7 @@ get_retweeted_by <- function(x, bearer_token = get_bearer(), data_path = NULL, v
   ## loop through x
   new_df <- data.frame()
   for(i in seq_along(x)){
-    cat(paste0("Processing ",x[i],"\n"))
+    .vcat(verbose, paste0("Processing ",x[i],"\n"))
     requrl <- paste0(url,x[i],endpoint)
     next_token <- ""
     while(!is.null(next_token)) {
@@ -38,12 +38,10 @@ get_retweeted_by <- function(x, bearer_token = get_bearer(), data_path = NULL, v
       new_rows <- dat$data
       new_rows$from_id <- x[i]
       new_df <- dplyr::bind_rows(new_df, new_rows) # add new rows
-      cat("Total data points: ",nrow(new_df), "\n")
+      .vcat(verbose, "Total data points: ",nrow(new_df), "\n")
       Sys.sleep(1)
       if (is.null(next_token)) {
-        if(verbose) {
-          cat("This is the last page for ",  x[i], ": finishing collection. \n")
-        }
+        .vcat(verbose, "This is the last page for ",  x[i], ": finishing collection. \n")
         break
       }
     }
