@@ -1,7 +1,7 @@
-# require(httptest)
-# start_capturing(simplify = FALSE)
-# res <- get_retweeted_by("1423714771384340481")
-# stop_capturing()
+## require(httptest)
+## start_capturing(simplify = FALSE)
+## res <- get_retweeted_by("1423714771384340481")
+## stop_capturing()
 
 with_mock_api({
   test_that("expected behavior, #153", {
