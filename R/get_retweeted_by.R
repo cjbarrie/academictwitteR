@@ -35,10 +35,12 @@ get_retweeted_by <- function(x, bearer_token = get_bearer(), data_path = NULL, v
       }
       dat <- make_query(url = requrl, params = params, bearer_token = bearer_token, verbose = verbose)
       next_token <- dat$meta$next_token #this is NULL if there are no pages left
-      new_rows <- dat$data
-      new_rows$from_id <- x[i]
-      new_df <- dplyr::bind_rows(new_df, new_rows) # add new rows
-      .vcat(verbose, "Total data points: ",nrow(new_df), "\n")
+      if (!is.null(dat$data)) {
+        new_rows <- dat$data
+        new_rows$from_id <- x[i]
+        new_df <- dplyr::bind_rows(new_df, new_rows) # add new rows
+        .vcat(verbose, "Total data points: ",nrow(new_df), "\n")
+      }
       Sys.sleep(1)
       if (is.null(next_token)) {
         .vcat(verbose, "This is the last page for ",  x[i], ": finishing collection. \n")
