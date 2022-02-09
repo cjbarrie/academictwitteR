@@ -3,10 +3,7 @@
 #' This function fetches users who retweeted a tweet
 #'
 #' @param x string containing one tweet id or a vector of tweet ids
-#' @param bearer_token string, bearer token
-#' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
-#' @param verbose If `FALSE`, query progress messages are suppressed
-#'
+#' @inheritParams get_all_tweets
 #' @return a data frame
 #' @export
 #'
