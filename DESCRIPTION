@@ -27,10 +27,10 @@ Authors@R:
 	   role = c("ctb"),
 	   comment = c(ORCID = "0000-0002-2852-2690")),
 	   person(given = "Thomas",
-	   middle = "R",
 	   family = "Davidson",
 	   role = c("ctb"),
-	   email = "thomas.davidson@rutgers.edu"))
+	   email = "thomas.davidson@rutgers.edu",
+	   comment = c(ORCID = "0000-0002-5947-7490")))
 Description: Package to query the Twitter Academic Research Product Track,
     providing access to full-archive search and other v2 API endpoints. Functions
     are written with academic research in mind. They provide flexibility in how 
