@@ -1,3 +1,9 @@
+# academictwitteR 0.3.1
+* Added support for hydrating tweet ids (`hydrate_tweets`) [#260 Thanks Tim König]
+* Added error capturing mechanism [#264 Thanks Tim König]
+* Fixed a bug of `get_retweeted_by` [#287 Thanks Thomas Davidson]
+* Various bug fixes [#273, #263, #267]
+
 # academictwitteR 0.3.0
 * Added support for batch compliance
 * Added functions `get_user_id`, `get_retweeted_by`, and `convert_json`.

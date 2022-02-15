@@ -1,6 +1,6 @@
 Package: academictwitteR
 Title: Access the Twitter Academic Research Product Track V2 API Endpoint
-Version: 0.3.0
+Version: 0.3.1
 Authors@R: 
     c(person(given = "Christopher",
            family = "Barrie",
