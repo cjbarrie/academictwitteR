@@ -27,7 +27,7 @@ create_compliance_job(
 the job ID (invisibly)
 }
 \description{
-This function creates a new compliance job and upload the Tweet IDs or user IDs. By default, the parameter \code{x} with the length of one is assumed to be a text file containing either Tweet IDs or iser IDs. This default behavior can be bypassed using \code{force_ids} For example, if you want to check for just a single Tweet ID.
+This function creates a new compliance job and upload the Tweet IDs or user IDs. By default, the parameter \code{x} with the length of one is assumed to be a text file containing either Tweet IDs or user IDs. This default behavior can be bypassed using \code{force_ids} For example, if you want to check for just a single Tweet ID.
 }
 \examples{
 \dontrun{
