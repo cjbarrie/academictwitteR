@@ -24,3 +24,4 @@ cran-comments.md
 ^codecov\.yml$
 ^doc$
 ^Meta$
+^CRAN-SUBMISSION$
