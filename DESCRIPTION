@@ -10,7 +10,7 @@ Authors@R:
            person(given = "Justin Chun-ting",
            family = "Ho",
            role = c("aut"),
-           email = "justin.chunting.ho@sciencespo.fr",
+           email = "justinho@gate.sinica.edu.tw",
            comment = c(ORCID = "0000-0002-7884-1059")),
 	   person(given = "Chung-hong",
 	   family = "Chan",
