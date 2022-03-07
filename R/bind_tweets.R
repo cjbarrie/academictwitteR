@@ -16,7 +16,8 @@
 #'    \item{"tidy"}{Tidy format; all essential columns are available}
 #'    \item{"tidy2"}{Tidy format; additional variables (see vars) are available. Untruncates retweet text and adds indicators for retweets, quotes and replies. Automatically drops duplicated tweets. Handling of quoted tweets can be specified (see quoted_variables)}
 #' }
-#' #' @param vars
+#' 
+#' @param vars
 #' `r lifecycle::badge("experimental")` vector of strings, determining additional variables provided by the tidy2 format. Can be any (or all) of the following:
 #' \itemize{
 #'    \item{"hashtags"}{Hashtags contained in the tweet. Untrunctated for retweets}
@@ -26,7 +27,7 @@
 #'    \item{"context_annotations"}{Context annotations provided by Twitter, including additional data on their domains. See https://developer.twitter.com/en/docs/twitter-api/annotations/overview for details}
 #' }
 #' 
-#' #' @param quoted_variables
+#' @param quoted_variables
 #' `r lifecycle::badge("experimental")` Should additional vars be returned for the quoted tweet? Defaults to FALSE. TRUE returns additional "_quoted" var-columns containing the vars (mentions, hashtags, etc.) of the quoted tweet in addition to the actual tweet's data
 #' 
 #' @return a data.frame containing either tweets or user information
@@ -43,9 +44,11 @@
 #' # bind json files in the directory "data" into a "tidy" data frame / tibble
 #' bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy")
 #' 
-#' # bind json files in the directory "data" into a "tidy2" data frame / tibble with additional variables
+#' # bind json files in the directory "data" into a "tidy2" data frame / tibble, get hashtags and
+#' # URLs for both original and quoted tweets
 #' bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy", 
-#'             vars = c("hashtags", "ext_urls", "mentions", "annotations", "context_annotations"))
+#'             vars = c("hashtags", "ext_urls"),
+#'             quoted_variables = T)
 #' }
 bind_tweets <- function(data_path, user = FALSE, verbose = TRUE, output_format = NA, 
                         vars = c("hashtags", "ext_urls", "mentions", "annotations", "context_annotations"),
