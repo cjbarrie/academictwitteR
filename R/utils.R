@@ -150,13 +150,15 @@ create_data_dir <- function(data_path, verbose = TRUE){
 }
 
 df_to_json <- function(df, data_path, errors = FALSE){
-  # check input
-  # if data path is supplied and file name given, generate data.frame object within loop and JSONs
-  jsonlite::write_json(df$data,
-                       file.path(data_path, paste0("data_", df$data$id[nrow(df$data)], ".json")))
-  jsonlite::write_json(df$includes,
-                       file.path(data_path, paste0("users_", df$data$id[nrow(df$data)], ".json")))
-  if (errors) { # error catcher
+  ## issue 305
+  if ("data" %in% names(df) & "includes" %in% names(df)) {
+  
+    jsonlite::write_json(df$data,
+                         file.path(data_path, paste0("data_", df$data$id[nrow(df$data)], ".json")))
+    jsonlite::write_json(df$includes,
+                         file.path(data_path, paste0("users_", df$data$id[nrow(df$data)], ".json")))
+  }
+  if (isTRUE(errors) & "errors" %in% names(df)) { # error catcher
     jsonlite::write_json(df$errors,
                          file.path(data_path, paste0("errors_", df$data$id[nrow(df$data)], ".json")))
   }
