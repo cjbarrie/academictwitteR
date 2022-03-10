@@ -54,7 +54,11 @@ bind_tweets <- function(data_path, user = FALSE, verbose = TRUE, output_format =
                         vars = c("hashtags", "ext_urls", "mentions", "annotations", "context_annotations"),
                         quoted_variables = F) {
   if (!is.na(output_format)) {
-    return(.flat(data_path, output_format = output_format, vars = vars, quoted_variables = quoted_variables))
+    flat <- .flat(data_path, output_format = output_format, vars = vars, quoted_variables = quoted_variables)
+    if (output_format == "tidy2") {
+      flat <- flat %>% dplyr::mutate(dplyr::across(.cols = tidyselect::everything(), ~ dplyr::na_if(., "NULL"))) # set left_join's NULL values to NA for consistency
+    }
+    return(flat)
   }
   if(user) {
     files <- ls_files(data_path, "^users_")
@@ -352,7 +356,6 @@ convert_json <- function(data_file, output_format = "tidy",
         } 
       }
     }
-    res <- res %>% dplyr::mutate(dplyr::across(.cols = tidyselect::everything(), ~ dplyr::na_if(., "NULL"))) # set left_join's NULL values to NA for consistency
     res <- dplyr::relocate(res, .data$tweet_id, .data$user_username, .data$text)
     return(tibble::as_tibble(res))
   }
