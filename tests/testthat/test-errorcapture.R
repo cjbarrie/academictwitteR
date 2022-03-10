@@ -200,9 +200,14 @@ with_mock_api({
       expect_true("error" %in% colnames(new_rows))
       expect_true(length(list.files(emptydir, "^errors", full.names = TRUE)) != 0)
       errs <- jsonlite::read_json(list.files(emptydir, "^errors", full.names = TRUE))
-      tw <- bind_tweets(emptydir, verbose = FALSE)
-      expect_equal(length(errs), n_polluted)
-      expect_equal(nrow(tw), 15 - n_polluted)
+      if (n_polluted <= 14) {
+        tw <- bind_tweets(emptydir, verbose = FALSE)
+        expect_equal(length(errs), n_polluted)
+        expect_equal(nrow(tw), 15 - n_polluted)
+      } else {
+        ## All polluted, It has no data, issue #301
+        expect_error(tw <- bind_tweets(emptydir, verbose = FALSE))
+      }
       unlink(emptydir, recursive = TRUE)
     }
   })
@@ -226,9 +231,14 @@ with_mock_api({
       expect_equal(nrow(new_rows), NULL) ## It's not a data.frame
       expect_true(length(list.files(emptydir, "^errors", full.names = TRUE)) != 0)
       errs <- jsonlite::read_json(list.files(emptydir, "^errors", full.names = TRUE))
-      tw <- bind_tweets(emptydir, verbose = FALSE)
-      expect_equal(length(errs), n_polluted)
-      expect_equal(nrow(tw), 15 - n_polluted)
+      if (n_polluted <= 14) {
+        tw <- bind_tweets(emptydir, verbose = FALSE)
+        expect_equal(length(errs), n_polluted)
+        expect_equal(nrow(tw), 15 - n_polluted)
+      } else {
+        ## All polluted, It has no data, issue #301
+        expect_error(tw <- bind_tweets(emptydir, verbose = FALSE))
+      }
       unlink(emptydir, recursive = TRUE)
     }
   })
@@ -251,8 +261,13 @@ with_mock_api({
       expect_false("error" %in% colnames(new_rows))
       expect_equal(nrow(new_rows), 15 - n_polluted)
       expect_true(length(list.files(emptydir, "^errors", full.names = TRUE)) == 0)
-      tw <- bind_tweets(emptydir, verbose = FALSE)
-      expect_equal(nrow(tw), 15 - n_polluted)
+      if (n_polluted <= 14) {
+        tw <- bind_tweets(emptydir, verbose = FALSE)
+        expect_equal(nrow(tw), 15 - n_polluted)
+      } else {
+        ## All polluted, It has no data, issue #301
+        expect_error(tw <- bind_tweets(emptydir, verbose = FALSE))
+      }
       unlink(emptydir, recursive = TRUE)
     }
   })
@@ -274,8 +289,13 @@ with_mock_api({
       expect_false("data.frame" %in% class(new_rows))
       expect_equal(nrow(new_rows), NULL)
       expect_true(length(list.files(emptydir, "^errors", full.names = TRUE)) == 0)
-      tw <- bind_tweets(emptydir, verbose = FALSE)
-      expect_equal(nrow(tw), 15 - n_polluted)
+      if (n_polluted <= 14) {
+        tw <- bind_tweets(emptydir, verbose = FALSE)
+        expect_equal(nrow(tw), 15 - n_polluted)
+      } else {
+        ## All polluted, It has no data, issue #301
+        expect_error(tw <- bind_tweets(emptydir, verbose = FALSE))
+      }
       unlink(emptydir, recursive = TRUE)
     }
   })

@@ -157,10 +157,10 @@ df_to_json <- function(df, data_path, errors = FALSE){
                          file.path(data_path, paste0("data_", df$data$id[nrow(df$data)], ".json")))
     jsonlite::write_json(df$includes,
                          file.path(data_path, paste0("users_", df$data$id[nrow(df$data)], ".json")))
-    if (isTRUE(errors)) { # error catcher
-      jsonlite::write_json(df$errors,
-                           file.path(data_path, paste0("errors_", df$data$id[nrow(df$data)], ".json")))
-    }
+  }
+  if (isTRUE(errors)) { # error catcher
+    jsonlite::write_json(df$errors,
+                         file.path(data_path, paste0("errors_", df$data$id[nrow(df$data)], ".json")))
   }
 }
 
