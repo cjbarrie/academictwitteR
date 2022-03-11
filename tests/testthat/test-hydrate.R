@@ -83,8 +83,6 @@ with_mock_api({
     }
   })
 })
-<<<<<<< HEAD
-=======
 
 ## Error capturing: don't change the basic behavior when all tweets IDs are valid
 
@@ -234,4 +232,3 @@ with_mock_api({
     unlink(emptydir, recursive = TRUE)
   })
 })
->>>>>>> 2809432aaea388e7bb016a1f15f24787e8d05586
