@@ -4,13 +4,7 @@
 #' @inheritParams get_all_tweets
 #' @param ids a character vector of Tweet IDs
 #' @param context_annotations If `TRUE`, context_annotations will be fetched.
-<<<<<<< HEAD
 #' @return When bind_tweets is `TRUE`, the function returns a data frame. The `data_path` if `bind_tweets` is `FALSE`
-=======
-#' @param errors logical, if `TRUE`, the error capturing mechanism is enabled. See details below.
-#' @return When bind_tweets is `TRUE`, the function returns a data frame. The `data_path` (invisibly) if `bind_tweets` is `FALSE`
-#' @details When the error capturing mechanism is enabled, Tweets IDs that cannot be queried (e.g. with error) are stored as `errors_*.json` files. If `bind_tweets` is TRUE, those error Tweets IDs are retained in the returned data.frame with the column `error` indicating the error.
->>>>>>> 2809432aaea388e7bb016a1f15f24787e8d05586
 #' @examples
 #' \dontrun{
 #' hydrate_tweets(c("1266876474440761346", "1266868259925737474", "1266867327079002121",
@@ -22,20 +16,12 @@
 hydrate_tweets <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
                            context_annotations = FALSE,
                            bind_tweets = TRUE,
-<<<<<<< HEAD
                            verbose = TRUE) {
   ## verbose = TRUE,
   ## errors = FALSE) {
   ## Building parameters for get_tweets()
   if (is.null(data_path) & !bind_tweets) {
     stop("Argument (bind_tweets = FALSE) only valid when a data_path is specified.")
-=======
-                           verbose = TRUE,
-                           errors = FALSE) {
-  ## Building parameters for get_tweets()
-  if (is.null(data_path) & !bind_tweets) {
-    stop("Argument (bind_tweets = FALSE) is valid only when data_path is specified.")
->>>>>>> 2809432aaea388e7bb016a1f15f24787e8d05586
   }
   params <- list(
     tweet.fields = "attachments,author_id,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld", 
@@ -60,7 +46,6 @@ hydrate_tweets <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
     
     ## Get tweets
     .vcat(verbose, "Batch", i, "out of", ceiling(length(ids) / 100),": ids", utils::head(batch, n = 1), "to", utils::tail(batch, n = 1), "\n")
-<<<<<<< HEAD
     ## new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, n = Inf, file = NULL, bearer_token = bearer_token, 
     ##                        export_query = FALSE, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, errors = errors)
     new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, n = Inf, file = NULL, bearer_token = bearer_token, 
@@ -88,22 +73,6 @@ hydrate_tweets <- function(ids,  bearer_token = get_bearer(), data_path = NULL,
     ## if (errors) {
     ##   .vcat(verbose, "Total of", nrow(dplyr::filter(new_df, is.na(error))), "out of", length(ids), "tweets retrieved.\n")
     ## }
-=======
-    new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, n = Inf, file = NULL, bearer_token = bearer_token, 
-                           export_query = FALSE, data_path = data_path, bind_tweets = bind_tweets, verbose = FALSE, errors = errors)
-    
-    if (bind_tweets) {
-      if (nrow(new_rows) > 0) { 
-        new_df <- dplyr::bind_rows(new_df, new_rows) # add new rows
-      }
-      if (errors) {
-        n_tweets <- nrow(dplyr::filter(new_df, is.na(.data$error)))
-        .vcat(verbose, "Total ", nrow(dplyr::filter(new_df, !is.na(.data$error))), " tweet(s) can't be retrieved.\n")
-      } else {
-        n_tweets <- nrow(new_df)
-      }
-      .vcat(verbose, "Total of ", n_tweets, " out of ", length(ids), " tweet(s) retrieved.\n")
->>>>>>> 2809432aaea388e7bb016a1f15f24787e8d05586
     }
   }
   if (bind_tweets) {

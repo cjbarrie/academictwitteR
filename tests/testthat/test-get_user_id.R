@@ -7,7 +7,6 @@
 
 with_mock_api({
   test_that("expected behavior, #153", {
-    skip_if(!dir.exists("api.twitter.com"))
     usernames <- c("icahdq", "POTUS", "hadleywickhaM", "_R_Foundation", "adljfhjsd")
     expect_error(get_user_id(usernames), NA) ## no error
     expect_true(is.data.frame(get_user_id(usernames, all = TRUE)))
