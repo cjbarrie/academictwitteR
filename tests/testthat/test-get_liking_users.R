@@ -9,6 +9,7 @@
 
 with_mock_api({
   test_that("expected behavior, #153", {
+    skip_if(!dir.exists("api.twitter.com"))
     ori_test <- "../testdata/commtwitter/"
     tweet_ids <- unique(bind_tweets(ori_test, verbose = FALSE)$id)
     res <- get_liking_users(x = tweet_ids)

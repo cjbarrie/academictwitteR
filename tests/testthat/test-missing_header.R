@@ -1,6 +1,7 @@
 
 test_that("test missing header", {
   library(httr)
+  skip_if(!file.exists("../testdata/rate_limit_res.RDS"))
   r <- readRDS("../testdata/rate_limit_res.RDS")
   expect_false(academictwitteR:::.check_header_rate_limit(r, verbose = FALSE))
   crazy_r <- r

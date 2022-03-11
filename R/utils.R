@@ -33,7 +33,8 @@ make_query <- function(url, params, bearer_token, max_error = 4, verbose = TRUE)
   jsonlite::fromJSON(httr::content(r, "text"))
 }
 
-get_tweets <- function(params, endpoint_url, page_token_name = "next_token", n, file, bearer_token, data_path, export_query, bind_tweets, verbose) {
+get_tweets <- function(params, endpoint_url, page_token_name = "next_token", n, file, bearer_token, data_path, export_query, bind_tweets, verbose, errors = FALSE) {
+  # the errors parameter allows to optionally retrieve tweets that throw an error, with the according error description. Currently, only the id-level errors are added to the bound data.frame. All errors are contained in the error_ json files when path is used, however
   
   # Check file storage conditions
   create_storage_dir(data_path = data_path, export_query = export_query, built_query = params[["query"]], start_tweets = params[["start_time"]], end_tweets = params[["end_time"]], verbose = verbose)
@@ -45,16 +46,20 @@ get_tweets <- function(params, endpoint_url, page_token_name = "next_token", n, 
   ntweets <- 0
   while (!is.null(next_token)) {
     df <- make_query(url = endpoint_url, params = params, bearer_token = bearer_token, verbose = verbose)
-    if (is.null(data_path)) {
-      # if data path is null, generate data.frame object within loop
-      df.all <- dplyr::bind_rows(df.all, df$data)
-    }
-    if (!is.null(data_path) & is.null(file) & !bind_tweets) {
-      df_to_json(df, data_path)
-    }
     if (!is.null(data_path)) {
-      df_to_json(df, data_path)
-      df.all <- dplyr::bind_rows(df.all, df$data) #and combine new data with old within function
+      df_to_json(df, data_path, errors) # piping error options to df_to_json      
+    }
+    if (!is.null(file) | bind_tweets | is.null(data_path)) {
+      ## if data path is null, generate data.frame object within loop
+      df.all <- dplyr::bind_rows(df.all, df$data)
+      if (errors) {  # error catcher
+        if ("errors" %in% names(df)) {
+          df.errors <- df$errors %>% dplyr::filter(.data$parameter == "ids") %>% dplyr::select(.data$resource_id, .data$title) %>% dplyr::rename(id = .data$resource_id, error = .data$title)
+        } else {
+          df.errors <- data.frame(id = character(), error = character()) ## empty
+        }
+        df.all <- dplyr::bind_rows(df.all, df.errors)
+      }
     }
     next_token <- df$meta$next_token #this is NULL if there are no pages left
     if (!is.null(next_token)) {
@@ -71,7 +76,7 @@ get_tweets <- function(params, endpoint_url, page_token_name = "next_token", n, 
           sep = ""
     )
     if (ntweets >= n){ # Check n
-      df.all <- df.all[1:n,] # remove extra
+      df.all <- df.all[seq_len(n),] # remove extra
       .vcat(verbose, "Total tweets captured now reach", n, ": finishing collection.\n")
       break
     }
@@ -140,23 +145,27 @@ create_data_dir <- function(data_path, verbose = TRUE){
     .vwarn(verbose, "Directory already exists. Existing JSON files may be parsed and returned, choose a new path if this is not intended.")
     invisible(data_path)
   }
-  dir.create(file.path(data_path), showWarnings = FALSE)
+  dir.create(file.path(data_path), showWarnings = FALSE, recursive = TRUE)
   invisible(data_path)  
 }
 
-df_to_json <- function(df, data_path){
+df_to_json <- function(df, data_path, errors = FALSE){
   # check input
   # if data path is supplied and file name given, generate data.frame object within loop and JSONs
   jsonlite::write_json(df$data,
                        file.path(data_path, paste0("data_", df$data$id[nrow(df$data)], ".json")))
   jsonlite::write_json(df$includes,
                        file.path(data_path, paste0("users_", df$data$id[nrow(df$data)], ".json")))
+  if (errors) { # error catcher
+    jsonlite::write_json(df$errors,
+                         file.path(data_path, paste0("errors_", df$data$id[nrow(df$data)], ".json")))
+  }
 }
 
 create_storage_dir <- function(data_path, export_query, built_query, start_tweets, end_tweets, verbose){
   if (!is.null(data_path)){
     create_data_dir(data_path, verbose)
-    if (isTRUE(export_query)){ # Note export_query is called only if data path is supplied
+    if (isTRUE(export_query) & !is.null(built_query)){ # Note export_query is called only if data path is supplied
       # Writing query to file (for resuming)
       filecon <- file(file.path(data_path, "query"))
       writeLines(c(built_query,start_tweets,end_tweets), filecon)

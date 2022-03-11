@@ -37,7 +37,7 @@ get_image_tweets(
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 
-\item{...}{arguments will be passed to \code{build_query()} function. See \code{?build_query()} for further information.}
+\item{...}{arguments will be passed to \code{\link[=build_query]{build_query()}} function. See \code{?build_query()} for further information.}
 }
 \value{
 a data.frame

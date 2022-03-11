@@ -116,10 +116,12 @@ convert_json <- function(data_file, output_format = "tidy") {
       colnames(ref) <- c("tweet_id", "sourcetweet_type", "sourcetweet_id")
       ref <- ref %>% dplyr::filter(.data$sourcetweet_type != "replied_to")
       res <- dplyr::left_join(res, ref, by = "tweet_id")
-      source_main <- dplyr::select(raw$sourcetweet.main, .data$id, .data$text, .data$lang, .data$author_id) %>%
+      if (nrow(raw$sourcetweet.main) > 0) {
+        source_main <- dplyr::select(raw$sourcetweet.main, .data$id, .data$text, .data$lang, .data$author_id) %>%
         dplyr::distinct(.data$id, .keep_all = TRUE)
-      colnames(source_main) <- paste0("sourcetweet_", colnames(source_main))
-      res <- res %>% dplyr::left_join(source_main, by = "sourcetweet_id")
+        colnames(source_main) <- paste0("sourcetweet_", colnames(source_main))
+        res <- res %>% dplyr::left_join(source_main, by = "sourcetweet_id")
+      }
     }
     res <- dplyr::relocate(res, .data$tweet_id, .data$user_username, .data$text)
     return(tibble::as_tibble(res))
