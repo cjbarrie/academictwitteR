@@ -21,7 +21,6 @@ test_that("basic test", {
 
 with_mock_api({
   test_that("basic test", {
-    skip_if(!dir.exists("api.twitter.com"))
     tweets1 <-
       suppressWarnings(get_all_tweets(
         query = "Black Lives Matter",

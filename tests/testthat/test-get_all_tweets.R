@@ -18,26 +18,23 @@ test_that("defensive programming", {
 
 with_mock_api({
   test_that("params: default", {
-    skip_if(!dir.exists("api.twitter.com"))
     emptydir <- academictwitteR:::.gen_random_dir()
     ## "Normal" usage; at least the default
     expect_error(w0 <- capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z")), NA)
     unlink(emptydir, recursive = TRUE)
   })
   test_that("params: data_path", {
-    skip_if(!dir.exists("api.twitter.com"))
-    emptydir <- academictwitteR:::.gen_random_dir()
-    expect_error(w1 <- capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir)), NA)
-    expect_match(w1, "Tweets will be bound", all = FALSE)
-    expect_true(length(list.files(emptydir)) != 0) ### side effect is there
-    ## warning message when the data_path is not empty
-    w2 <- capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir))
-    expect_match(w2, "Tweets will be bound", all = FALSE)
-    expect_match(w2, "Directory already exists", all = FALSE)
-    unlink(emptydir, recursive = TRUE)
+  emptydir <- academictwitteR:::.gen_random_dir()
+  expect_error(w1 <- capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir)), NA)
+  expect_match(w1, "Tweets will be bound", all = FALSE)
+  expect_true(length(list.files(emptydir)) != 0) ### side effect is there
+  ## warning message when the data_path is not empty
+  w2 <- capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir))
+  expect_match(w2, "Tweets will be bound", all = FALSE)
+  expect_match(w2, "Directory already exists", all = FALSE)
+  unlink(emptydir, recursive = TRUE)
   })
   test_that("param: bind_tweets", {
-    skip_if(!dir.exists("api.twitter.com"))
     emptydir <- academictwitteR:::.gen_random_dir()
 
     ## bind_tweets is FALSE and data_path is NULL: error
@@ -61,7 +58,6 @@ with_mock_api({
     unlink(emptydir, recursive = TRUE)
   })
   test_that("param: verbose", {
-    skip_if(!dir.exists("api.twitter.com"))
     emptydir <- academictwitteR:::.gen_random_dir()  
     expect_silent(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = FALSE, data_path = emptydir, bind_tweets = FALSE))
     unlink(emptydir, recursive = TRUE)
@@ -82,7 +78,6 @@ with_mock_api({
     unlink(emptydir, recursive = TRUE)
   })
   test_that("param: file", {
-    skip_if(!dir.exists("api.twitter.com"))
     emptydir <- academictwitteR:::.gen_random_dir()
     temp_RDS <- "aaa.RDS"
     expect_error(capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir, bind_tweets = FALSE, file = temp_RDS)), NA)
@@ -95,7 +90,6 @@ with_mock_api({
   })
 
   test_that("param: export_query", {
-    skip_if(!dir.exists("api.twitter.com"))
     emptydir <- academictwitteR:::.gen_random_dir()  
     capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", verbose = TRUE, data_path = emptydir, bind_tweets = FALSE, export_query = TRUE))
     expect_true(file.exists(paste0(emptydir, "/query")))
