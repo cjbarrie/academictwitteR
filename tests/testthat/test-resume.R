@@ -19,6 +19,7 @@ test_that("defensive programming", {
 
 with_mock_api({
   test_that("No duplication bug like #143 / ref #147", {
+    skip_if(!dir.exists("api.twitter.com"))
     ori_test <- "../testdata/commtwitter/"
     test_dir <- academictwitteR:::.gen_random_dir()
     dir.create(test_dir)
@@ -37,6 +38,7 @@ with_mock_api({
 
 with_mock_api({
   test_that("verbose #147", {
+    skip_if(!dir.exists("api.twitter.com"))
     ori_test <- "../testdata/commtwitter/"
     test_dir <- academictwitteR:::.gen_random_dir()
     dir.create(test_dir)

@@ -28,6 +28,7 @@
 
 with_mock_api({
   test_that("Make query and errors", {
+    skip_if(!dir.exists("api.twitter.com"))
     params <- list(
       "query" = "#standwithhongkong",
       "max_results" = 500,
