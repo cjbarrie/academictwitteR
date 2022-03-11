@@ -26,6 +26,7 @@
 #' @param page_n integer, amount of tweets to be returned by per page
 #' @param context_annotations If `TRUE`, context_annotations will be fetched. Note it will limit the page_n to 100 due restrictions of Twitter API. 
 #' @param verbose If `FALSE`, query progress messages are suppressed
+#' @param errors If `TRUE`, errors will be captured as .json objects in the data_path. Only works if a data_path is supplied
 #' @param ... arguments will be passed to [build_query()] function. See `?build_query()` for further information.
 #' 
 #' @return When bind_tweets is `TRUE` (default), the function returns a data frame. Nothing otherwise.
@@ -67,6 +68,7 @@ get_all_tweets <-
            page_n = 500,
            context_annotations = FALSE,
            verbose = TRUE,
+           errors = FALSE,
            ...) {    
     if (missing(start_tweets)) {
       stop("Start time must be specified.")
@@ -102,5 +104,5 @@ get_all_tweets <-
     
     # Get tweets
     get_tweets(params = params, endpoint_url = endpoint_url, n = n, file = file, bearer_token = bearer_token, 
-               export_query = export_query, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose)
+               export_query = export_query, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, errors = errors)
  }
