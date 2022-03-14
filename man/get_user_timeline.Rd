@@ -16,6 +16,7 @@ get_user_timeline(
   bind_tweets = TRUE,
   page_n = 100,
   verbose = TRUE,
+  errors = FALSE,
   ...
 )
 }
@@ -41,6 +42,8 @@ get_user_timeline(
 \item{page_n}{integer, amount of tweets to be returned by per page}
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
+
+\item{errors}{If \code{TRUE}, errors will be captured as .json objects in the data_path. Only works if a data_path is supplied}
 
 \item{...}{arguments will be passed to \code{build_query()} function. See \code{?build_query()} for further information.}
 }
