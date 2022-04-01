@@ -439,9 +439,16 @@ convert_json <- function(data_file, output_format = "tidy",
   variables <- dplyr::select(x, tidyselect::ends_with("_source")) %>% colnames(.) %>% stringr::str_extract(".*(?=_source)")
   if (!purrr::is_empty(variables)) {
       for (i in 1:length(variables)) {
-        x <- x %>% dplyr::mutate(!!as.name(variables[i]) := ifelse(.data$is_retweet == F & (as.character(variables[i]) %in% colnames(.)),   
-                                                            !!as.name(variables[i]),          
-                                                            !!as.name(paste0(variables[i],"_source"))))
+        if (as.character(variables[i]) %in% colnames(x)) {
+          x <- x %>% dplyr::mutate(!!as.name(variables[i]) := ifelse(.data$is_retweet == F,   
+                                                                     !!as.name(variables[i]),          
+                                                                     !!as.name(paste0(variables[i],"_source"))))
+        }
+        if(!(as.character(variables[i]) %in% colnames(x))) {
+          x <- x %>% dplyr::mutate(!!as.name(variables[i]) := ifelse(.data$is_retweet == F,   
+                                                                     NA,          
+                                                                     !!as.name(paste0(variables[i],"_source"))))
+        }
       }
   }  
   return(x)
@@ -458,3 +465,5 @@ convert_json <- function(data_file, output_format = "tidy",
   }  
   return(x)
 }
+
+
