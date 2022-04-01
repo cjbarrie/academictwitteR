@@ -10,14 +10,16 @@ bind_tweets(
   user = FALSE,
   verbose = TRUE,
   output_format = NA,
-  vars = c("hashtags", "ext_urls", "mentions", "annotations", "context_annotations"),
+  vars = c("text", "user", "tweet_metrics", "user_metrics", "hashtags", "ext_urls",
+    "mentions", "annotations", "context_annotations"),
   quoted_variables = F
 )
 
 convert_json(
   data_file,
   output_format = "tidy",
-  vars = c("hashtags", "ext_urls", "mentions", "annotations", "context_annotations"),
+  vars = c("text", "user", "tweet_metrics", "user_metrics", "hashtags", "ext_urls",
+    "mentions", "annotations", "context_annotations"),
   quoted_variables = F
 )
 }
@@ -37,6 +39,10 @@ convert_json(
 
 \item{vars}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} vector of strings, determining additional variables provided by the tidy2 format. Can be any (or all) of the following:
 \itemize{
+\item{"text"}{Text of the tweet, including language classification, indicator of sensitive content and (if applicable) sourcetweet text}
+\item{"user"}{Information on the user in addition to their ID}
+\item{"tweet_metrics"}{Tweet metrics, specifically the like, retweet and quote counts}
+\item{"user_metrics"}{User metrics, specifically their tweet, list, follower and following counts}
 \item{"hashtags"}{Hashtags contained in the tweet. Untrunctated for retweets}
 \item{"ext_urls"}{Shortened and expanded URLs contained in the tweet, excluding those internal to Twitter (e.g. retweet URLs). Includes additional data provided by Twitter, such as the unwound URL, their title and description (if available). Untrunctated for retweets}
 \item{"mentions"}{Mentioned usernames and their IDs, excluding retweeted users. Untrunctated for retweets. Note that quoted users are only mentioned here if explicitly named in the tweet text. This was usually the case with older versions of Twitter, but is no longer the standard behaviour}

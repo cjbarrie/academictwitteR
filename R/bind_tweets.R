@@ -20,6 +20,10 @@
 #' @param vars
 #' `r lifecycle::badge("experimental")` vector of strings, determining additional variables provided by the tidy2 format. Can be any (or all) of the following:
 #' \itemize{
+#'    \item{"text"}{Text of the tweet, including language classification, indicator of sensitive content and (if applicable) sourcetweet text}
+#'    \item{"user"}{Information on the user in addition to their ID}
+#'    \item{"tweet_metrics"}{Tweet metrics, specifically the like, retweet and quote counts}
+#'    \item{"user_metrics"}{User metrics, specifically their tweet, list, follower and following counts}
 #'    \item{"hashtags"}{Hashtags contained in the tweet. Untrunctated for retweets}
 #'    \item{"ext_urls"}{Shortened and expanded URLs contained in the tweet, excluding those internal to Twitter (e.g. retweet URLs). Includes additional data provided by Twitter, such as the unwound URL, their title and description (if available). Untrunctated for retweets}
 #'    \item{"mentions"}{Mentioned usernames and their IDs, excluding retweeted users. Untrunctated for retweets. Note that quoted users are only mentioned here if explicitly named in the tweet text. This was usually the case with older versions of Twitter, but is no longer the standard behaviour}
@@ -51,7 +55,7 @@
 #'             quoted_variables = T)
 #' }
 bind_tweets <- function(data_path, user = FALSE, verbose = TRUE, output_format = NA, 
-                        vars = c("hashtags", "ext_urls", "mentions", "annotations", "context_annotations"),
+                        vars = c("text", "user", "tweet_metrics", "user_metrics", "hashtags", "ext_urls", "mentions", "annotations", "context_annotations"),
                         quoted_variables = F) {
   if (!is.na(output_format)) {
     flat <- .flat(data_path, output_format = output_format, vars = vars, quoted_variables = quoted_variables)
@@ -107,7 +111,7 @@ ls_files <- function(data_path, pattern) {
 #' @importFrom rlang .data
 #' @importFrom rlang :=
 convert_json <- function(data_file, output_format = "tidy",
-                         vars = c("hashtags", "ext_urls", "mentions", "annotations", "context_annotations"),
+                         vars = c("text", "user", "tweet_metrics", "user_metrics", "hashtags", "ext_urls", "mentions", "annotations", "context_annotations"),
                          quoted_variables = F) {
   if (!output_format %in% c("tidy", "raw", "tidy2")) {
     stop("Unknown format.", call. = FALSE)
@@ -158,22 +162,32 @@ convert_json <- function(data_file, output_format = "tidy",
   }
 
   if (output_format == "tidy2") {
-    tweetmain <- raw[["tweet.main"]]
-    usermain <- dplyr::distinct(raw[["user.main"]], .data$author_id, .keep_all = TRUE)  ## there are duplicates
-    colnames(usermain) <- paste0("user_", colnames(usermain))
-    tweet_metrics <- tibble::tibble(tweet_id = raw$tweet.public_metrics.retweet_count$tweet_id,
-                                    retweet_count = raw$tweet.public_metrics.retweet_count$data,
-                                    like_count = raw$tweet.public_metrics.like_count$data,
-                                    quote_count = raw$tweet.public_metrics.quote_count$data)
-    user_metrics <- tibble::tibble(author_id = raw$user.public_metrics.tweet_count$author_id,
-                                   user_tweet_count = raw$user.public_metrics.tweet_count$data,
-                                   user_list_count = raw$user.public_metrics.listed_count$data,
-                                   user_followers_count = raw$user.public_metrics.followers_count$data,
-                                   user_following_count = raw$user.public_metrics.following_count$data) %>%
-      dplyr::distinct(.data$author_id, .keep_all = TRUE)
-    res <- tweetmain %>% dplyr::left_join(usermain, by = c("author_id" = "user_author_id")) %>%
-      dplyr::left_join(tweet_metrics, by = "tweet_id") %>%
-      dplyr::left_join(user_metrics, by = "author_id")
+    res <- raw[["tweet.main"]] %>% dplyr::select(tweet_id, tidyselect::any_of(c("conversation_id", "author_id", "created_at", "source", "in_reply_to_user_id")))
+    if ("text" %in% vars) {
+      text <- raw[["tweet.main"]] %>% dplyr::select(tweet_id, tidyselect::any_of(c("text", "lang", "possibly_sensitive")))
+      res <- res %>% dplyr::left_join(text, by = "tweet_id")
+    }
+    if ("user" %in% vars) {
+      usermain <- dplyr::distinct(raw[["user.main"]], .data$author_id, .keep_all = TRUE)  ## there are duplicates
+      colnames(usermain) <- paste0("user_", colnames(usermain))
+      res <- res %>% dplyr::left_join(usermain, by = c("author_id" = "user_author_id"))
+    }
+    if ("tweet_metrics" %in% vars) {
+      tweet_metrics <- tibble::tibble(tweet_id = raw$tweet.public_metrics.retweet_count$tweet_id,
+                                      retweet_count = raw$tweet.public_metrics.retweet_count$data,
+                                      like_count = raw$tweet.public_metrics.like_count$data,
+                                      quote_count = raw$tweet.public_metrics.quote_count$data) 
+      res <- res %>% dplyr::left_join(tweet_metrics, by = "tweet_id")
+    }
+    if ("user_metrics" %in% vars) {
+      user_metrics <- tibble::tibble(author_id = raw$user.public_metrics.tweet_count$author_id,
+                                     user_tweet_count = raw$user.public_metrics.tweet_count$data,
+                                     user_list_count = raw$user.public_metrics.listed_count$data,
+                                     user_followers_count = raw$user.public_metrics.followers_count$data,
+                                     user_following_count = raw$user.public_metrics.following_count$data) %>%
+        dplyr::distinct(.data$author_id, .keep_all = TRUE)
+      res <- res %>% dplyr::left_join(user_metrics, by = "author_id")
+    }
     if ("hashtags" %in% vars & !is.null(raw$tweet.entities.hashtags)) {
       hashtags <- raw$tweet.entities.hashtags %>% 
         dplyr::group_by(.data$tweet_id) %>% dplyr::mutate(hashtags = if ("tag" %in% colnames(.)) list(.data$tag) else NA) %>% # used hashtags as list per tweet
@@ -234,15 +248,15 @@ convert_json <- function(data_file, output_format = "tidy",
       ref <- ref %>% dplyr::filter(.data$sourcetweet_type != "replied_to") 
       res <- dplyr::left_join(res, ref, by = "tweet_id")
       if (nrow(raw$sourcetweet.main) > 0) {
+        if ("text" %in% vars) {
         source_main <- dplyr::select(raw$sourcetweet.main, .data$id, .data$text, .data$lang, .data$author_id) %>%
           dplyr::distinct(.data$id, .keep_all = TRUE)
+        } else {
+          source_main <- dplyr::select(raw$sourcetweet.main, .data$id, .data$author_id) %>%
+            dplyr::distinct(.data$id, .keep_all = TRUE)
+        }
         colnames(source_main) <- paste0("sourcetweet_", colnames(source_main))
         res <- res %>% dplyr::left_join(source_main, by = "sourcetweet_id") %>% 
-          dplyr::mutate(text = dplyr::case_when(  # full length text for RTs, removes RT marker
-            .data$sourcetweet_type == "retweeted" ~ .data$sourcetweet_text,
-            is.na(.data$sourcetweet_type) ~ .data$text,
-            TRUE ~ .data$text
-          )) %>%
           dplyr::mutate(is_retweet = dplyr::case_when( # clear retweet identifier
             .data$sourcetweet_type == "retweeted" ~ TRUE,
             is.na(.data$sourcetweet_type) ~ FALSE,
@@ -258,18 +272,21 @@ convert_json <- function(data_file, output_format = "tidy",
             is.na(.data$in_reply_to_user_id) ~ FALSE,
           ) else FALSE) %>%  
           dplyr::distinct(.data$tweet_id, .keep_all = TRUE) # make unique explicitly to prevent errors (e.g. duplicated mentions). Will be made unique anyway
-        if (!is.null(vars)) {
+        if ("text" %in% vars) {
+          res <- res %>% 
+            dplyr::mutate(text = dplyr::case_when(  # full length text for RTs, removes RT marker
+              .data$sourcetweet_type == "retweeted" ~ .data$sourcetweet_text,
+              is.na(.data$sourcetweet_type) ~ .data$text,
+              TRUE ~ .data$text))      
+          }
+        if (any(c("mentions", "ext_urls", "hashtags", "annotations", "context_annotations") %in% vars)) {
           rt <-        # RT and quote entity information. This is incomplete in the tweet.entities for RTs due to truncation and missing for quotes
             raw$sourcetweet.main %>% 
             dplyr::filter(.data$id %in% raw$tweet.referenced_tweets[raw$tweet.referenced_tweets$type != "replied_to", "id"]$id) %>% # get retweets & quotes only
             dplyr::distinct(.data$id, .keep_all = TRUE) # unique tweets only (requires formatting as data.table to be efficient)
-          if ("mentions" %in% colnames(rt$entities)) rt$entities.mentions <- rt$entities$mentions %>% purrr::map(as.data.frame) # this is necessary because empty data is represented as Named list(),
-          if ("hashtags" %in% colnames(rt$entities)) rt$entities.hashtags <- rt$entities$hashtags %>% purrr::map(as.data.frame) #  causing tidyr::unnest() (and equivalent functions) to fail due to diferent data formats
-          if ("urls" %in% colnames(rt$entities)) rt$entities.urls <- rt$entities$urls %>% purrr::map(as.data.frame)
-          if ("annotations" %in% colnames(rt$entities)) rt$entities.annotations <- rt$entities$annotations %>% purrr::map(as.data.frame)
-          if ("context_annotations" %in% colnames(rt)) rt$context_annotations <- rt$context_annotations %>% purrr::map(as.data.frame)
         }
         if ("mentions" %in% vars & !is.null(rt$entities.mentions)){
+          if ("mentions" %in% colnames(rt$entities)) rt$entities.mentions <- rt$entities$mentions %>% purrr::map(as.data.frame) # this is necessary because empty data is represented as Named list(), causing tidyr::unnest() (and equivalent functions) to fail due to diferent data formats
             mentions_rt <-
               rt %>% dplyr::select(.data$id, .data$entities.mentions) %>% tidyr::unnest(.data$entities.mentions, names_sep = "_", keep_empty = T) %>%  # ! requires tidyr v1.1.4+ !
               dplyr::group_by(.data$id) %>% 
@@ -284,7 +301,8 @@ convert_json <- function(data_file, output_format = "tidy",
             }
             res <- res %>% dplyr::select(!tidyselect::ends_with("_source")) # drop _source variables
           }
-        if ("ext_urls" %in% vars & !is.null(rt$entities.urls))  {        
+        if ("ext_urls" %in% vars & !is.null(rt$entities.urls))  { 
+          if ("urls" %in% colnames(rt$entities)) rt$entities.urls <- rt$entities$urls %>% purrr::map(as.data.frame)
           urls_rt <- rt %>% dplyr::select(.data$id, .data$entities.urls) %>% tidyr::unnest(.data$entities.urls, names_sep = "_", keep_empty = T)   # ! requires tidyr v1.1.4+ !
           if ("entities.urls_expanded_url" %in% colnames(urls_rt)) { # if applicable drop twitter-intern URLs (retweets etc.)
             urls_rt <- dplyr::filter(urls_rt, !stringr::str_detect(.data$entities.urls_expanded_url, pattern = "https://twitter.com/"))
@@ -306,6 +324,7 @@ convert_json <- function(data_file, output_format = "tidy",
           res <- res %>% dplyr::select(!tidyselect::ends_with("_source")) # drop _source variables
           }
         if ("hashtags" %in% vars & !is.null(rt$entities.hashtags)) {
+          if ("hashtags" %in% colnames(rt$entities)) rt$entities.hashtags <- rt$entities$hashtags %>% purrr::map(as.data.frame) 
           hashtags_rt <-
             rt %>% dplyr::select(.data$id, .data$entities.hashtags) %>% tidyr::unnest(.data$entities.hashtags, names_sep = "_", keep_empty = T) %>%  
             dplyr::group_by(.data$id) %>% 
@@ -320,6 +339,7 @@ convert_json <- function(data_file, output_format = "tidy",
           res <- res %>% dplyr::select(!tidyselect::ends_with("_source")) # drop _source variables
         }
         if ("annotations" %in% vars & !is.null(rt$entities.annotations)) {
+          if ("annotations" %in% colnames(rt$entities)) rt$entities.annotations <- rt$entities$annotations %>% purrr::map(as.data.frame)
           annotations_rt <-
             rt %>% dplyr::select(.data$id, .data$entities.annotations) %>% tidyr::unnest(.data$entities.annotations, names_sep = "_", keep_empty = T) %>%  
             dplyr::group_by(.data$id) %>% 
@@ -336,6 +356,7 @@ convert_json <- function(data_file, output_format = "tidy",
           res <- res %>% dplyr::select(!tidyselect::ends_with("_source")) # drop _source variables
         }
         if ("context_annotations" %in% vars & !is.null(rt$context_annotations)) {
+          if ("context_annotations" %in% colnames(rt)) rt$context_annotations <- rt$context_annotations %>% purrr::map(as.data.frame)
           context_annotations_rt <- 
             rt %>% dplyr::select(.data$id, .data$context_annotations) %>% tidyr::unnest(.data$context_annotations, names_sep = "_", keep_empty = T) %>% 
             dplyr::group_by(.data$id) %>% dplyr::mutate( # used annotations as list per tweet
@@ -356,12 +377,13 @@ convert_json <- function(data_file, output_format = "tidy",
         } 
       }
     }
-    res <- dplyr::relocate(res, .data$tweet_id, .data$user_username, .data$text)
+    res <- dplyr::relocate(res, tidyselect::any_of(c("tweet_id", "user_username", "text")))
     return(tibble::as_tibble(res))
   }
 }
 
-.flat <- function(data_path, output_format = "tidy", vars = c("hashtags", "ext_urls", "mentions", "annotations", "context_annotations"), quoted_variables = F) {
+.flat <- function(data_path, output_format = "tidy", vars = c("text", "user", "tweet_metrics", "user_metrics", "hashtags", "ext_urls", "mentions", "annotations", "context_annotations"), 
+                  quoted_variables = F) {
   if (!output_format %in% c("tidy", "raw", "tidy2")) {
     stop("Unknown format.", call. = FALSE)
   }
