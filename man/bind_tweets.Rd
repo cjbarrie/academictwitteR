@@ -37,7 +37,7 @@ convert_json(
 \item{"tidy2"}{Tidy format; additional variables (see vars) are available. Untruncates retweet text and adds indicators for retweets, quotes and replies. Automatically drops duplicated tweets. Handling of quoted tweets can be specified (see quoted_variables)}
 }}
 
-\item{vars}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} vector of strings, determining additional variables provided by the tidy2 format. Can be any (or all) of the following:
+\item{vars}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} vector of strings, determining the variables provided by the tidy2 format. Can be any (or all) of the following:
 \itemize{
 \item{"text"}{Text of the tweet, including language classification, indicator of sensitive content and (if applicable) sourcetweet text}
 \item{"user"}{Information on the user in addition to their ID}
@@ -64,6 +64,8 @@ This function binds information stored as JSON files. The experimental function 
 By default, \code{bind_tweets} binds into a data frame containing tweets (from data_\emph{id}.json files).
 
 If users is TRUE, it binds into a data frame containing user information (from users_\emph{id}.json).
+
+Note that output of the tidy2 vars is strongly dependant on the returns of the Twitter API. This is due to the fact that, rather than extracting entities from the tweet text, tidy2 completely relies on the vars data returned by the API. While current search requests should return all these vars, older data might not contain certain data. This is especially true for annotations (named entities) and context_annotations. As of now, these variables are also poorly supported by Twitter for the majority languages, with English being the language that provides comprehensive annnotations and context_annotions. This is equally the case for quoted_variables, where older data may not contain the necessary sourcetweet data to extract the vars for quoted tweets. This may be the case not only for annotations and context_annotations, but also hashtags, mentions and URLs.
 }
 \examples{
 \dontrun{

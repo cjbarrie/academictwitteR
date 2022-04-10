@@ -5,6 +5,8 @@
 #' By default, `bind_tweets` binds into a data frame containing tweets (from data_*id*.json files). 
 #' 
 #' If users is TRUE, it binds into a data frame containing user information (from users_*id*.json). 
+#' 
+#' Note that output of the tidy2 vars is strongly dependant on the returns of the Twitter API. This is due to the fact that, rather than extracting entities from the tweet text, tidy2 completely relies on the vars data returned by the API. While current search requests should return all these vars, older data might not contain certain data. This is especially true for annotations (named entities) and context_annotations. As of now, these variables are also poorly supported by Twitter for the majority languages, with English being the language that provides comprehensive annnotations and context_annotions. This is equally the case for quoted_variables, where older data may not contain the necessary sourcetweet data to extract the vars for quoted tweets. This may be the case not only for annotations and context_annotations, but also hashtags, mentions and URLs.
 #'
 #' @param data_path string, file path to directory of stored tweets data saved as data_*id*.json and users_*id*.json
 #' @param user If `FALSE`, this function binds JSON files into a data frame containing tweets; data frame containing user information otherwise. Ignore if `output_format` is not NA
@@ -18,7 +20,7 @@
 #' }
 #' 
 #' @param vars
-#' `r lifecycle::badge("experimental")` vector of strings, determining additional variables provided by the tidy2 format. Can be any (or all) of the following:
+#' `r lifecycle::badge("experimental")` vector of strings, determining the variables provided by the tidy2 format. Can be any (or all) of the following:
 #' \itemize{
 #'    \item{"text"}{Text of the tweet, including language classification, indicator of sensitive content and (if applicable) sourcetweet text}
 #'    \item{"user"}{Information on the user in addition to their ID}
