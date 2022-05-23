@@ -287,7 +287,7 @@ convert_json <- function(data_file, output_format = "tidy",
             dplyr::filter(.data$id %in% raw$tweet.referenced_tweets[raw$tweet.referenced_tweets$type != "replied_to", "id"]$id) %>% # get retweets & quotes only
             dplyr::distinct(.data$id, .keep_all = TRUE) # unique tweets only (requires formatting as data.table to be efficient)
         }
-        if ("mentions" %in% vars & !is.null(rt$entities.mentions)){
+        if ("mentions" %in% vars & !is.null(rt$entities$mentions)){
           if ("mentions" %in% colnames(rt$entities)) rt$entities.mentions <- rt$entities$mentions %>% purrr::map(as.data.frame) # this is necessary because empty data is represented as Named list(), causing tidyr::unnest() (and equivalent functions) to fail due to diferent data formats
             mentions_rt <-
               rt %>% dplyr::select(.data$id, .data$entities.mentions) %>% tidyr::unnest(.data$entities.mentions, names_sep = "_", keep_empty = T) %>%  # ! requires tidyr v1.1.4+ !
@@ -303,7 +303,7 @@ convert_json <- function(data_file, output_format = "tidy",
             }
             res <- res %>% dplyr::select(!tidyselect::ends_with("_source")) # drop _source variables
           }
-        if ("ext_urls" %in% vars & !is.null(rt$entities.urls))  { 
+        if ("ext_urls" %in% vars & !is.null(rt$entities$urls))  { 
           if ("urls" %in% colnames(rt$entities)) rt$entities.urls <- rt$entities$urls %>% purrr::map(as.data.frame)
           urls_rt <- rt %>% dplyr::select(.data$id, .data$entities.urls) %>% tidyr::unnest(.data$entities.urls, names_sep = "_", keep_empty = T)   # ! requires tidyr v1.1.4+ !
           if ("entities.urls_expanded_url" %in% colnames(urls_rt)) { # if applicable drop twitter-intern URLs (retweets etc.)
@@ -325,7 +325,7 @@ convert_json <- function(data_file, output_format = "tidy",
           }
           res <- res %>% dplyr::select(!tidyselect::ends_with("_source")) # drop _source variables
           }
-        if ("hashtags" %in% vars & !is.null(rt$entities.hashtags)) {
+        if ("hashtags" %in% vars & !is.null(rt$entities$hashtags)) {
           if ("hashtags" %in% colnames(rt$entities)) rt$entities.hashtags <- rt$entities$hashtags %>% purrr::map(as.data.frame) 
           hashtags_rt <-
             rt %>% dplyr::select(.data$id, .data$entities.hashtags) %>% tidyr::unnest(.data$entities.hashtags, names_sep = "_", keep_empty = T) %>%  
@@ -340,7 +340,7 @@ convert_json <- function(data_file, output_format = "tidy",
           }
           res <- res %>% dplyr::select(!tidyselect::ends_with("_source")) # drop _source variables
         }
-        if ("annotations" %in% vars & !is.null(rt$entities.annotations)) {
+        if ("annotations" %in% vars & !is.null(rt$entities$annotations)) {
           if ("annotations" %in% colnames(rt$entities)) rt$entities.annotations <- rt$entities$annotations %>% purrr::map(as.data.frame)
           annotations_rt <-
             rt %>% dplyr::select(.data$id, .data$entities.annotations) %>% tidyr::unnest(.data$entities.annotations, names_sep = "_", keep_empty = T) %>%  
