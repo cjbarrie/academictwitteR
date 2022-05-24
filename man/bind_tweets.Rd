@@ -45,7 +45,7 @@ convert_json(
 \item{"user_metrics"}{User metrics, specifically their tweet, list, follower and following counts}
 \item{"hashtags"}{Hashtags contained in the tweet. Untrunctated for retweets}
 \item{"ext_urls"}{Shortened and expanded URLs contained in the tweet, excluding those internal to Twitter (e.g. retweet URLs). Includes additional data provided by Twitter, such as the unwound URL, their title and description (if available). Untrunctated for retweets}
-\item{"mentions"}{Mentioned usernames and their IDs, excluding retweeted users. Untrunctated for retweets. Note that quoted users are only mentioned here if explicitly named in the tweet text. This was usually the case with older versions of Twitter, but is no longer the standard behaviour}
+\item{"mentions"}{Mentioned usernames and their IDs, excluding retweeted users. Untrunctated for retweets. Note that quoted users are only mentioned here if explicitly named in the tweet text. This was usually the case with older versions of Twitter, but is no longer the standard behaviour. Extracting mentions allows the usernames of the RT authors (rather than only their ID) to be preserved}
 \item{"annotations"}{Annotations provided by Twitter, including their probability and type. Basically Named Entities. See https://developer.twitter.com/en/docs/twitter-api/annotations/overview for details}
 \item{"context_annotations"}{Context annotations provided by Twitter, including additional data on their domains. See https://developer.twitter.com/en/docs/twitter-api/annotations/overview for details}
 }}

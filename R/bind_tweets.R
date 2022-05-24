@@ -28,7 +28,7 @@
 #'    \item{"user_metrics"}{User metrics, specifically their tweet, list, follower and following counts}
 #'    \item{"hashtags"}{Hashtags contained in the tweet. Untrunctated for retweets}
 #'    \item{"ext_urls"}{Shortened and expanded URLs contained in the tweet, excluding those internal to Twitter (e.g. retweet URLs). Includes additional data provided by Twitter, such as the unwound URL, their title and description (if available). Untrunctated for retweets}
-#'    \item{"mentions"}{Mentioned usernames and their IDs, excluding retweeted users. Untrunctated for retweets. Note that quoted users are only mentioned here if explicitly named in the tweet text. This was usually the case with older versions of Twitter, but is no longer the standard behaviour}
+#'    \item{"mentions"}{Mentioned usernames and their IDs, excluding retweeted users. Untrunctated for retweets. Note that quoted users are only mentioned here if explicitly named in the tweet text. This was usually the case with older versions of Twitter, but is no longer the standard behaviour. Extracting mentions allows the usernames of the RT authors (rather than only their ID) to be preserved}
 #'    \item{"annotations"}{Annotations provided by Twitter, including their probability and type. Basically Named Entities. See https://developer.twitter.com/en/docs/twitter-api/annotations/overview for details}
 #'    \item{"context_annotations"}{Context annotations provided by Twitter, including additional data on their domains. See https://developer.twitter.com/en/docs/twitter-api/annotations/overview for details}
 #' }
@@ -297,7 +297,8 @@ convert_json <- function(data_file, output_format = "tidy",
               dplyr::select(.data$id, tidyselect::starts_with("mentions")) %>% # dplyr::select relevant variables
               dplyr::ungroup() %>% dplyr::distinct(.data$id, .keep_all = TRUE) # drop duplicates introduced by tidyr::unnesting
             res <- dplyr::left_join(res, mentions_rt, by = c("sourcetweet_id" = "id")) 
-            res <- .merge_rt_variables(res) # get correct entities for RTs (seperately for every dataset, rather than merge in the end, to account for missing variables)
+            res <- res %>% dplyr::rowwise() %>% dplyr::mutate(retweet_source_author_name = ifelse(is_retweet == TRUE & !is.null(mentions_username), dplyr::first(mentions_username), NA)) # preserve original RT authors usernames (currently unavailable for quotes, as their authors are not in the @mentions)
+            res <- res %>% dplyr::ungroup() %>% .merge_rt_variables()# get correct entities for RTs (seperately for every dataset, rather than merge in the end, to account for missing variables)
             if (quoted_variables == T) {
               res <- .add_quote_variables(res) # get quote entities if enabled
             }
