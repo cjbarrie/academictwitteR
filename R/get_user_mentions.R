@@ -82,11 +82,23 @@ get_user_mentions <-
       endpoint_url <- paste0("https://api.twitter.com/2/users/", user, "/mentions")
       
       # Get tweets
-      new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, page_token_name = "pagination_token", n = n, file = file, bearer_token = bearer_token, 
-                             export_query = export_query, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose)
-      new_df <- dplyr::bind_rows(new_df, new_rows)
+        new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, page_token_name = "pagination_token", n = n, file = file, bearer_token = bearer_token, 
+                               export_query = export_query, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose)
+        if (nrow(new_rows) > 0) {
+          new_rows$from_id <- user
+        }
+        new_df <- dplyr::bind_rows(new_df, new_rows)
     }
     new_df
   }
+
+
+new_df <- data.frame()
+for (user in users$user_id) {
+  new_rows <- data.frame(from_id = user)
+  new_df <- dplyr::bind_rows(new_df, new_rows)
+  new_df
+}
+
 
 
