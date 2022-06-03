@@ -93,12 +93,3 @@ get_user_mentions <-
   }
 
 
-new_df <- data.frame()
-for (user in users$user_id) {
-  new_rows <- data.frame(from_id = user)
-  new_df <- dplyr::bind_rows(new_df, new_rows)
-  new_df
-}
-
-
-
