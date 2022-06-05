@@ -15,15 +15,6 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       TWITTER_BEARER: ${{ secrets.TWITTER_BEARER }}
 
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-          - {os: ubuntu-20.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-20.04, r: 'oldrel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-18.04, r: '3.4', "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
-
     steps:
       - uses: actions/checkout@v2
 
