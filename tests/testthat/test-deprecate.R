@@ -67,28 +67,28 @@ with_mock_api({
 ## z <- get_radius_tweets(query = "happy", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", radius = c(-0.131969125179604,51.50847878040284, 25))
 ## stop_capturing()
 
-with_mock_api({
-  test_that("get_radius_tweets", {
-    skip_if(!dir.exists("api.twitter.com"))
-    emptydir <- academictwitteR:::.gen_random_dir()
-    lifecycle::expect_deprecated(get_radius_tweets(query = "happy", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", radius = c(-0.131969125179604,51.50847878040284, 25), data_path = emptydir, bind_tweets = FALSE, verbose = FALSE))
-    unlink(emptydir, recursive = TRUE)
-  })
-})
+## with_mock_api({
+##   test_that("get_radius_tweets", {
+##     skip_if(!dir.exists("api.twitter.com"))
+##     emptydir <- academictwitteR:::.gen_random_dir()
+##     lifecycle::expect_deprecated(get_radius_tweets(query = "happy", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", radius = c(-0.131969125179604,51.50847878040284, 25), data_path = emptydir, bind_tweets = FALSE, verbose = FALSE))
+##     unlink(emptydir, recursive = TRUE)
+##   })
+## })
 
 ## require(httptest)
 ## start_capturing(simplify = FALSE)
 ## z <- get_bbox_tweets(query = "happy", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", bbox = c(-0.222473,51.442453,0.072784,51.568534))
 ## stop_capturing()
 
-with_mock_api({
-  test_that("get_bbox_tweets", {
-    skip_if(!dir.exists("api.twitter.com"))
-    emptydir <- academictwitteR:::.gen_random_dir()
-    lifecycle::expect_deprecated(get_bbox_tweets(query = "happy", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", bbox = c(-0.222473,51.442453,0.072784,51.568534), data_path = emptydir, bind_tweets = FALSE, verbose = FALSE))
-    unlink(emptydir, recursive = TRUE)
-  })
-})
+## with_mock_api({
+##   test_that("get_bbox_tweets", {
+##     skip_if(!dir.exists("api.twitter.com"))
+##     emptydir <- academictwitteR:::.gen_random_dir()
+##     lifecycle::expect_deprecated(get_bbox_tweets(query = "happy", start_tweets = "2021-06-01T00:00:00Z", end_tweets = "2021-06-05T00:00:00Z", bbox = c(-0.222473,51.442453,0.072784,51.568534), data_path = emptydir, bind_tweets = FALSE, verbose = FALSE))
+##     unlink(emptydir, recursive = TRUE)
+##   })
+## })
 
 ## require(httptest)
 ## start_capturing(simplify = FALSE)
