@@ -58,8 +58,7 @@ Imports:
     tidyselect,
     purrr,
     rlang,
-    utils,
-    stringr
+    utils
 Suggests: 
     knitr,
     rmarkdown,
