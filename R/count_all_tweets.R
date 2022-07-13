@@ -3,19 +3,9 @@
 #' This function returns aggregate counts of tweets by query string or strings
 #' between specified date ranges. 
 #'
-#' @param query string or character vector, search query or queries
-#' @param start_tweets string, starting date
-#' @param end_tweets  string, ending date
-#' @param bearer_token string, bearer token
 #' @param n integer, upper limit of tweet counts to be fetched (i.e., for 365 days n must be at least 365). Default is 100. 
-#' @param file string, name of the resulting RDS file
-#' @param data_path string, if supplied, fetched data can be saved to the designated path as jsons
-#' @param export_query If `TRUE`, queries are exported to data_path
-#' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
-#' @param granularity string, the granularity for the search counts results. Options are "day"; "hour"; "minute". Default is day. 
-#' @param verbose If `FALSE`, query progress messages are suppressed
-#' @param ... arguments will be passed to `build_query()` function. See `?build_query()` for further information.
-#' 
+#' @param granularity string, the granularity for the search counts results. Options are "day"; "hour"; "minute". Default is day.
+#' @inheritParams get_all_tweets
 #' @return a data.frame
 #' @export
 #'
@@ -47,12 +37,6 @@ count_all_tweets <-
            granularity = "day",
            verbose = TRUE,
            ...) {    
-    if (missing(start_tweets)) {
-      stop("Start time must be specified.")
-    }
-    if (missing(end_tweets)) {
-      stop("End time must be specified.")
-    }
     
     # Build query
     built_query <- build_query(query, ...)
@@ -60,10 +44,19 @@ count_all_tweets <-
     # Building parameters for get_tweets()
     params <- list(
       "query" = built_query,
-      "start_time" = start_tweets,
-      "end_time" = end_tweets,
       "granularity" = granularity
-      )
+    )
+    if (!missing(start_tweets)) {
+      params$start_time <- start_tweets
+    }
+    if (!missing(end_tweets)) {
+      params$end_time <- end_tweets
+    }
+    if ("start_time" %in% names(params) & "end_time" %in% names(params)) {
+      ## For backward compatibility with test cases
+      params <- params[c("query", "start_time", "end_time", "granularity")]
+    }
+
     endpoint_url <- "https://api.twitter.com/2/tweets/counts/all"
     .vcat(verbose, "query: ", params[["query"]], "\n")
     

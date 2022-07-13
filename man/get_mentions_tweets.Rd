@@ -21,9 +21,9 @@ get_mentions_tweets(
 \arguments{
 \item{query}{string or character vector, search query or queries}
 
-\item{start_tweets}{string, starting date}
+\item{start_tweets}{string, starting date; default to now - 30 days}
 
-\item{end_tweets}{string, ending date}
+\item{end_tweets}{string, ending date; default to now - 30 seconds}
 
 \item{bearer_token}{string, bearer token}
 
