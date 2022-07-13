@@ -15,7 +15,7 @@ update_collection(
 \arguments{
 \item{data_path}{string, name of an existing data_path}
 
-\item{end_tweets}{string, ending date}
+\item{end_tweets}{string, ending date; default to now - 30 seconds}
 
 \item{bearer_token}{string, bearer token}
 

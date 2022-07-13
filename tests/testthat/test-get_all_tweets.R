@@ -4,10 +4,11 @@
 
 ## Github secret has not been set yet!
 
-test_that("defensive programming", {
-  expect_error(capture_warnings(get_all_tweets(query = "#commtwitter", end_tweets = "2021-06-05T00:00:00Z")))
-  expect_error(capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-05T00:00:00Z")))
-})
+
+## test_that("defensive programming", {
+##   expect_error(capture_warnings(get_all_tweets(query = "#commtwitter", end_tweets = "2021-06-05T00:00:00Z")))
+##   expect_error(capture_warnings(get_all_tweets(query = "#commtwitter", start_tweets = "2021-06-05T00:00:00Z")))
+## })
 
 
 ## require(httptest)
