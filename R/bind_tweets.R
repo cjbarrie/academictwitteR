@@ -288,7 +288,7 @@ convert_json <- function(data_file, output_format = "tidy",
             dplyr::distinct(.data$id, .keep_all = TRUE) # unique tweets only (requires formatting as data.table to be efficient)
         }
         if ("mentions" %in% vars & !is.null(rt$entities$mentions)){
-          if ("mentions" %in% colnames(rt$entities)) rt$entities.mentions <- rt$entities$mentions %>% purrr::map(as.data.frame) # this is necessary because empty data is represented as Named list(), causing tidyr::unnest() (and equivalent functions) to fail due to diferent data formats
+          if ("mentions" %in% colnames(rt$entities)) rt$entities.mentions <- rt$entities$mentions %>% purrr::map(as.data.frame) # this is necessary because empty data is represented as Named list(), causing tidyr::unnest() (and equivalent functions) to fail due to different data formats
             mentions_rt <-
               rt %>% dplyr::select(.data$id, .data$entities.mentions) %>% tidyr::unnest(.data$entities.mentions, names_sep = "_", keep_empty = T) %>%  # ! requires tidyr v1.1.4+ !
               dplyr::group_by(.data$id) %>% 
@@ -297,8 +297,8 @@ convert_json <- function(data_file, output_format = "tidy",
               dplyr::select(.data$id, tidyselect::starts_with("mentions")) %>% # dplyr::select relevant variables
               dplyr::ungroup() %>% dplyr::distinct(.data$id, .keep_all = TRUE) # drop duplicates introduced by tidyr::unnesting
             res <- dplyr::left_join(res, mentions_rt, by = c("sourcetweet_id" = "id")) 
-            res <- res %>% dplyr::rowwise() %>% dplyr::mutate(retweet_source_author_name = ifelse(is_retweet == TRUE & !is.null(mentions_username), dplyr::first(mentions_username), NA)) # preserve original RT authors usernames (currently unavailable for quotes, as their authors are not in the @mentions)
-            res <- res %>% dplyr::ungroup() %>% .merge_rt_variables()# get correct entities for RTs (seperately for every dataset, rather than merge in the end, to account for missing variables)
+            res <- res %>% dplyr::rowwise() %>% dplyr::mutate(retweet_source_author_name = ifelse(is_retweet == TRUE & "mentions_username" %in% colnames(.data), dplyr::first(.data$mentions_username), NA)) # preserve original RT authors usernames (currently unavailable for quotes, as their authors are not in the @mentions)
+            res <- res %>% dplyr::ungroup() %>% .merge_rt_variables()# get correct entities for RTs (separately for every data set, rather than merge in the end, to account for missing variables)
             if (quoted_variables == T) {
               res <- .add_quote_variables(res) # get quote entities if enabled
             }
