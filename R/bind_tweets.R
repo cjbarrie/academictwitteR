@@ -15,6 +15,7 @@
 #'    \item{"raw"}{List of data frames; Note: not all data frames are in Boyce-Codd 3rd Normal Form}
 #'    \item{"tidy"}{Tidy format; all essential columns are available}
 #' }
+#' @param parallel_workers number of threads used for parallel processing. Defaults to all detected threads. Only supported if the output_format is not NA
 #' @return a data.frame containing either tweets or user information
 #' @export
 #'
