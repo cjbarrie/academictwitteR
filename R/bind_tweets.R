@@ -29,9 +29,9 @@
 #' # bind json files in the directory "data" into a "tidy" data frame / tibble
 #' bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy")
 #' }
-bind_tweets <- function(data_path, user = FALSE, verbose = TRUE, output_format = NA) {
+bind_tweets <- function(data_path, user = FALSE, verbose = TRUE, output_format = NA, parallel_workers = parallel::detectCores()) {
   if (!is.na(output_format)) {
-    return(.flat(data_path, output_format = output_format))
+    return(.flat(data_path, output_format = output_format, parallel_workers = parallel_workers))
   }
   if(user) {
     files <- ls_files(data_path, "^users_")
@@ -133,7 +133,7 @@ convert_json <- function(data_file, output_format = "tidy") {
   return(file.path(dirname(data_filename), paste0("users_", ids, ".json")))
 }
 
-.flat <- function(data_path, output_format = "tidy") {
+.flat <- function(data_path, output_format = "tidy", parallel_workers) {
   if (!output_format %in% c("tidy", "raw")) {
     stop("Unknown format.", call. = FALSE)
   }
@@ -141,7 +141,10 @@ convert_json <- function(data_file, output_format = "tidy") {
   if (output_format == "raw") {
     return(convert_json(data_files, output_format = "raw"))
   }
-  return(purrr::map_dfr(data_files, convert_json, output_format = output_format))
+  if (parallel_workers > 1) {
+    future::plan(multisession, workers = parallel_workers)
+  }
+  return(furrr::future_map_dfr(data_files, convert_json, output_format = output_format))
 }
 
 .gen_raw <- function(df, pkicol = "id", pki_name = "tweet_id") {
