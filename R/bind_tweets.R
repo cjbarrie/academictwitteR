@@ -36,6 +36,8 @@
 #' @param quoted_variables
 #' `r lifecycle::badge("experimental")` Should additional vars be returned for the quoted tweet? Defaults to FALSE. TRUE returns additional "_quoted" var-columns containing the vars (mentions, hashtags, etc.) of the quoted tweet in addition to the actual tweet's data
 #' 
+#' @param parallel_workers number of threads used for parallel processing. Defaults to all detected threads. Only supported if the output_format is not NA
+#'  
 #' @return a data.frame containing either tweets or user information
 #' @export
 #'
@@ -58,9 +60,10 @@
 #' }
 bind_tweets <- function(data_path, user = FALSE, verbose = TRUE, output_format = NA, 
                         vars = c("text", "user", "tweet_metrics", "user_metrics", "hashtags", "ext_urls", "mentions", "annotations", "context_annotations"),
-                        quoted_variables = F) {
+                        quoted_variables = F,
+                        parallel_workers = parallel::detectCores()) {
   if (!is.na(output_format)) {
-    flat <- .flat(data_path, output_format = output_format, vars = vars, quoted_variables = quoted_variables)
+    flat <- .flat(data_path, output_format = output_format, vars = vars, quoted_variables = quoted_variables, parallel_workers = parallel_workers)
     if (output_format == "tidy2") {
       flat <- flat %>% dplyr::mutate(dplyr::across(.cols = tidyselect::everything(), ~ dplyr::na_if(., "NULL"))) # set left_join's NULL values to NA for consistency
     }
@@ -385,8 +388,10 @@ convert_json <- function(data_file, output_format = "tidy",
   }
 }
 
-.flat <- function(data_path, output_format = "tidy", vars = c("text", "user", "tweet_metrics", "user_metrics", "hashtags", "ext_urls", "mentions", "annotations", "context_annotations"), 
-                  quoted_variables = F) {
+.flat <- function(data_path, output_format = "tidy", 
+                  vars = c("text", "user", "tweet_metrics", "user_metrics", "hashtags", "ext_urls", "mentions", "annotations", "context_annotations"), 
+                  quoted_variables = F,
+                  parallel_workers = parallel::detectCores()) {
   if (!output_format %in% c("tidy", "raw", "tidy2")) {
     stop("Unknown format.", call. = FALSE)
   }
@@ -394,7 +399,10 @@ convert_json <- function(data_file, output_format = "tidy",
   if (output_format == "raw") {
     return(convert_json(data_files, output_format = "raw"))
   }
-  return(purrr::map_dfr(data_files, convert_json, output_format = output_format, vars = vars, quoted_variables = quoted_variables))
+  if (parallel_workers > 1) {
+    future::plan(multisession, workers = parallel_workers)
+  }
+  return(furrr::future_map_dfr(data_files, convert_json, output_format = output_format, vars = vars, quoted_variables = quoted_variables))
 }
 
 .gen_aux_filename <- function(data_filename) {
