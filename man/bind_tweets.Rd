@@ -5,7 +5,13 @@
 \alias{convert_json}
 \title{Bind information stored as JSON files}
 \usage{
-bind_tweets(data_path, user = FALSE, verbose = TRUE, output_format = NA)
+bind_tweets(
+  data_path,
+  user = FALSE,
+  verbose = TRUE,
+  output_format = NA,
+  parallel_workers = parallel::detectCores()
+)
 
 convert_json(data_file, output_format = "tidy")
 }
@@ -21,6 +27,8 @@ convert_json(data_file, output_format = "tidy")
 \item{"raw"}{List of data frames; Note: not all data frames are in Boyce-Codd 3rd Normal Form}
 \item{"tidy"}{Tidy format; all essential columns are available}
 }}
+
+\item{parallel_workers}{number of threads used for parallel processing. Defaults to all detected threads. Only supported if the output_format is not NA}
 
 \item{data_file}{string, a single file path to a JSON file; or a vector of file paths to JSON files of stored tweets data saved as data_\emph{id}.json}
 }
