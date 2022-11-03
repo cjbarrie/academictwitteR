@@ -400,7 +400,7 @@ convert_json <- function(data_file, output_format = "tidy",
     return(convert_json(data_files, output_format = "raw"))
   }
   if (parallel_workers > 1) {
-    future::plan(multisession, workers = parallel_workers)
+    future::plan(future::multisession, workers = parallel_workers)
   }
   return(furrr::future_map_dfr(data_files, convert_json, output_format = output_format, vars = vars, quoted_variables = quoted_variables))
 }
