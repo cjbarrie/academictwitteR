@@ -36,7 +36,8 @@
 #' @param quoted_variables
 #' `r lifecycle::badge("experimental")` Should additional vars be returned for the quoted tweet? Defaults to FALSE. TRUE returns additional "_quoted" var-columns containing the vars (mentions, hashtags, etc.) of the quoted tweet in addition to the actual tweet's data
 #' 
-#' @param parallel_workers number of threads used for parallel processing. Defaults to all detected threads. Only supported if the output_format is not NA
+#' @param parallel_workers Number of threads used for parallel processing. Defaults to all detected threads. Only supported if the output_format is "tidy" or "tidy2"
+#' @param auto_set_plan Should the parallelization plan be set automatically? If True, the function automatically sets up (and ends) a multisession with the specified amount of parallel workers. If False, a future::plan() session needs to be set up manually for parallelization
 #'  
 #' @return a data.frame containing either tweets or user information
 #' @export
@@ -60,10 +61,11 @@
 #' }
 bind_tweets <- function(data_path, user = FALSE, verbose = TRUE, output_format = NA, 
                         vars = c("text", "user", "tweet_metrics", "user_metrics", "hashtags", "ext_urls", "mentions", "annotations", "context_annotations"),
-                        quoted_variables = F,
-                        parallel_workers = parallel::detectCores()) {
+                        quoted_variables = FALSE,
+                        parallel_workers = parallel::detectCores(),
+                        auto_set_plan = TRUE) {
   if (!is.na(output_format)) {
-    flat <- .flat(data_path, output_format = output_format, vars = vars, quoted_variables = quoted_variables, parallel_workers = parallel_workers)
+    flat <- .flat(data_path, output_format = output_format, vars = vars, quoted_variables = quoted_variables, parallel_workers = parallel_workers, auto_set_plan = auto_set_plan)
     if (output_format == "tidy2") {
       flat <- flat %>% dplyr::mutate(dplyr::across(.cols = tidyselect::everything(), ~ dplyr::na_if(., "NULL"))) # set left_join's NULL values to NA for consistency
     }
@@ -390,8 +392,9 @@ convert_json <- function(data_file, output_format = "tidy",
 
 .flat <- function(data_path, output_format = "tidy", 
                   vars = c("text", "user", "tweet_metrics", "user_metrics", "hashtags", "ext_urls", "mentions", "annotations", "context_annotations"), 
-                  quoted_variables = F,
-                  parallel_workers = parallel::detectCores()) {
+                  quoted_variables = FALSE,
+                  parallel_workers = parallel::detectCores(),
+                  auto_set_plan = TRUE) {
   if (!output_format %in% c("tidy", "raw", "tidy2")) {
     stop("Unknown format.", call. = FALSE)
   }
@@ -399,8 +402,9 @@ convert_json <- function(data_file, output_format = "tidy",
   if (output_format == "raw") {
     return(convert_json(data_files, output_format = "raw"))
   }
-  if (parallel_workers > 1) {
-    future::plan(future::multisession, workers = parallel_workers)
+  if (auto_set_plan == TRUE && parallel_workers > 1) {
+    session_plan <- future::plan(future::multisession, workers = parallel_workers)
+    on.exit(future::plan(session_plan))
   }
   return(furrr::future_map_dfr(data_files, convert_json, output_format = output_format, vars = vars, quoted_variables = quoted_variables))
 }
