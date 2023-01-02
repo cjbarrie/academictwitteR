@@ -59,7 +59,8 @@ Imports:
     purrr,
     rlang,
     utils,
-    stringr
+    stringr,
+    future
 Suggests: 
     knitr,
     rmarkdown,
