@@ -15,7 +15,10 @@
 #'    \item{"raw"}{List of data frames; Note: not all data frames are in Boyce-Codd 3rd Normal Form}
 #'    \item{"tidy"}{Tidy format; all essential columns are available}
 #' }
-#' @param parallel_workers number of threads used for parallel processing. Defaults to all detected threads. Only supported if the output_format is not NA
+#' 
+#' @param parallel_workers Number of threads used for parallel processing. Defaults to all detected threads. Only supported if the output_format is "tidy"
+#' @param auto_set_plan Should the parallelization plan be set automatically? If True, the function automatically sets up (and ends) a multisession with the specified amount of parallel workers. If False, a future::plan() session needs to be set up manually for parallelization
+#'
 #' @return a data.frame containing either tweets or user information
 #' @export
 #'
@@ -142,8 +145,9 @@ convert_json <- function(data_file, output_format = "tidy") {
   if (output_format == "raw") {
     return(convert_json(data_files, output_format = "raw"))
   }
-  if (parallel_workers > 1) {
-    future::plan(future::multisession, workers = parallel_workers)
+  if (auto_set_plan == TRUE && parallel_workers > 1) {
+    session_plan <- future::plan(future::multisession, workers = parallel_workers)
+    on.exit(future::plan(session_plan))
   }
   return(furrr::future_map_dfr(data_files, convert_json, output_format = output_format))
 }
