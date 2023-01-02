@@ -12,8 +12,9 @@ bind_tweets(
   output_format = NA,
   vars = c("text", "user", "tweet_metrics", "user_metrics", "hashtags", "ext_urls",
     "mentions", "annotations", "context_annotations"),
-  quoted_variables = F,
-  parallel_workers = parallel::detectCores()
+  quoted_variables = FALSE,
+  parallel_workers = parallel::detectCores(),
+  auto_set_plan = TRUE
 )
 
 convert_json(
@@ -53,7 +54,9 @@ convert_json(
 
 \item{quoted_variables}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} Should additional vars be returned for the quoted tweet? Defaults to FALSE. TRUE returns additional "_quoted" var-columns containing the vars (mentions, hashtags, etc.) of the quoted tweet in addition to the actual tweet's data}
 
-\item{parallel_workers}{number of threads used for parallel processing. Defaults to all detected threads. Only supported if the output_format is not NA}
+\item{parallel_workers}{Number of threads used for parallel processing. Defaults to all detected threads. Only supported if the output_format is "tidy" or "tidy2"}
+
+\item{auto_set_plan}{Should the parallelization plan be set automatically? If True, the function automatically sets up (and ends) a multisession with the specified amount of parallel workers. If False, a future::plan() session needs to be set up manually for parallelization}
 
 \item{data_file}{string, a single file path to a JSON file; or a vector of file paths to JSON files of stored tweets data saved as data_\emph{id}.json}
 }
