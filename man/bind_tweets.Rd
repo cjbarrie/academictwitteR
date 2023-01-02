@@ -28,9 +28,11 @@ convert_json(data_file, output_format = "tidy")
 \item{"tidy"}{Tidy format; all essential columns are available}
 }}
 
-\item{parallel_workers}{number of threads used for parallel processing. Defaults to all detected threads. Only supported if the output_format is not NA}
+\item{parallel_workers}{Number of threads used for parallel processing. Defaults to all detected threads. Only supported if the output_format is "tidy"}
 
 \item{data_file}{string, a single file path to a JSON file; or a vector of file paths to JSON files of stored tweets data saved as data_\emph{id}.json}
+
+\item{auto_set_plan}{Should the parallelization plan be set automatically? If True, the function automatically sets up (and ends) a multisession with the specified amount of parallel workers. If False, a future::plan() session needs to be set up manually for parallelization}
 }
 \value{
 a data.frame containing either tweets or user information
