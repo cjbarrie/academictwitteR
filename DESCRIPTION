@@ -60,7 +60,8 @@ Imports:
     rlang,
     utils,
     stringr,
-    future
+    future,
+    furrr
 Suggests: 
     knitr,
     rmarkdown,
