@@ -35,7 +35,7 @@
 #' }
 bind_tweets <- function(data_path, user = FALSE, verbose = TRUE, output_format = NA, parallel_workers = parallel::detectCores(), auto_set_plan = TRUE) {
   if (!is.na(output_format)) {
-    return(.flat(data_path, output_format = output_format, parallel_workers = parallel_workers))
+    return(.flat(data_path, output_format = output_format, parallel_workers = parallel_workers, auto_set_plan = auto_set_plan))
   }
   if(user) {
     files <- ls_files(data_path, "^users_")
@@ -137,7 +137,7 @@ convert_json <- function(data_file, output_format = "tidy") {
   return(file.path(dirname(data_filename), paste0("users_", ids, ".json")))
 }
 
-.flat <- function(data_path, output_format = "tidy", parallel_workers) {
+.flat <- function(data_path, output_format = "tidy", parallel_workers, auto_set_plan) {
   if (!output_format %in% c("tidy", "raw")) {
     stop("Unknown format.", call. = FALSE)
   }
