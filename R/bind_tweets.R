@@ -33,7 +33,7 @@
 #' # bind json files in the directory "data" into a "tidy" data frame / tibble
 #' bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy")
 #' }
-bind_tweets <- function(data_path, user = FALSE, verbose = TRUE, output_format = NA, parallel_workers = parallel::detectCores()) {
+bind_tweets <- function(data_path, user = FALSE, verbose = TRUE, output_format = NA, parallel_workers = parallel::detectCores(), auto_set_plan == TRUE) {
   if (!is.na(output_format)) {
     return(.flat(data_path, output_format = output_format, parallel_workers = parallel_workers))
   }
