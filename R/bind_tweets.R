@@ -5,6 +5,8 @@
 #' By default, `bind_tweets` binds into a data frame containing tweets (from data_*id*.json files). 
 #' 
 #' If users is TRUE, it binds into a data frame containing user information (from users_*id*.json). 
+#' 
+#' For the "tidy" format, parallel processing with furrr is supported. In order to enable parallel processing, workers need to be set manually through [future::plan()]. See examples
 #'
 #' @param data_path string, file path to directory of stored tweets data saved as data_*id*.json and users_*id*.json
 #' @param user If `FALSE`, this function binds JSON files into a data frame containing tweets; data frame containing user information otherwise. Ignore if `output_format` is not NA
@@ -16,9 +18,6 @@
 #'    \item{"tidy"}{Tidy format; all essential columns are available}
 #' }
 #' 
-#' @param parallel_workers Number of threads used for parallel processing. Defaults to all detected threads. Only supported if the output_format is "tidy"
-#' @param auto_set_plan Should the parallelization plan be set automatically? If True, the function automatically sets up (and ends) a multisession with the specified amount of parallel workers. If False, a future::plan() session needs to be set up manually for parallelization
-#'
 #' @return a data.frame containing either tweets or user information
 #' @export
 #'
@@ -32,10 +31,19 @@
 #' 
 #' # bind json files in the directory "data" into a "tidy" data frame / tibble
 #' bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy")
+#' 
+#' # bind json files in the directory "data" into a "tidy" data frame / tibble with parallel computing
+#' ## set up a multisession
+#' future::plan("multisession")
+#' ## run the function - note that no additional arguments are required
+#' bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy")
+#' ## Shut down parallel workers
+#' future::plan("sequential")
 #' }
-bind_tweets <- function(data_path, user = FALSE, verbose = TRUE, output_format = NA, parallel_workers = parallel::detectCores(), auto_set_plan = TRUE) {
+#' 
+bind_tweets <- function(data_path, user = FALSE, verbose = TRUE, output_format = NA) {
   if (!is.na(output_format)) {
-    return(.flat(data_path, output_format = output_format, parallel_workers = parallel_workers, auto_set_plan = auto_set_plan))
+    return(.flat(data_path, output_format = output_format))
   }
   if(user) {
     files <- ls_files(data_path, "^users_")
@@ -137,17 +145,13 @@ convert_json <- function(data_file, output_format = "tidy") {
   return(file.path(dirname(data_filename), paste0("users_", ids, ".json")))
 }
 
-.flat <- function(data_path, output_format = "tidy", parallel_workers, auto_set_plan) {
+.flat <- function(data_path, output_format = "tidy") {
   if (!output_format %in% c("tidy", "raw")) {
     stop("Unknown format.", call. = FALSE)
   }
   data_files <- ls_files(data_path, "^data_")
   if (output_format == "raw") {
     return(convert_json(data_files, output_format = "raw"))
-  }
-  if (auto_set_plan == TRUE && parallel_workers > 1) {
-    session_plan <- future::plan(future::multisession, workers = parallel_workers)
-    on.exit(future::plan(session_plan))
   }
   return(furrr::future_map_dfr(data_files, convert_json, output_format = output_format))
 }
