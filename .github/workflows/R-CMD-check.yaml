@@ -26,6 +26,7 @@ jobs:
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      TWITTER_BEARER: ${{ secrets.TWITTER_BEARER }}
       R_KEEP_PKG_SOURCE: yes
 
     steps:
