@@ -12,9 +12,7 @@ bind_tweets(
   output_format = NA,
   vars = c("text", "user", "tweet_metrics", "user_metrics", "hashtags", "ext_urls",
     "mentions", "annotations", "context_annotations"),
-  quoted_variables = FALSE,
-  parallel_workers = parallel::detectCores(),
-  auto_set_plan = TRUE
+  quoted_variables = FALSE
 )
 
 convert_json(
@@ -54,10 +52,6 @@ convert_json(
 
 \item{quoted_variables}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} Should additional vars be returned for the quoted tweet? Defaults to FALSE. TRUE returns additional "_quoted" var-columns containing the vars (mentions, hashtags, etc.) of the quoted tweet in addition to the actual tweet's data}
 
-\item{parallel_workers}{Number of threads used for parallel processing. Defaults to all detected threads. Only supported if the output_format is "tidy" or "tidy2"}
-
-\item{auto_set_plan}{Should the parallelization plan be set automatically? If True, the function automatically sets up (and ends) a multisession with the specified amount of parallel workers. If False, a future::plan() session needs to be set up manually for parallelization}
-
 \item{data_file}{string, a single file path to a JSON file; or a vector of file paths to JSON files of stored tweets data saved as data_\emph{id}.json}
 }
 \value{
@@ -70,6 +64,8 @@ This function binds information stored as JSON files. The experimental function 
 By default, \code{bind_tweets} binds into a data frame containing tweets (from data_\emph{id}.json files).
 
 If users is TRUE, it binds into a data frame containing user information (from users_\emph{id}.json).
+
+For the "tidy" and "tidy2" format, parallel processing with furrr is supported. In order to enable parallel processing, workers need to be set manually through \code{\link[future:plan]{future::plan()}}. See examples
 
 Note that output of the tidy2 vars is strongly dependant on the returns of the Twitter API. This is due to the fact that, rather than extracting entities from the tweet text, tidy2 completely relies on the vars data returned by the API. While current search requests should return all these vars, older data might not contain certain data. This is especially true for annotations (named entities) and context_annotations. As of now, these variables are also poorly supported by Twitter for the majority languages, with English being the language that provides comprehensive annnotations and context_annotions. This is equally the case for quoted_variables, where older data may not contain the necessary sourcetweet data to extract the vars for quoted tweets. This may be the case not only for annotations and context_annotations, but also hashtags, mentions and URLs.
 }
@@ -86,8 +82,16 @@ bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy")
 
 # bind json files in the directory "data" into a "tidy2" data frame / tibble, get hashtags and
 # URLs for both original and quoted tweets
-bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy", 
+bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy2", 
             vars = c("hashtags", "ext_urls"),
             quoted_variables = T)
+            
+# bind json files in the directory "data" into a "tidy2" data frame / tibble with parallel computing
+## set up a multisession
+future::plan("multisession")
+## run the function - note that no additional arguments are required
+bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy2")
+## Shut down parallel workers
+future::plan("sequential")            
 }
 }

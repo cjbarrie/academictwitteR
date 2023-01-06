@@ -6,6 +6,8 @@
 #' 
 #' If users is TRUE, it binds into a data frame containing user information (from users_*id*.json). 
 #' 
+#' For the "tidy" and "tidy2" format, parallel processing with furrr is supported. In order to enable parallel processing, workers need to be set manually through [future::plan()]. See examples
+#' 
 #' Note that output of the tidy2 vars is strongly dependant on the returns of the Twitter API. This is due to the fact that, rather than extracting entities from the tweet text, tidy2 completely relies on the vars data returned by the API. While current search requests should return all these vars, older data might not contain certain data. This is especially true for annotations (named entities) and context_annotations. As of now, these variables are also poorly supported by Twitter for the majority languages, with English being the language that provides comprehensive annnotations and context_annotions. This is equally the case for quoted_variables, where older data may not contain the necessary sourcetweet data to extract the vars for quoted tweets. This may be the case not only for annotations and context_annotations, but also hashtags, mentions and URLs.
 #'
 #' @param data_path string, file path to directory of stored tweets data saved as data_*id*.json and users_*id*.json
@@ -36,9 +38,6 @@
 #' @param quoted_variables
 #' `r lifecycle::badge("experimental")` Should additional vars be returned for the quoted tweet? Defaults to FALSE. TRUE returns additional "_quoted" var-columns containing the vars (mentions, hashtags, etc.) of the quoted tweet in addition to the actual tweet's data
 #' 
-#' @param parallel_workers Number of threads used for parallel processing. Defaults to all detected threads. Only supported if the output_format is "tidy" or "tidy2"
-#' @param auto_set_plan Should the parallelization plan be set automatically? If True, the function automatically sets up (and ends) a multisession with the specified amount of parallel workers. If False, a future::plan() session needs to be set up manually for parallelization
-#'  
 #' @return a data.frame containing either tweets or user information
 #' @export
 #'
@@ -55,17 +54,23 @@
 #' 
 #' # bind json files in the directory "data" into a "tidy2" data frame / tibble, get hashtags and
 #' # URLs for both original and quoted tweets
-#' bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy", 
+#' bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy2", 
 #'             vars = c("hashtags", "ext_urls"),
 #'             quoted_variables = T)
+#'             
+#' # bind json files in the directory "data" into a "tidy2" data frame / tibble with parallel computing
+#' ## set up a multisession
+#' future::plan("multisession")
+#' ## run the function - note that no additional arguments are required
+#' bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy2")
+#' ## Shut down parallel workers
+#' future::plan("sequential")            
 #' }
 bind_tweets <- function(data_path, user = FALSE, verbose = TRUE, output_format = NA, 
                         vars = c("text", "user", "tweet_metrics", "user_metrics", "hashtags", "ext_urls", "mentions", "annotations", "context_annotations"),
-                        quoted_variables = FALSE,
-                        parallel_workers = parallel::detectCores(),
-                        auto_set_plan = TRUE) {
+                        quoted_variables = FALSE) {
   if (!is.na(output_format)) {
-    flat <- .flat(data_path, output_format = output_format, vars = vars, quoted_variables = quoted_variables, parallel_workers = parallel_workers, auto_set_plan = auto_set_plan)
+    flat <- .flat(data_path, output_format = output_format, vars = vars, quoted_variables = quoted_variables)
     if (output_format == "tidy2") {
       flat <- flat %>% dplyr::mutate(dplyr::across(.cols = tidyselect::everything(), ~ dplyr::na_if(., "NULL"))) # set left_join's NULL values to NA for consistency
     }
@@ -392,19 +397,13 @@ convert_json <- function(data_file, output_format = "tidy",
 
 .flat <- function(data_path, output_format = "tidy", 
                   vars = c("text", "user", "tweet_metrics", "user_metrics", "hashtags", "ext_urls", "mentions", "annotations", "context_annotations"), 
-                  quoted_variables = FALSE,
-                  parallel_workers = parallel::detectCores(),
-                  auto_set_plan = TRUE) {
+                  quoted_variables = FALSE) {
   if (!output_format %in% c("tidy", "raw", "tidy2")) {
     stop("Unknown format.", call. = FALSE)
   }
   data_files <- ls_files(data_path, "^data_")
   if (output_format == "raw") {
     return(convert_json(data_files, output_format = "raw"))
-  }
-  if (auto_set_plan == TRUE && parallel_workers > 1) {
-    session_plan <- future::plan(future::multisession, workers = parallel_workers)
-    on.exit(future::plan(session_plan))
   }
   return(furrr::future_map_dfr(data_files, convert_json, output_format = output_format, vars = vars, quoted_variables = quoted_variables))
 }
