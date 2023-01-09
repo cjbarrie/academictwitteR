@@ -22,9 +22,9 @@ count_all_tweets(
 \arguments{
 \item{query}{string or character vector, search query or queries}
 
-\item{start_tweets}{string, starting date}
+\item{start_tweets}{string, starting date; default to now - 30 days}
 
-\item{end_tweets}{string, ending date}
+\item{end_tweets}{string, ending date; default to now - 30 seconds}
 
 \item{bearer_token}{string, bearer token}
 
@@ -42,7 +42,7 @@ count_all_tweets(
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
 
-\item{...}{arguments will be passed to \code{build_query()} function. See \code{?build_query()} for further information.}
+\item{...}{arguments will be passed to \code{\link[=build_query]{build_query()}} function. See \code{?build_query()} for further information.}
 }
 \value{
 a data.frame

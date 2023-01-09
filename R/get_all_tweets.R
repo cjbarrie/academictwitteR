@@ -15,8 +15,8 @@
 #' while user-level data will be returned as a series of JSONs beginning "users_".
 #'
 #' @param query string or character vector, search query or queries
-#' @param start_tweets string, starting date
-#' @param end_tweets  string, ending date
+#' @param start_tweets string, starting date; default to now - 30 days
+#' @param end_tweets  string, ending date; default to now - 30 seconds
 #' @param bearer_token string, bearer token
 #' @param n integer, upper limit of tweets to be fetched
 #' @param file string, name of the resulting RDS file
@@ -68,12 +68,6 @@ get_all_tweets <-
            context_annotations = FALSE,
            verbose = TRUE,
            ...) {    
-    if (missing(start_tweets)) {
-      stop("Start time must be specified.")
-    }
-    if (missing(end_tweets)) {
-      stop("End time must be specified.")
-    }
     
     # Check file storage conditions
     check_data_path(data_path = data_path, file = file, bind_tweets = bind_tweets, verbose = verbose)
@@ -85,13 +79,21 @@ get_all_tweets <-
     params <- list(
       "query" = built_query,
       "max_results" = page_n,
-      "start_time" = start_tweets,
-      "end_time" = end_tweets,
       "tweet.fields" = "attachments,author_id,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,public_metrics,possibly_sensitive,referenced_tweets,source,text,withheld",
       "user.fields" = "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld",
       "expansions" = "author_id,entities.mentions.username,geo.place_id,in_reply_to_user_id,referenced_tweets.id,referenced_tweets.id.author_id",
       "place.fields" = "contained_within,country,country_code,full_name,geo,id,name,place_type"
     )
+    if (!missing(start_tweets)) {
+      params$start_time <- start_tweets
+    }
+    if (!missing(end_tweets)) {
+      params$end_time <- end_tweets
+    }
+    if ("start_time" %in% names(params) & "end_time" %in% names(params)) {
+      ## For backward compatibility with test cases
+      params <- params[c("query", "max_results", "start_time", "end_time", "tweet.fields", "user.fields", "expansions", "place.fields")]
+    }
     endpoint_url <- "https://api.twitter.com/2/tweets/search/all"
     
     if (context_annotations){

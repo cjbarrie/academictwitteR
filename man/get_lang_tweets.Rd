@@ -24,9 +24,9 @@ get_lang_tweets(
 
 \item{lang, }{string, a single BCP 47 language identifier e.g. "fr"}
 
-\item{start_tweets}{string, starting date}
+\item{start_tweets}{string, starting date; default to now - 30 days}
 
-\item{end_tweets}{string, ending date}
+\item{end_tweets}{string, ending date; default to now - 30 seconds}
 
 \item{bearer_token}{string, bearer token}
 

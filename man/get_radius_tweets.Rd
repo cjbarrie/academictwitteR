@@ -24,9 +24,9 @@ get_radius_tweets(
 
 \item{radius}{numeric, a vector of two point coordinates latitude, longitude, and point radius distance (in miles)}
 
-\item{start_tweets}{string, starting date}
+\item{start_tweets}{string, starting date; default to now - 30 days}
 
-\item{end_tweets}{string, ending date}
+\item{end_tweets}{string, ending date; default to now - 30 seconds}
 
 \item{bearer_token}{string, bearer token}
 
