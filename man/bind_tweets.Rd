@@ -67,7 +67,7 @@ If users is TRUE, it binds into a data frame containing user information (from u
 
 For the "tidy" and "tidy2" format, parallel processing with furrr is supported. In order to enable parallel processing, workers need to be set manually through \code{\link[future:plan]{future::plan()}}. See examples
 
-Note that output of the tidy2 vars is strongly dependant on the returns of the Twitter API. This is due to the fact that, rather than extracting entities from the tweet text, tidy2 completely relies on the vars data returned by the API. While current search requests should return all these vars, older data might not contain certain data. This is especially true for annotations (named entities) and context_annotations. As of now, these variables are also poorly supported by Twitter for the majority languages, with English being the language that provides comprehensive annnotations and context_annotions. This is equally the case for quoted_variables, where older data may not contain the necessary sourcetweet data to extract the vars for quoted tweets. This may be the case not only for annotations and context_annotations, but also hashtags, mentions and URLs.
+Note that output of the tidy2 vars returns results of the Twitter API, rather than from tweet text. Therefore, certain variables, especially context annotations and quoted_variables, may not be present in older data.
 }
 \examples{
 \dontrun{

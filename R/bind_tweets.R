@@ -8,7 +8,7 @@
 #' 
 #' For the "tidy" and "tidy2" format, parallel processing with furrr is supported. In order to enable parallel processing, workers need to be set manually through [future::plan()]. See examples
 #' 
-#' Note that output of the tidy2 vars is strongly dependant on the returns of the Twitter API. This is due to the fact that, rather than extracting entities from the tweet text, tidy2 completely relies on the vars data returned by the API. While current search requests should return all these vars, older data might not contain certain data. This is especially true for annotations (named entities) and context_annotations. As of now, these variables are also poorly supported by Twitter for the majority languages, with English being the language that provides comprehensive annnotations and context_annotions. This is equally the case for quoted_variables, where older data may not contain the necessary sourcetweet data to extract the vars for quoted tweets. This may be the case not only for annotations and context_annotations, but also hashtags, mentions and URLs.
+#' Note that output of the tidy2 vars returns results of the Twitter API, rather than from tweet text. Therefore, certain variables, especially context annotations and quoted_variables, may not be present in older data.
 #'
 #' @param data_path string, file path to directory of stored tweets data saved as data_*id*.json and users_*id*.json
 #' @param user If `FALSE`, this function binds JSON files into a data frame containing tweets; data frame containing user information otherwise. Ignore if `output_format` is not NA
@@ -72,7 +72,7 @@ bind_tweets <- function(data_path, user = FALSE, verbose = TRUE, output_format =
   if (!is.na(output_format)) {
     flat <- .flat(data_path, output_format = output_format, vars = vars, quoted_variables = quoted_variables)
     if (output_format == "tidy2") {
-      flat <- flat %>% dplyr::mutate(dplyr::across(.cols = tidyselect::everything(), ~ dplyr::na_if(., "NULL"))) # set left_join's NULL values to NA for consistency
+      flat <- flat %>% dplyr::mutate(dplyr::across(.cols = tidyselect::where(is.list), ~ dplyr::coalesce(., list(NA)))) # set left_join's NULL values to NA for consistency
     }
     return(flat)
   }
@@ -189,7 +189,8 @@ convert_json <- function(data_file, output_format = "tidy",
       tweet_metrics <- tibble::tibble(tweet_id = raw$tweet.public_metrics.retweet_count$tweet_id,
                                       retweet_count = raw$tweet.public_metrics.retweet_count$data,
                                       like_count = raw$tweet.public_metrics.like_count$data,
-                                      quote_count = raw$tweet.public_metrics.quote_count$data) 
+                                      quote_count = raw$tweet.public_metrics.quote_count$data,
+                                      impression_count = raw$tweet.public_metrics.impression_count$data) 
       res <- res %>% dplyr::left_join(tweet_metrics, by = "tweet_id")
     }
     if ("user_metrics" %in% vars) {
