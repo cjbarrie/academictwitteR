@@ -24,9 +24,9 @@ get_country_tweets(
 
 \item{country, }{string, name of country as ISO alpha-2 code e.g. "GB"}
 
-\item{start_tweets}{string, starting date}
+\item{start_tweets}{string, starting date; default to now - 30 days}
 
-\item{end_tweets}{string, ending date}
+\item{end_tweets}{string, ending date; default to now - 30 seconds}
 
 \item{bearer_token}{string, bearer token}
 

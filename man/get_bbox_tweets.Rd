@@ -24,9 +24,9 @@ get_bbox_tweets(
 
 \item{bbox}{numeric, a vector of four bounding box coordinates from west longitude to north latitude}
 
-\item{start_tweets}{string, starting date}
+\item{start_tweets}{string, starting date; default to now - 30 days}
 
-\item{end_tweets}{string, ending date}
+\item{end_tweets}{string, ending date; default to now - 30 seconds}
 
 \item{bearer_token}{string, bearer token}
 
