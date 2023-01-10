@@ -34,6 +34,8 @@ This function binds information stored as JSON files. The experimental function 
 By default, \code{bind_tweets} binds into a data frame containing tweets (from data_\emph{id}.json files).
 
 If users is TRUE, it binds into a data frame containing user information (from users_\emph{id}.json).
+
+For the "tidy" format, parallel processing with furrr is supported. In order to enable parallel processing, workers need to be set manually through \code{\link[future:plan]{future::plan()}}. See examples
 }
 \examples{
 \dontrun{
@@ -45,5 +47,14 @@ bind_tweets(data_path = "data/", user = TRUE)
 
 # bind json files in the directory "data" into a "tidy" data frame / tibble
 bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy")
+
+# bind json files in the directory "data" into a "tidy" data frame / tibble with parallel computing
+## set up a multisession
+future::plan("multisession")
+## run the function - note that no additional arguments are required
+bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy")
+## Shut down parallel workers
+future::plan("sequential")
 }
+
 }
