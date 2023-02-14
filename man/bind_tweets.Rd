@@ -5,9 +5,23 @@
 \alias{convert_json}
 \title{Bind information stored as JSON files}
 \usage{
-bind_tweets(data_path, user = FALSE, verbose = TRUE, output_format = NA)
+bind_tweets(
+  data_path,
+  user = FALSE,
+  verbose = TRUE,
+  output_format = NA,
+  vars = c("text", "user", "tweet_metrics", "user_metrics", "hashtags", "ext_urls",
+    "mentions", "annotations", "context_annotations"),
+  quoted_variables = FALSE
+)
 
-convert_json(data_file, output_format = "tidy")
+convert_json(
+  data_file,
+  output_format = "tidy",
+  vars = c("text", "user", "tweet_metrics", "user_metrics", "hashtags", "ext_urls",
+    "mentions", "annotations", "context_annotations"),
+  quoted_variables = F
+)
 }
 \arguments{
 \item{data_path}{string, file path to directory of stored tweets data saved as data_\emph{id}.json and users_\emph{id}.json}
@@ -20,7 +34,23 @@ convert_json(data_file, output_format = "tidy")
 \itemize{
 \item{"raw"}{List of data frames; Note: not all data frames are in Boyce-Codd 3rd Normal Form}
 \item{"tidy"}{Tidy format; all essential columns are available}
+\item{"tidy2"}{Tidy format; additional variables (see vars) are available. Untruncates retweet text and adds indicators for retweets, quotes and replies. Automatically drops duplicated tweets. Handling of quoted tweets can be specified (see quoted_variables)}
 }}
+
+\item{vars}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} vector of strings, determining the variables provided by the tidy2 format. Can be any (or all) of the following:
+\itemize{
+\item{"text"}{Text of the tweet, including language classification, indicator of sensitive content and (if applicable) sourcetweet text}
+\item{"user"}{Information on the user in addition to their ID}
+\item{"tweet_metrics"}{Tweet metrics, specifically the like, retweet and quote counts}
+\item{"user_metrics"}{User metrics, specifically their tweet, list, follower and following counts}
+\item{"hashtags"}{Hashtags contained in the tweet. Untrunctated for retweets}
+\item{"ext_urls"}{Shortened and expanded URLs contained in the tweet, excluding those internal to Twitter (e.g. retweet URLs). Includes additional data provided by Twitter, such as the unwound URL, their title and description (if available). Untrunctated for retweets}
+\item{"mentions"}{Mentioned usernames and their IDs, excluding retweeted users. Untrunctated for retweets. Note that quoted users are only mentioned here if explicitly named in the tweet text. This was usually the case with older versions of Twitter, but is no longer the standard behaviour. Extracting mentions allows the usernames of the RT authors (rather than only their ID) to be preserved}
+\item{"annotations"}{Annotations provided by Twitter, including their probability and type. Basically Named Entities. See https://developer.twitter.com/en/docs/twitter-api/annotations/overview for details}
+\item{"context_annotations"}{Context annotations provided by Twitter, including additional data on their domains. See https://developer.twitter.com/en/docs/twitter-api/annotations/overview for details}
+}}
+
+\item{quoted_variables}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} Should additional vars be returned for the quoted tweet? Defaults to FALSE. TRUE returns additional "_quoted" var-columns containing the vars (mentions, hashtags, etc.) of the quoted tweet in addition to the actual tweet's data}
 
 \item{data_file}{string, a single file path to a JSON file; or a vector of file paths to JSON files of stored tweets data saved as data_\emph{id}.json}
 }
@@ -35,7 +65,9 @@ By default, \code{bind_tweets} binds into a data frame containing tweets (from d
 
 If users is TRUE, it binds into a data frame containing user information (from users_\emph{id}.json).
 
-For the "tidy" format, parallel processing with furrr is supported. In order to enable parallel processing, workers need to be set manually through \code{\link[future:plan]{future::plan()}}. See examples
+For the "tidy" and "tidy2" format, parallel processing with furrr is supported. In order to enable parallel processing, workers need to be set manually through \code{\link[future:plan]{future::plan()}}. See examples
+
+Note that output of the tidy2 vars returns results of the Twitter API, rather than from tweet text. Therefore, certain variables, especially context annotations and quoted_variables, may not be present in older data.
 }
 \examples{
 \dontrun{
@@ -48,13 +80,18 @@ bind_tweets(data_path = "data/", user = TRUE)
 # bind json files in the directory "data" into a "tidy" data frame / tibble
 bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy")
 
-# bind json files in the directory "data" into a "tidy" data frame / tibble with parallel computing
+# bind json files in the directory "data" into a "tidy2" data frame / tibble, get hashtags and
+# URLs for both original and quoted tweets
+bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy2", 
+            vars = c("hashtags", "ext_urls"),
+            quoted_variables = T)
+            
+# bind json files in the directory "data" into a "tidy2" data frame / tibble with parallel computing
 ## set up a multisession
 future::plan("multisession")
 ## run the function - note that no additional arguments are required
-bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy")
+bind_tweets(data_path = "data/", user = TRUE, output_format = "tidy2")
 ## Shut down parallel workers
-future::plan("sequential")
+future::plan("sequential")            
 }
-
 }

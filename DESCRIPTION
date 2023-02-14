@@ -59,6 +59,7 @@ Imports:
     purrr,
     rlang,
     utils,
+    stringr,
     future,
     furrr
 Suggests: 
