@@ -1,5 +1,7 @@
 # academictwitteR <img src="man/figures/academictwitteRhex.png" width="160px" align="right" />
 
+**Note this repo is now ARCHVIED due to changes to the Twitter API. The paid API means open-source development of this package is no longer feasible.**
+
 <!-- badges: start -->
 [![v2](https://img.shields.io/endpoint?url=https%3A%2F%2Ftwbadges.glitch.me%2Fbadges%2Fv2)](https://developer.twitter.com/en/docs/twitter-api)
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.03272/status.svg)](https://doi.org/10.21105/joss.03272) 
