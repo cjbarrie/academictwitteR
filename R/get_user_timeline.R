@@ -24,6 +24,7 @@
 #' @param bind_tweets If `TRUE`, tweets captured are bound into a data.frame for assignment
 #' @param page_n integer, amount of tweets to be returned by per page
 #' @param verbose If `FALSE`, query progress messages are suppressed
+#' @param errors If `TRUE`, errors will be captured as .json objects in the data_path. Only works if a data_path is supplied
 #' @param ... arguments will be passed to `build_query()` function. See `?build_query()` for further information.
 #' 
 #' @return a data.frame
@@ -50,6 +51,7 @@ get_user_timeline <-
            bind_tweets = TRUE,
            page_n = 100,
            verbose = TRUE,
+           errors = FALSE,
            ...) {    
     if (missing(start_tweets)) {
       stop("Start time must be specified.")
@@ -81,7 +83,7 @@ get_user_timeline <-
       
       # Get tweets
       new_rows <- get_tweets(params = params, endpoint_url = endpoint_url, page_token_name = "pagination_token", n = n, file = file, bearer_token = bearer_token, 
-                             export_query = export_query, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose)
+                             export_query = export_query, data_path = data_path, bind_tweets = bind_tweets, verbose = verbose, errors = errors)
       new_df <- dplyr::bind_rows(new_df, new_rows)
     }
     new_df

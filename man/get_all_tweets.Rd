@@ -17,6 +17,7 @@ get_all_tweets(
   page_n = 500,
   context_annotations = FALSE,
   verbose = TRUE,
+  errors = FALSE,
   ...
 )
 }
@@ -44,6 +45,8 @@ get_all_tweets(
 \item{context_annotations}{If \code{TRUE}, context_annotations will be fetched. Note it will limit the page_n to 100 due restrictions of Twitter API.}
 
 \item{verbose}{If \code{FALSE}, query progress messages are suppressed}
+
+\item{errors}{If \code{TRUE}, errors will be captured as .json objects in the data_path. Only works if a data_path is supplied}
 
 \item{...}{arguments will be passed to \code{\link[=build_query]{build_query()}} function. See \code{?build_query()} for further information.}
 }
